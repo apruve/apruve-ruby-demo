@@ -7,12 +7,16 @@ require 'apruve'
 
 set :bind, '0.0.0.0'
 
-apruve_config = {}
-apruve_config[:scheme] = ENV['APRUVE_SCHEME'] unless ENV['APRUVE_SCHEME'].nil?
-apruve_config[:host] = ENV['APRUVE_HOST'] unless ENV['APRUVE_HOST'].nil?
-apruve_config[:port] = ENV['APRUVE_PORT'] unless ENV['APRUVE_PORT'].nil?
+# default the environment to test.apruve.com
+apruve_environment = ENV['APRUVE_ENVIRONMENT'].nil? ? 'test' : ENV['APRUVE_ENVIRONMENT']
 
-Apruve.configure(ENV['APRUVE_API_KEY'], 'test', apruve_config)
+# can override other specifics here if necessary
+config_overrides = {}
+config_overrides[:scheme] = ENV['APRUVE_SCHEME'] unless ENV['APRUVE_SCHEME'].nil?
+config_overrides[:host] = ENV['APRUVE_HOST'] unless ENV['APRUVE_HOST'].nil?
+config_overrides[:port] = ENV['APRUVE_PORT'] unless ENV['APRUVE_PORT'].nil?
+
+Apruve.configure(ENV['APRUVE_API_KEY'], apruve_environment, config_overrides)
 merchant_id = ENV['APRUVE_MERCHANT_ID']
 
 before '/webhook_notify' do
