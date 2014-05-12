@@ -1,0 +1,103 @@
+<%= Apruve.js %>
+<script type="text/javascript">
+    apruve.secureHash = '<%= @payment_request.secure_hash %>';
+    apruve.paymentRequest = <%= @payment_request.to_json %>;
+    apruve.registerApruveCallback(apruve.APRUVE_COMPLETE_EVENT, function () {
+        $('#tokenField').val(apruve.paymentRequestId)
+        $('#chargeAmount').val(apruve.paymentRequest.amount_cents)
+        $('#finishOrder').submit();
+    });
+</script>
+<div id="thankYou" style="display:none">
+  <div class="row">
+    <div class="span6 offset3">
+      <div class="well-large" style="text-align: center">
+        <h1>Your order is ready to place. Click to complete.</h1>
+
+        <form id="finishOrder" action="/finish_order" method="POST">
+          <input id="tokenField" type="hidden" name="token" value="">
+          <input id="chargeAmount" type="hidden" name="charge" value="">
+          <input type="submit" value="Submit">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div>
+    <ul class="nav nav-pills">
+      <li class="active">
+        <a href="/">Products</a>
+      </li>
+      <li>
+        <a href="/services">Services</a>
+      </li>
+    </ul>
+  </div>
+  <h1>
+    Your Cart
+  </h1>
+</div>
+<div id="shoppingCart">
+  <div class="row-fluid">
+    <div class="span12">
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th></th>
+          <th>Product</th>
+          <th>Description</th>
+          <th>Unit Price</th>
+          <th>Qty</th>
+          <th>Line Total</th>
+        </tr>
+        </thead>
+        <tr>
+          <td>
+            <img src="/img/letterpaper.jpg" class="productPhoto" />
+          </td>
+          <td>Letter Paper</td>
+          <td>20 lb ream (500 Sheets). Paper dimensions are 8.5 x 11.00 inches.</td>
+          <td>$12.00</td>
+          <td>3</td>
+          <td>$36.00</td>
+        </tr>
+        <tr>
+          <td>
+            <img src="/img/legalpaper.jpg" class="productPhoto" />
+          </td>
+          <td>Legal Paper</td>
+          <td>24 lb ream (250 Sheets). Paper dimensions are 8.5 x 14.00 inches.</td>
+          <td>$9.50</td>
+          <td>2</td>
+          <td>$19.00</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+      <div class="pull-right text-right totals">
+        <p>
+          <strong>
+            Subtotal:&nbsp;
+          </strong>
+          $55.00
+        </p>
+        <p>
+          <strong>
+            Shipping:&nbsp;
+          </strong>
+          $5.00
+        </p>
+        <p>
+          <strong>
+            Total:&nbsp;
+          </strong>
+        $60.00
+        </p>
+        <p><strong>Click to pay</strong></p>
+
+        <%= Apruve.button %>
+      </div>
+  </div>
+</div>

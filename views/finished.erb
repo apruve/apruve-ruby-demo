@@ -1,0 +1,21 @@
+<div id="thankYou" style="padding-top:60px;">
+  <div class="row">
+    <div class="text-center">
+      <% if @status == 'captured' %>
+          <h1>Thank you for your order!</h1>
+
+          <h3>Payment has been made. We'll ship that right out.</h3>
+      <% elsif @status == 'pending' || @status == 'ready' %>
+          <h1>Thank you for your order!</h1>
+
+          <h3>Your order will be shipped as soon as final payment is approved.</h3>
+      <% elsif @status == 'rejected' %>
+          <h1>Payment for your order has been rejected.</h1>
+
+          <h3>Please select another payment method.</h3>
+      <% else %>
+          <h1>An unexpected response was received.</h1>
+      <% end %>
+    </div>
+  </div>
+</div>

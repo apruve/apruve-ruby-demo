@@ -1,0 +1,90 @@
+<%= Apruve.js %>
+<script type="text/javascript">
+    apruve.secureHash = '<%= @payment_request.secure_hash %>';
+    apruve.paymentRequest = <%= @payment_request.to_json %>;
+    apruve.registerApruveCallback(apruve.APRUVE_COMPLETE_EVENT, function () {
+        $('#tokenField').val(apruve.paymentRequestId)
+        $('#chargeAmount').val(apruve.paymentRequest.amount_cents)
+        $('#finishOrder').submit();
+    });
+</script>
+<div id="thankYou" style="display:none">
+  <div class="row">
+    <div class="span6 offset3">
+      <div class="well-large" style="text-align: center">
+        <h1>Your order is ready to place. Click to complete.</h1>
+
+        <form id="finishOrder" action="/finish_subscription" method="POST">
+          <input id="tokenField" type="hidden" name="token" value="">
+          <input id="chargeAmount" type="hidden" name="charge" value="">
+          <input type="submit" value="Submit">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div>
+    <ul class="nav nav-pills">
+      <li>
+        <a href="/">Products</a>
+      </li>
+      <li class="active">
+        <a href="/services">Services</a>
+      </li>
+    </ul>
+  </div>
+  <h1>
+    Your Cart
+  </h1>
+</div>
+<div id="shoppingCart">
+  <div class="row-fluid">
+    <div class="span12">
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th></th>
+            <th>Product</th>
+            <th>Description</th>
+            <th>Price</th>
+          </tr>
+          </thead>
+          <tr>
+            <td>
+              <img src="/img/legalpaper.jpg" class="productPhoto" />
+            </td>
+            <td>Monthly Delivery - Letter Paper</td>
+            <td>20 x 20lb reams, 10,000 sheets total will be delivered on the first Monday of each month.
+              Paper dimensions are 8.5 x 11.00 inches. (Total includes 4% discount for purchase of 20 or more units)</td>
+            <td>$192.00/Month (Shipping Incl.)</td>
+          </tr>
+          <tr>
+            <td>
+              <img src="/img/letterpaper.jpg" class="productPhoto" />
+            </td>
+            <td>Monthly Delivery - Legal Paper</td>
+            <td>10 x 24 lb reams, 2,500 sheets total will be delivered on the first Monday of each month.
+              Paper dimensions are 8.5 x 14.00 inches.</td>
+            <td>$76.00/Month (Shipping Incl.)</td>
+          </tr>
+        </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="pull-right text-right totals">
+      <p>
+        <strong>
+          Est. Monthly Charge:&nbsp;
+        </strong>
+        $268.00
+      </p>
+      <p><strong>Click to pay</strong></p>
+      <%= Apruve.button %>
+
+
+    </div>
+  </div>
+</div>
+
+</div>
