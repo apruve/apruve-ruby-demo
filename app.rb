@@ -58,8 +58,7 @@ get '/services' do
   @payment_request = Apruve::PaymentRequest.new(
       merchant_id: merchant_id,
       currency: 'USD',
-      amount_cents: 26800,
-      recurring: 'true'
+      amount_cents: 26800
   )
   @payment_request.line_items << Apruve::LineItem.new(
       title: 'Monthly Delivery - Letter Paper',
