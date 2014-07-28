@@ -11,10 +11,10 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     addressable (2.3.6)
-    apruve (0.9.1)
-      addressable (~> 2.3.5)
+    apruve (0.11.0)
+      addressable (~> 2.3)
       faraday (>= 0.8.6, <= 0.9.0)
-      faraday_middleware (~> 0.9.0)
+      faraday_middleware (~> 0.9)
     builder (3.2.2)
     coffee-script (2.2.0)
       coffee-script-source
