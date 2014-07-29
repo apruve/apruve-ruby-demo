@@ -4,8 +4,14 @@ require 'sinatra'
 require 'coffee-script'
 require 'net/http'
 require 'apruve'
+require 'openssl'
+require 'base64'
 
 set :bind, '0.0.0.0'
+
+# public key for verifying webhook signatures
+# TODO pull this from a webservice
+apruve_public_key = OpenSSL::PKey.read(File.new(('apruve.pub')))
 
 # default the environment to test.apruve.com
 apruve_environment = ENV['APRUVE_ENVIRONMENT'].nil? ? 'test' : ENV['APRUVE_ENVIRONMENT']
@@ -21,7 +27,7 @@ merchant_id = ENV['APRUVE_MERCHANT_ID']
 
 before '/webhook_notify' do
   request.body.rewind
-  @webhook_data = JSON.parse request.body.read
+  @webhook_data = request.body.read
 end
 
 get '/' do
@@ -113,4 +119,5 @@ end
 post '/webhook_notify' do
   # We got a webhook. You should look up the order in your database and complete or cancel it as appropriate.
   puts "GOT WEBHOOK DATA FOR PAYMENT #{@webhook_data}"
+  puts "Webhook verified?: #{apruve_public_key.verify OpenSSL::Digest::SHA256.new, Base64.decode64(env['HTTP_X_APRUVE_SIGNATURE']), @webhook_data}"
 end
