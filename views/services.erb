@@ -7,6 +7,12 @@
         $('#chargeAmount').val(apruve.paymentRequest.amount_cents)
         $('#finishOrder').submit();
     });
+    $(function() {
+        apruve.shopperEmail = $('#shopperEmail').val()
+        $('#shopperEmail').on('blur', function(event) {
+            apruve.shopperEmail = $('#shopperEmail').val()
+        })
+    })
 </script>
 <div id="thankYou" style="display:none">
   <div class="row">
@@ -79,6 +85,13 @@
         </strong>
         $268.00
       </p>
+      <p>&nbsp;</p>
+
+      <p>
+        <strong>Shopper Email:</strong>&nbsp;&nbsp;
+        <input class="input-large" type="text" id="shopperEmail" value="<%= ENV['DEFAULT_SHOPPER_EMAIL']||'carduser@example.com'%>">
+      </p>
+
       <p>&nbsp;</p>
     </div>
   </div>
