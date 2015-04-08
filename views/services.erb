@@ -11,6 +11,7 @@
         apruve.shopperEmail = $('#shopperEmail').val()
         $('#shopperEmail').on('blur', function(event) {
             apruve.shopperEmail = $('#shopperEmail').val()
+            apruve.apruveIFrame.contentWindow.postMessage(JSON.stringify(apruve.buildPurchaseOrderMsg()), "<%= @apruve_url %>");
         })
     })
 </script>

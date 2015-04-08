@@ -21,7 +21,6 @@ config_overrides = {}
 config_overrides[:scheme] = ENV['APRUVE_SCHEME'] unless ENV['APRUVE_SCHEME'].nil?
 config_overrides[:host] = ENV['APRUVE_HOST'] unless ENV['APRUVE_HOST'].nil?
 config_overrides[:port] = ENV['APRUVE_PORT'] unless ENV['APRUVE_PORT'].nil?
-
 Apruve.configure(ENV['APRUVE_API_KEY'], apruve_environment, config_overrides)
 merchant_id = ENV['APRUVE_MERCHANT_ID']
 
@@ -31,6 +30,11 @@ before '/webhook_notify' do
 end
 
 get '/' do
+  url_builder = (Apruve.config[:scheme] == 'http') ? URI::HTTP : URI::HTTPS
+  @apruve_url= url_builder.build({:host => Apruve.config[:host],
+                                  :port => Apruve.config[:port],
+                                  :scheme => Apruve.config[:scheme]})
+
   # Create a payment request and some line items
   @payment_request = Apruve::PaymentRequest.new(
       merchant_id: merchant_id,
@@ -60,6 +64,11 @@ get '/' do
 end
 
 get '/services' do
+  url_builder = (Apruve.config[:scheme] == 'http') ? URI::HTTP : URI::HTTPS
+  @apruve_url= url_builder.build({:host => config[:host],
+                                  :port => config[:port],
+                                  :scheme => config[:scheme]})
+
   # Create a payment request and some line items that match a subscription plan in our Apruve store
   @payment_request = Apruve::PaymentRequest.new(
       merchant_id: merchant_id,
