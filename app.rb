@@ -30,11 +30,6 @@ before '/webhook_notify' do
 end
 
 get '/' do
-  url_builder = (Apruve.config[:scheme] == 'http') ? URI::HTTP : URI::HTTPS
-  @apruve_url= url_builder.build({:host => Apruve.config[:host],
-                                  :port => Apruve.config[:port],
-                                  :scheme => Apruve.config[:scheme]})
-
   # Create a payment request and some line items
   @payment_request = Apruve::PaymentRequest.new(
       merchant_id: merchant_id,
@@ -64,11 +59,6 @@ get '/' do
 end
 
 get '/services' do
-  url_builder = (Apruve.config[:scheme] == 'http') ? URI::HTTP : URI::HTTPS
-  @apruve_url= url_builder.build({:host => config[:host],
-                                  :port => config[:port],
-                                  :scheme => config[:scheme]})
-
   # Create a payment request and some line items that match a subscription plan in our Apruve store
   @payment_request = Apruve::PaymentRequest.new(
       merchant_id: merchant_id,
