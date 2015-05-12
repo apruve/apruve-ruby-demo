@@ -7,12 +7,6 @@
         $('#chargeAmount').val(apruve.paymentRequest.amount_cents);
         $('#finishOrder').submit();
     });
-    $(function() {
-        apruve.shopperEmail = $('#shopperEmail').val();
-        $('#shopperEmail').on('blur', function(event) {
-          apruve.shopperEmail = $('#shopperEmail').val();
-        })
-    })
 </script>
 <div id="thankYou" style="display:none">
   <div class="row">
