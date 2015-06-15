@@ -31,13 +31,13 @@ end
 
 get '/' do
   # Create a payment request and some line items
-  @payment_request = Apruve::PaymentRequest.new(
+  @payment_request = Apruve::Order.new(
       merchant_id: merchant_id,
       currency: 'USD',
       amount_cents: 6000,
       shipping_cents: 500
   )
-  @payment_request.line_items << Apruve::LineItem.new(
+  @payment_request.order_items << Apruve::OrderItem.new(
       title: 'Letter Paper',
       description: '20 lb ream (500 Sheets). Paper dimensions are 8.5 x 11.00 inches.',
       sku: 'LTR-20R',
@@ -46,7 +46,7 @@ get '/' do
       amount_cents: 3600,
       view_product_url: 'https://merchant-demo.herokuapp.com'
   )
-  @payment_request.line_items << Apruve::LineItem.new(
+  @payment_request.order_items << Apruve::OrderItem.new(
       title: 'Legal Paper',
       description: '24 lb ream (250 Sheets). Paper dimensions are 8.5 x 14.00 inches.',
       sku: 'LGL-24R',
@@ -60,12 +60,12 @@ end
 
 get '/services' do
   # Create a payment request and some line items that match a subscription plan in our Apruve store
-  @payment_request = Apruve::PaymentRequest.new(
+  @payment_request = Apruve::Order.new(
       merchant_id: merchant_id,
       currency: 'USD',
       amount_cents: 26800
   )
-  @payment_request.line_items << Apruve::LineItem.new(
+  @payment_request.order_items << Apruve::OrderItem.new(
       title: 'Monthly Delivery - Letter Paper',
       description: '20 x 20lb reams, 10,000 sheets total will be delivered on the first Monday of each month. '\
                     'Paper dimensions are 8.5 x 11.00 inches.',
@@ -75,7 +75,7 @@ get '/services' do
       quantity: 20,
       amount_cents: 19200
   )
-  @payment_request.line_items << Apruve::LineItem.new(
+  @payment_request.order_items << Apruve::OrderItem.new(
       title: 'Monthly Delivery - Legal Paper',
       description: '10 x 24 lb reams, 2,500 sheets total will be delivered on the first Monday of each month. '\
                     'Paper dimensions are 8.5 x 14.00 inches.',
@@ -91,7 +91,7 @@ post '/finish_order' do
   #
   # Use the payment_request_id similar to the token you get from other payment services,
   # and issue a payment against it.
-  payment = Apruve::Payment.new(payment_request_id: params[:token], amount_cents: params[:charge])
+  payment = Apruve::Invoice.new(order_id: params[:token], amount_cents: params[:charge])
   @status = payment.save!
 
   # If you track payments separately from the order, you probably want to store payment.id and payment.status
@@ -103,14 +103,14 @@ end
 post '/finish_subscription' do
   # You should save the payment_request_id with the order in your database.
   #
-  # If you don't want to charge the customer immediately, call PaymentRequest#finalize to tell Apruve to
+  # If you don't want to charge the customer immediately, call Order#finalize to tell Apruve to
   # escalate the request to the payer and get their approval without charging their credit card. You can
   # create a payment to actually charge the customer later. Or, in this case, we're using Apruve's automated
   # subscriptions, so Apruve will create payments for us automatically.
   #
   # (Note: This is NOT the same as a credit card authorization! This is more akin to receiving a purchase order
   # from your customer after sending them a quote.)
-  response = Apruve::PaymentRequest.finalize!(params[:token])
+  response = Apruve::Order.finalize!(params[:token])
   @status = response['status']
   erb :finished
 end
