@@ -92,6 +92,24 @@ post '/finish_order' do
   # Use the payment_request_id similar to the token you get from other payment services,
   # and issue a payment against it.
   payment = Apruve::Payment.new(payment_request_id: params[:token], amount_cents: params[:charge])
+  payment.payment_items << Apruve::PaymentItem.new(
+      title: 'Letter Paper',
+      description: '20 lb ream (500 Sheets). Paper dimensions are 8.5 x 11.00 inches.',
+      sku: 'LTR-20R',
+      price_ea_cents: 1200,
+      quantity: 3,
+      amount_cents: 3600,
+      view_product_url: 'https://merchant-demo.herokuapp.com'
+  )
+  payment.payment_items << Apruve::PaymentItem.new(
+      title: 'Legal Paper',
+      description: '24 lb ream (250 Sheets). Paper dimensions are 8.5 x 14.00 inches.',
+      sku: 'LGL-24R',
+      price_ea_cents: 950,
+      quantity: 2,
+      amount_cents: 1900,
+      view_product_url: 'https://merchant-demo.herokuapp.com'
+  )
   @status = payment.save!
 
   # If you track payments separately from the order, you probably want to store payment.id and payment.status
