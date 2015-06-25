@@ -1,10 +1,12 @@
 <div id="thankYou" style="padding-top:60px;">
   <div class="row">
     <div class="text-center">
-      <% if @status == 'captured' || @status == 'approved' %>
+      <h1>Invoice status: <%= @invoice_status %></h1>
+      <h1>Status: <%= @status %></h1>
+      <% if @status == 'accepted' %>
           <h1>Thank you for your order!</h1>
 
-          <h3>Payment has been made. We'll ship that right out.</h3>
+          <h3>Your order has been accepted. We'll ship that right out.</h3>
       <% elsif @status == 'pending' || @status == 'ready' %>
           <h1>Thank you for your order!</h1>
 
