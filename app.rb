@@ -91,7 +91,7 @@ post '/finish_order' do
   #
   # Use the payment_request_id similar to the token you get from other payment services,
   # and issue a payment against it.
-  invoice = Apruve::Invoice.new(order_id: params[:token], amount_cents: params[:charge], auto_invoice: true)
+  invoice = Apruve::Invoice.new(order_id: params[:token], amount_cents: params[:charge], auto_issue: true)
   @invoice_status = invoice.save!
   @status = Apruve::Order.find(invoice.order_id).status
 
