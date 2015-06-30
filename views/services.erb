@@ -1,17 +1,16 @@
 <%= Apruve.js %>
 <script type="text/javascript">
-    apruve.secureHash = '<%= @payment_request.secure_hash %>';
-    apruve.paymentRequest = <%= @payment_request.to_json %>;
-    apruve.registerApruveCallback(apruve.APRUVE_COMPLETE_EVENT, function () {
-        $('#tokenField').val(apruve.paymentRequestId)
-        $('#chargeAmount').val(apruve.paymentRequest.amount_cents)
+    apruve.setOrder(<%= @order.to_json %>, '<%= @order.secure_hash %>');
+    apruve.registerApruveCallback(apruve.APRUVE_COMPLETE_EVENT, function (orderId) {
+        $('#tokenField').val(orderId)
+        $('#chargeAmount').val(<%= @order.amount_cents %>)
         $('#finishOrder').submit();
     });
     $(function() {
-        apruve.shopperEmail = $('#shopperEmail').val()
-        $('#shopperEmail').on('blur', function(event) {
-            apruve.shopperEmail = $('#shopperEmail').val()
-        })
+      apruve.setShopper($('#shopperEmail').val());
+      $('#shopperEmail').on('blur', function(event) {
+        apruve.setShopper($('#shopperEmail').val());
+      })
     })
 </script>
 <div id="thankYou" style="display:none">

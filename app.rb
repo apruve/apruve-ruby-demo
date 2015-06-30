@@ -31,13 +31,13 @@ end
 
 get '/' do
   # Create a payment request and some line items
-  @payment_request = Apruve::Order.new(
+  @order = Apruve::Order.new(
       merchant_id: merchant_id,
       currency: 'USD',
       amount_cents: 6000,
       shipping_cents: 500
   )
-  @payment_request.order_items << Apruve::OrderItem.new(
+  @order.order_items << Apruve::OrderItem.new(
       title: 'Letter Paper',
       description: '20 lb ream (500 Sheets). Paper dimensions are 8.5 x 11.00 inches.',
       sku: 'LTR-20R',
@@ -46,7 +46,7 @@ get '/' do
       amount_cents: 3600,
       view_product_url: 'https://merchant-demo.herokuapp.com'
   )
-  @payment_request.order_items << Apruve::OrderItem.new(
+  @order.order_items << Apruve::OrderItem.new(
       title: 'Legal Paper',
       description: '24 lb ream (250 Sheets). Paper dimensions are 8.5 x 14.00 inches.',
       sku: 'LGL-24R',
@@ -60,12 +60,12 @@ end
 
 get '/services' do
   # Create a payment request and some line items that match a subscription plan in our Apruve store
-  @payment_request = Apruve::Order.new(
+  @order = Apruve::Order.new(
       merchant_id: merchant_id,
       currency: 'USD',
       amount_cents: 26800
   )
-  @payment_request.order_items << Apruve::OrderItem.new(
+  @order.order_items << Apruve::OrderItem.new(
       title: 'Monthly Delivery - Letter Paper',
       description: '20 x 20lb reams, 10,000 sheets total will be delivered on the first Monday of each month. '\
                     'Paper dimensions are 8.5 x 11.00 inches.',
@@ -75,7 +75,7 @@ get '/services' do
       quantity: 20,
       amount_cents: 19200
   )
-  @payment_request.order_items << Apruve::OrderItem.new(
+  @order.order_items << Apruve::OrderItem.new(
       title: 'Monthly Delivery - Legal Paper',
       description: '10 x 24 lb reams, 2,500 sheets total will be delivered on the first Monday of each month. '\
                     'Paper dimensions are 8.5 x 14.00 inches.',
