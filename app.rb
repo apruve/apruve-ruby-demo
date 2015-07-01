@@ -112,7 +112,7 @@ post '/finish_subscription' do
   # (Note: This is NOT the same as a credit card authorization! This is more akin to receiving a purchase order
   # from your customer after sending them a quote.)
   response = Apruve::Order.finalize!(params[:token])
-  @status = response['status']
+  @status = response.status
   erb :finished
 end
 
