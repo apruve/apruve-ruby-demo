@@ -110,7 +110,7 @@ post '/finish_order' do
       price_total_cents: 1900,
       view_product_url: 'https://merchant-demo.herokuapp.com'
   )
-  @invoice = invoice.save!
+  @invoice_status = invoice.save!
   @status = Apruve::Order.find(invoice.order_id).status
 
   # If you track payments separately from the order, you probably want to store payment.id and payment.status
