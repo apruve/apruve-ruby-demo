@@ -26,18 +26,18 @@ merchant_id = ENV['APRUVE_MERCHANT_ID']
 
 before '/webhook_notify' do
   request.body.rewind
-  @webhook_data = request.body.read
+  @webhook_body = request.body.read
 end
 
 get '/' do
   # Create a payment request and some line items
-  @payment_request = Apruve::PaymentRequest.new(
+  @order = Apruve::Order.new(
       merchant_id: merchant_id,
       currency: 'USD',
       amount_cents: 6000,
       shipping_cents: 500
   )
-  @payment_request.line_items << Apruve::LineItem.new(
+  @order.order_items << Apruve::OrderItem.new(
       title: 'Letter Paper',
       description: '20 lb ream (500 Sheets). Paper dimensions are 8.5 x 11.00 inches.',
       sku: 'LTR-20R',
@@ -46,7 +46,7 @@ get '/' do
       amount_cents: 3600,
       view_product_url: 'https://merchant-demo.herokuapp.com'
   )
-  @payment_request.line_items << Apruve::LineItem.new(
+  @order.order_items << Apruve::OrderItem.new(
       title: 'Legal Paper',
       description: '24 lb ream (250 Sheets). Paper dimensions are 8.5 x 14.00 inches.',
       sku: 'LGL-24R',
@@ -60,12 +60,12 @@ end
 
 get '/services' do
   # Create a payment request and some line items that match a subscription plan in our Apruve store
-  @payment_request = Apruve::PaymentRequest.new(
+  @order = Apruve::Order.new(
       merchant_id: merchant_id,
       currency: 'USD',
       amount_cents: 26800
   )
-  @payment_request.line_items << Apruve::LineItem.new(
+  @order.order_items << Apruve::OrderItem.new(
       title: 'Monthly Delivery - Letter Paper',
       description: '20 x 20lb reams, 10,000 sheets total will be delivered on the first Monday of each month. '\
                     'Paper dimensions are 8.5 x 11.00 inches.',
@@ -75,7 +75,7 @@ get '/services' do
       quantity: 20,
       amount_cents: 19200
   )
-  @payment_request.line_items << Apruve::LineItem.new(
+  @order.order_items << Apruve::OrderItem.new(
       title: 'Monthly Delivery - Legal Paper',
       description: '10 x 24 lb reams, 2,500 sheets total will be delivered on the first Monday of each month. '\
                     'Paper dimensions are 8.5 x 14.00 inches.',
@@ -91,26 +91,27 @@ post '/finish_order' do
   #
   # Use the payment_request_id similar to the token you get from other payment services,
   # and issue a payment against it.
-  payment = Apruve::Payment.new(payment_request_id: params[:token], amount_cents: params[:charge])
-  payment.payment_items << Apruve::PaymentItem.new(
+  invoice = Apruve::Invoice.new(order_id: params[:token], amount_cents: params[:charge], auto_issue: true)
+  invoice.invoice_items << Apruve::InvoiceItem.new(
       title: 'Letter Paper',
       description: '20 lb ream (500 Sheets). Paper dimensions are 8.5 x 11.00 inches.',
       sku: 'LTR-20R',
       price_ea_cents: 1200,
       quantity: 3,
-      amount_cents: 3600,
+      price_total_cents: 3600,
       view_product_url: 'https://merchant-demo.herokuapp.com'
   )
-  payment.payment_items << Apruve::PaymentItem.new(
+  invoice.invoice_items << Apruve::InvoiceItem.new(
       title: 'Legal Paper',
       description: '24 lb ream (250 Sheets). Paper dimensions are 8.5 x 14.00 inches.',
       sku: 'LGL-24R',
       price_ea_cents: 950,
       quantity: 2,
-      amount_cents: 1900,
+      price_total_cents: 1900,
       view_product_url: 'https://merchant-demo.herokuapp.com'
   )
-  @status = payment.save!
+  @invoice = invoice.save!
+  @status = Apruve::Order.find(invoice.order_id).status
 
   # If you track payments separately from the order, you probably want to store payment.id and payment.status
   # in the database somewhere, too...
@@ -121,20 +122,20 @@ end
 post '/finish_subscription' do
   # You should save the payment_request_id with the order in your database.
   #
-  # If you don't want to charge the customer immediately, call PaymentRequest#finalize to tell Apruve to
+  # If you don't want to charge the customer immediately, call Order#finalize to tell Apruve to
   # escalate the request to the payer and get their approval without charging their credit card. You can
   # create a payment to actually charge the customer later. Or, in this case, we're using Apruve's automated
   # subscriptions, so Apruve will create payments for us automatically.
   #
   # (Note: This is NOT the same as a credit card authorization! This is more akin to receiving a purchase order
   # from your customer after sending them a quote.)
-  response = Apruve::PaymentRequest.finalize!(params[:token])
-  @status = response['status']
+  response = Apruve::Order.finalize!(params[:token])
+  @status = response.status
   erb :finished
 end
 
 post '/webhook_notify' do
   # We got a webhook. You should look up the order in your database and complete or cancel it as appropriate.
-  puts "GOT WEBHOOK DATA FOR PAYMENT #{@webhook_data}"
-  puts "Webhook verified?: #{apruve_public_key.verify OpenSSL::Digest::SHA256.new, Base64.decode64(env['HTTP_X_APRUVE_SIGNATURE']), @webhook_data}"
+  puts "GOT WEBHOOK DATA FOR PAYMENT #{@webhook_body}"
+  puts "Webhook verified?: #{apruve_public_key.verify OpenSSL::Digest::SHA256.new, Base64.decode64(env['HTTP_X_APRUVE_SIGNATURE']), @webhook_body}"
 end

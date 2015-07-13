@@ -1,3 +1,13 @@
+GIT
+  remote: git://github.com/apruve/apruve-ruby.git
+  revision: b2c9bf9ab40a4a4d25c023b33895e47c2364d02d
+  branch: v4
+  specs:
+    apruve (1.0.0)
+      addressable (~> 2.3)
+      faraday (>= 0.8.6, <= 0.9.0)
+      faraday_middleware (~> 0.9)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -10,11 +20,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
-    addressable (2.3.6)
-    apruve (0.11.0)
-      addressable (~> 2.3)
-      faraday (>= 0.8.6, <= 0.9.0)
-      faraday_middleware (~> 0.9)
+    addressable (2.3.8)
     builder (3.2.2)
     coffee-script (2.2.0)
       coffee-script-source
@@ -26,7 +32,7 @@ GEM
     execjs (2.0.2)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
-    faraday_middleware (0.9.1)
+    faraday_middleware (0.10.0)
       faraday (>= 0.7.4, < 0.10)
     i18n (0.6.9)
     json (1.7.7)
@@ -71,7 +77,7 @@ PLATFORMS
 
 DEPENDENCIES
   activemodel
-  apruve
+  apruve!
   coffee-script
   json (~> 1.7.7)
   rack
