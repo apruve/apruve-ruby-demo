@@ -26,7 +26,7 @@ merchant_id = ENV['APRUVE_MERCHANT_ID']
 
 before '/webhook_notify' do
   request.body.rewind
-  @webhook_data = request.body.read
+  @webhook_body = request.body.read
 end
 
 get '/' do
@@ -118,6 +118,6 @@ end
 
 post '/webhook_notify' do
   # We got a webhook. You should look up the order in your database and complete or cancel it as appropriate.
-  puts "GOT WEBHOOK DATA FOR PAYMENT #{@webhook_data}"
-  puts "Webhook verified?: #{apruve_public_key.verify OpenSSL::Digest::SHA256.new, Base64.decode64(env['HTTP_X_APRUVE_SIGNATURE']), @webhook_data}"
+  puts "GOT WEBHOOK DATA FOR PAYMENT #{@webhook_body}"
+  puts "Webhook verified?: #{apruve_public_key.verify OpenSSL::Digest::SHA256.new, Base64.decode64(env['HTTP_X_APRUVE_SIGNATURE']), @webhook_body}"
 end
