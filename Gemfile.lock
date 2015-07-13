@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/apruve/apruve-ruby.git
-  revision: 3be311e3948b2231bac15c27b73188ce1fa6085d
+  revision: b2c9bf9ab40a4a4d25c023b33895e47c2364d02d
   branch: v4
   specs:
-    apruve (0.11.0)
+    apruve (1.0.0)
       addressable (~> 2.3)
       faraday (>= 0.8.6, <= 0.9.0)
       faraday_middleware (~> 0.9)
