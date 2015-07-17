@@ -1,7 +1,5 @@
-GIT
-  remote: git://github.com/apruve/apruve-ruby.git
-  revision: b2c9bf9ab40a4a4d25c023b33895e47c2364d02d
-  branch: v4
+PATH
+  remote: ../apruve-ruby
   specs:
     apruve (1.0.0)
       addressable (~> 2.3)
@@ -39,8 +37,6 @@ GEM
     minitest (5.3.3)
     multipart-post (2.0.0)
     rack (1.5.2)
-    rack-flash3 (1.0.5)
-      rack
     rack-protection (1.5.3)
       rack
     rspec (2.14.1)
@@ -81,7 +77,6 @@ DEPENDENCIES
   coffee-script
   json (~> 1.7.7)
   rack
-  rack-flash3
   rspec
   shotgun
   shoulda

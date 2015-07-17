@@ -63,7 +63,7 @@ get '/services' do
   @order = Apruve::Order.new(
       merchant_id: merchant_id,
       currency: 'USD',
-      amount_cents: 26800
+      auto_finalize: false
   )
   @order.order_items << Apruve::OrderItem.new(
       title: 'Monthly Delivery - Letter Paper',
@@ -87,50 +87,27 @@ get '/services' do
 end
 
 post '/finish_order' do
-  # You should save the payment_request_id with the order in your database.
-  #
-  # Use the payment_request_id similar to the token you get from other payment services,
-  # and issue a payment against it.
-  invoice = Apruve::Invoice.new(order_id: params[:token], amount_cents: params[:charge], auto_issue: true)
-  invoice.invoice_items << Apruve::InvoiceItem.new(
-      title: 'Letter Paper',
-      description: '20 lb ream (500 Sheets). Paper dimensions are 8.5 x 11.00 inches.',
-      sku: 'LTR-20R',
-      price_ea_cents: 1200,
-      quantity: 3,
-      price_total_cents: 3600,
-      view_product_url: 'https://merchant-demo.herokuapp.com'
-  )
-  invoice.invoice_items << Apruve::InvoiceItem.new(
-      title: 'Legal Paper',
-      description: '24 lb ream (250 Sheets). Paper dimensions are 8.5 x 14.00 inches.',
-      sku: 'LGL-24R',
-      price_ea_cents: 950,
-      quantity: 2,
-      price_total_cents: 1900,
-      view_product_url: 'https://merchant-demo.herokuapp.com'
-  )
-  @invoice_status = invoice.save!
-  @status = Apruve::Order.find(invoice.order_id).status
+  # You should save the order_id with the order in your database.
+  # Since the order automatically finalizes, we only need to get the status to display to the user.
+  @status = Apruve::Order.find(params[:token]).status
 
-  # If you track payments separately from the order, you probably want to store payment.id and payment.status
-  # in the database somewhere, too...
+  # If you track invoices separately from the order, you may want to get the invoices and store the IDs.
+  @invoices = Apruve::Invoice.index(params[:token])
 
   erb :finished
 end
 
 post '/finish_subscription' do
-  # You should save the payment_request_id with the order in your database.
+  # You should save the order_id with the order in your database.
   #
   # If you don't want to charge the customer immediately, call Order#finalize to tell Apruve to
   # escalate the request to the payer and get their approval without charging their credit card. You can
   # create a payment to actually charge the customer later. Or, in this case, we're using Apruve's automated
-  # subscriptions, so Apruve will create payments for us automatically.
+  # subscriptions, so Apruve will create invoices for us automatically.
   #
   # (Note: This is NOT the same as a credit card authorization! This is more akin to receiving a purchase order
   # from your customer after sending them a quote.)
-  response = Apruve::Order.finalize!(params[:token])
-  @status = response.status
+  @status = Apruve::Order.finalize!(params[:token]).status
   erb :finished
 end
 
