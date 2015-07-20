@@ -92,7 +92,7 @@ post '/finish_order' do
   @status = Apruve::Order.find(params[:token]).status
 
   # If you track invoices separately from the order, you may want to get the invoices and store the IDs.
-  @invoices = Apruve::Invoice.index(params[:token])
+  # @invoices = Apruve::Invoice.index(params[:token])
 
   erb :finished
 end
