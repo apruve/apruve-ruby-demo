@@ -63,7 +63,7 @@ get '/services' do
   @order = Apruve::Order.new(
       merchant_id: merchant_id,
       currency: 'USD',
-      auto_finalize: false
+      finalize_on_create: false
   )
   @order.order_items << Apruve::OrderItem.new(
       title: 'Monthly Delivery - Letter Paper',
