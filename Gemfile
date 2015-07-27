@@ -8,8 +8,8 @@ gem 'thin'
 gem 'activemodel'
 gem 'coffee-script'
 gem 'json', '~> 1.7.7'
-# gem 'apruve', github: 'apruve/apruve-ruby', branch: 'v4'
-gem 'apruve', :path => '../apruve-ruby'
+gem 'apruve', github: 'apruve/apruve-ruby', branch: 'v4'
+# gem 'apruve', :path => '../apruve-ruby'
 
 group :test do
   gem 'rspec'
