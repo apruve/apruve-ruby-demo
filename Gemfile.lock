@@ -1,5 +1,7 @@
-PATH
-  remote: ../apruve-ruby
+GIT
+  remote: git://github.com/apruve/apruve-ruby.git
+  revision: ff311e3204ef8496b6cd57e289a84ecf3cb1dc22
+  branch: v4
   specs:
     apruve (1.0.0)
       addressable (~> 2.3)
