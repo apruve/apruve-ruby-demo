@@ -89,7 +89,28 @@ end
 post '/finish_order' do
   # You should save the order_id with the order in your database.
   # Since the order automatically finalizes, we only need to get the status to display to the user.
-  @status = Apruve::Order.find(params[:token]).status
+  order = Apruve::Order.find(params[:token])
+
+  if order.status == 'accepted'
+    invoices = Apruve::Order.invoices_for(params[:token])
+    if invoices.all? { |invoice| invoice.status == 'closed'}
+      # The order is accepted and fully paid for.  Report that goods are being shipped.
+      @status = 'accepted'
+    elsif order.payment_terms && order.payment_terms['final_state_at']
+      # The order was accepted with payment terms.  Report that goods are being shipped.
+      @status = 'accepted'
+    else
+      # The order was accepted, but either payment is still pending.  Report that goods will
+      # ship once payment is complete.
+      @status = 'pending_payment'
+    end
+  elsif order.status == 'canceled'
+    @status = 'canceled'
+  else
+    # The order is waiting for either a requisition or payment terms to be approved.  Report that goods will ship once
+    # payment is approved.
+    @status = 'pending_approval'
+  end
 
   # If you track invoices separately from the order, you may want to get the invoices and store the IDs.
   # @invoices = Apruve::Order.invoices_for(params[:token])
