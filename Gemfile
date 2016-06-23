@@ -7,7 +7,7 @@ gem 'shotgun'
 gem 'thin'
 gem 'activemodel'
 gem 'coffee-script'
-gem 'json', '~> 1.7.7'
+gem 'json', '>= 1.8.3'
 gem 'rack-flash3'
 gem 'apruve' #, :path => '../apruve-ruby'
 
