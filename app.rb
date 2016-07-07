@@ -90,20 +90,6 @@ post '/finish_order' do
   erb :finished
 end
 
-post '/finish_subscription' do
-  # You should save the order_id with the order in your database.
-  #
-  # If you don't want to charge the customer immediately, call Order#finalize to tell Apruve to
-  # escalate the request to the payer and get their approval without charging their credit card. You can
-  # create a payment to actually charge the customer later. Or, in this case, we're using Apruve's automated
-  # subscriptions, so Apruve will create invoices for us automatically.
-  #
-  # (Note: This is NOT the same as a credit card authorization! This is more akin to receiving a purchase order
-  # from your customer after sending them a quote.)
-  @status = Apruve::Order.finalize!(params[:token]).status
-  erb :finished
-end
-
 post '/webhook_notify' do
   # We got a webhook. You should look up the order in your database and complete or cancel it as appropriate.
   puts "GOT WEBHOOK DATA FOR PAYMENT #{@webhook_body}"
