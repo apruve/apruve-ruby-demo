@@ -18,7 +18,7 @@ apruve_environment = ENV['APRUVE_ENVIRONMENT'].nil? ? 'test' : ENV['APRUVE_ENVIR
 
 
 # set the default credit application url
-ENV['APRUVE_CREDIT_APP_URL'] = 'http://localhost:3000/apply/munder-difflin-inc' if ENV['APRUVE_CREDIT_APP_URL'].nil?
+ENV['APRUVE_CREDIT_APP_URL'] ||= 'http://localhost:3000/apply/munder-difflin-inc'
 
 
 # can override other specifics here if necessary
