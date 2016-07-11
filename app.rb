@@ -16,6 +16,11 @@ apruve_public_key = OpenSSL::PKey.read(File.new(('apruve.pub')))
 # default the environment to test.apruve.com
 apruve_environment = ENV['APRUVE_ENVIRONMENT'].nil? ? 'test' : ENV['APRUVE_ENVIRONMENT']
 
+
+# set the default credit application url
+ENV['APRUVE_CREDIT_APP_URL'] = 'http://localhost:3000/apply/munder-difflin-inc' if ENV['APRUVE_CREDIT_APP_URL'].nil?
+
+
 # can override other specifics here if necessary
 config_overrides = {}
 config_overrides[:scheme] = ENV['APRUVE_SCHEME'] unless ENV['APRUVE_SCHEME'].nil?
