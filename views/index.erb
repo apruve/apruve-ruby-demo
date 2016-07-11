@@ -122,18 +122,7 @@
     <div class="span5 pull-right">
       Apruve makes buying stuff for work simple and safe.  Want to use a check or a PO? Want your company to pay for your
       purchase? Click the Apruve button to get started.
-      <a class="btn btn-primary btn-small credit-app-button" href="http://test.apruve.com/apply/munder-difflin">Apply for a Corporate Account</a>
+      <a class="btn btn-primary btn-small credit-app-button" href="<%= ENV['APRUVE_CREDIT_APP_URL'] %> ">Apply for a Corporate Account</a>
     </div>
   </div>
-
-  <script type="text/javascript">
-    var apruve_environment = '<%= ENV['APRUVE_ENVIRONMENT'] %>';
-
-    var credit_app_url = '';
-    if(apruve_environment == 'local')
-      credit_app_url = 'http://' + window.location.hostname + ':3000/apply/munder-difflin-inc';
-
-    $(".credit-app-button").prop("href", credit_app_url);
-
-  </script>
 </div>

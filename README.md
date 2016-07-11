@@ -26,6 +26,8 @@ Set environment variables for your Merchant ID and API-Key
     $ export APRUVE_MERCHANT_ID
     $ APRUVE_ENVIRONMENT="test"
     $ export APRUVE_ENVIROMENT
+    $ APRUVE_CREDIT_APP_URL
+    $ export APRUVE_CREDIT_APP_URL
 
 Run the app
 
