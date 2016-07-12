@@ -29,16 +29,14 @@
     </div>
   </div>
 </div>
-<div class="row">
-  <div>
+<div class="row-fluid">
+  <div class="span6">
+    <h1>
+      Your Cart
+    </h1>
   </div>
-  <h1>
-    Your Cart
-  </h1>
-</div>
-<div class="row">
-  <div class="col-md-12 credit-application">
-    <a class="btn btn-primary btn-small credit-app-button pull-right span-5" href="<%= ENV['APRUVE_CREDIT_APP_URL'] %> ">Pay later with Apruve Corporate Accounts</a>
+  <div class="span6 pull-right">
+    <a class="credit-app-button pull-right" href="<%= ENV['APRUVE_CREDIT_APP_URL'] %> ">Get a Corporate Account with Munder Difflin</a>
   </div>
 </div>
 <div id="shoppingCart">
