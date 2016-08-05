@@ -11,6 +11,10 @@ gem 'json', '>= 1.8.3'
 gem 'rack-flash3'
 gem 'apruve' #, :path => '../apruve-ruby'
 
+group :development, :test do
+  gem 'dotenv'
+end
+
 group :test do
   gem 'rspec'
   gem 'shoulda-matchers'

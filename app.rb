@@ -6,6 +6,9 @@ require 'net/http'
 require 'apruve'
 require 'openssl'
 require 'base64'
+require 'dotenv'
+
+Dotenv.load
 
 set :bind, '0.0.0.0'
 
