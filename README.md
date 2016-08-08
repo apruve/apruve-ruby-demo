@@ -18,7 +18,7 @@ Open a terminal in your newly created directory. Run `bundle install` to get the
 
     $ bundle install
 
-Set environment variables for your Merchant ID and API-Key
+Set environment variables for your Merchant ID and API-Key (see .env_example file)
 
     $ APRUVE_API_KEY="your-api-key"
     $ export APRUVE_API_KEY

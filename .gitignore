@@ -88,3 +88,6 @@ Vagrantfile
 
 # cache for jasmine-headless-webkit
 .jhw-cache
+
+# Local environment variable files
+.env
