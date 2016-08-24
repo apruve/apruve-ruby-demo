@@ -10,10 +10,7 @@ gem 'coffee-script'
 gem 'json', '>= 1.8.3'
 gem 'rack-flash3'
 gem 'apruve' #, :path => '../apruve-ruby'
-
-group :development, :test do
-  gem 'dotenv'
-end
+gem 'dotenv'
 
 group :test do
   gem 'rspec'
