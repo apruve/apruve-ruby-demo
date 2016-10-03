@@ -36,7 +36,7 @@
     </h1>
   </div>
   <div class="span6 pull-right">
-    <a class="credit-app-button pull-right" href="<%= ENV['APRUVE_CREDIT_APP_URL'] %> ">Get a Corporate Account with Munder Difflin</a>
+    <a class="credit-app-button pull-right" href="<%= ENV['APRUVE_CREDIT_APP_URL'] %>" target="_blank">Get a Corporate Account with Munder Difflin</a>
   </div>
 </div>
 <div id="shoppingCart">
@@ -76,39 +76,38 @@
       </table>
     </div>
   </div>
-  <div class="row">
-    <div class="pull-right text-right totals">
-      <p>
-        <strong>
-          Subtotal:&nbsp;
-        </strong>
-        $55.00
-      </p>
-
-      <p>
-        <strong>
-          Shipping:&nbsp;
-        </strong>
-        $5.00
-      </p>
-
-      <p>
-        <strong>
-          Total:&nbsp;
-        </strong>
-        $60.00
-      </p>
-
-      <p>&nbsp;</p>
-
-      <p>
+  <div class="row-fluid">
+    <div class="span8">
+      <div class="pull-right">
         <strong>Shopper Email:</strong>&nbsp;&nbsp;
         <input class="input-large" type="text" id="shopperEmail" value="<%= ENV['DEFAULT_SHOPPER_EMAIL']||'carduser@example.com'%>">
-      </p>
-
-      <p>&nbsp;</p>
+      </div>
     </div>
+    <div class="span4">
+      <div class="pull-right text-right totals">
+        <p>
+          <strong>
+            Subtotal:&nbsp;
+          </strong>
+          $55.00
+        </p>
 
+        <p>
+          <strong>
+            Shipping:&nbsp;
+          </strong>
+          $5.00
+        </p>
+
+        <p>
+          <strong>
+            Total:&nbsp;
+          </strong>
+          $60.00
+        </p>
+
+      </div>
+    </div>
   </div>
   <div class="row-fluid">
     <div class="pull-right" style="margin-left: 15px">
