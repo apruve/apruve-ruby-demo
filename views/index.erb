@@ -10,8 +10,25 @@
       apruve.setShopper($('#shopperEmail').val());
       $('#shopperEmail').on('blur', function(event) {
         apruve.setShopper($('#shopperEmail').val());
-      })
-    })
+      });
+    });
+</script>
+<script type="text/javascript">
+  $(function() {
+    $('#checkout-options').submit(function() {
+      var values = {};
+      $.each($(this).serializeArray(), function(i, field) {
+          values[field.name] = field.value;
+      });
+      if (values['payment-method'] == 'apruve') {
+        apruve.startCheckout();
+      }
+      else {
+        alert('Credit card payments are not supported in this demo. Please pay with Apruve.')
+      }
+      return false;
+    });
+  });
 </script>
 
 <div id="thankYou" style="display:none">
@@ -55,7 +72,7 @@
         </thead>
         <tr>
           <td>
-            <img src="/img/letterpaper.jpg" class="productPhoto"/>
+            <img src="/img/letterpaper.jpg" class="productPhoto" width="80" height="80"/>
           </td>
           <td>Letter Paper</td>
           <td>20 lb ream (500 Sheets). Paper dimensions are 8.5 x 11.00 inches.</td>
@@ -65,7 +82,7 @@
         </tr>
         <tr>
           <td>
-            <img src="/img/legalpaper.jpg" class="productPhoto"/>
+            <img src="/img/legalpaper.jpg" class="productPhoto" width="80" height="80"/>
           </td>
           <td>Legal Paper</td>
           <td>24 lb ream (250 Sheets). Paper dimensions are 8.5 x 14.00 inches.</td>
@@ -77,41 +94,70 @@
     </div>
   </div>
   <div class="row-fluid">
-    <div class="span8">
-      <div class="pull-right">
-        <strong>Shopper Email:</strong>&nbsp;&nbsp;
-        <input class="input-large" type="text" id="shopperEmail" value="<%= ENV['DEFAULT_SHOPPER_EMAIL']||'carduser@example.com'%>">
-      </div>
+    <div class="span9">
+      <strong>Shopper Email:</strong>&nbsp;&nbsp;
+      <input class="input-large" type="text" id="shopperEmail" value="<%= ENV['DEFAULT_SHOPPER_EMAIL']||'carduser@example.com'%>">
     </div>
-    <div class="span4">
-      <div class="pull-right text-right totals">
+    <div class="span3">
+      <div class="text-right totals">
         <p>
-          <strong>
-            Subtotal:&nbsp;
+          <strong class="pull-left">
+            Subtotal:
           </strong>
           $55.00
         </p>
 
         <p>
-          <strong>
-            Shipping:&nbsp;
+          <strong class="pull-left">
+            Shipping:
           </strong>
           $5.00
         </p>
 
         <p>
-          <strong>
-            Total:&nbsp;
+          <strong class="pull-left">
+            Total:
           </strong>
           $60.00
         </p>
-
       </div>
+      <hr>
     </div>
   </div>
   <div class="row-fluid">
-    <div class="pull-right" style="margin-left: 15px">
-      <%= Apruve.button %>
+    <div class="span9 text-right">
+      <h4 style="margin-right: 20px; margin-top: 0;">
+        Choose Your Payment Method
+      </h4>
+    </div>
+    <div class="span3">
+      <form id="checkout-options">
+        <div class="radio" style="margin-bottom: 10px;">
+          <label>
+            <input type="radio" name="payment-method" id="payment-method-1" value="apruve" checked>
+            <img src="/img/apruve.png" width="75" height="20">
+            <div>
+              <small>Business Credit</small>
+            </div>
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="payment-method" id="payment-method-2" value="credit-card">
+            <img src="/img/credit-card-logos-sm.png" width="132" height="25">
+            <div>
+              <small>Credit Card</small>
+            </div>
+          </label>
+        </div>
+        <br>
+        <button class="btn btn-large btn-primary" type="submit">
+          Checkout
+        </button>
+      </form>
+      <div style="display: none;">
+        <%= Apruve.button %>
+      </div>
     </div>
   </div>
 </div>
