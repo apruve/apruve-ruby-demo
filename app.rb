@@ -37,13 +37,50 @@ before '/webhook_notify' do
   @webhook_body = request.body.read
 end
 
+get '/orders' do
+  send_file File.expand_path('orders.html', settings.public_folder)
+end
+
+post '/orders' do
+  request.body.rewind
+  payload = JSON.parse request.body.read
+  total_amount_cents = payload['orders'].map {|order|
+    order['subtotal'].to_f
+  }.reduce(:+)
+  total_amount_cents = ((total_amount_cents + payload['shipping'].to_f) * 100).round
+
+  @order = Apruve::Order.new(
+      merchant_id: merchant_id,
+      shopper_id: 'd03bf60f2e5b8d983e7131a9a1df4cd1',
+      currency: 'USD',
+      amount_cents: total_amount_cents,
+      shipping_cents: (payload['shipping'].to_f * 100).round,
+      payment_term: {corporate_account_id: '8d8c66b9051e5c1b8e7a523e21ee7575'}
+  )
+
+  payload['orders'].each {|order|
+    @order.order_items << Apruve::OrderItem.new(
+        title: order['name'],
+        sku: order['sku'],
+        price_ea_cents: (order['price'].to_f * 100).round,
+        quantity: order['quantity'].to_i,
+        price_total_cents: (order['subtotal'].to_f * 100).round
+    )
+  }
+
+  @order.save!
+end
+
 get '/' do
   # Create a payment request and some line items
   @order = Apruve::Order.new(
       merchant_id: merchant_id,
+      shopper_id: 'd03bf60f2e5b8d983e7131a9a1df4cd1',
       currency: 'USD',
       amount_cents: 6000,
-      shipping_cents: 500
+      shipping_cents: 500,
+      payment_term: {corporate_account_id: '8d8c66b9051e5c1b8e7a523e21ee7575'}
+
   )
   @order.order_items << Apruve::OrderItem.new(
       title: 'Letter Paper',
@@ -73,7 +110,7 @@ post '/finish_order' do
 
   if order.status == 'accepted'
     invoices = Apruve::Order.invoices_for(params[:token])
-    if invoices.all? { |invoice| invoice.status == 'closed'}
+    if invoices.all? {|invoice| invoice.status == 'closed'}
       # The order is accepted and fully paid for.  Report that goods are being shipped.
       @status = 'accepted'
     elsif order.payment_terms && order.payment_terms['final_state_at']
