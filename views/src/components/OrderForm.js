@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button, Input, Row, Col } from 'reactstrap'
+import { Alert, Button, Input, Row, Col } from 'reactstrap'
 import OrderTable from './OrderTable'
 import CustomerSelect from './CustomerSelect'
 
@@ -18,8 +18,9 @@ class OrderForm extends React.Component {
         quantity: '',
         subtotal: ''
       }],
-      error_visible: false,
-      success_visible: false
+      alert_message: 'hi',
+      alert_color: 'success',
+      alert_visible: false
     }
 
     this.name = this.name.bind(this)
@@ -37,8 +38,8 @@ class OrderForm extends React.Component {
     this.shipping_update = this.shipping_update.bind(this)
     this.select_customer = this.select_customer.bind(this)
     this.get_shopper_id = this.get_shopper_id.bind(this)
-    this.on_success_dismiss = this.on_success_dismiss.bind(this)
-    this.on_error_dismiss = this.on_error_dismiss.bind(this)
+    this.alert = this.alert.bind(this)
+    this.dismiss_alert = this.dismiss_alert.bind(this)
   }
 
   componentDidMount() {
@@ -61,14 +62,6 @@ class OrderForm extends React.Component {
     .catch((err) => {
       console.error('Error getting customers.json: ', err)
     })
-  }
-
-  on_error_dismiss() {
-    this.setState({ error_visible: false })
-  }
-
-  on_success_dismiss() {
-    this.setState({ success_visible: false })
   }
 
   name(text, index) {
@@ -173,12 +166,11 @@ class OrderForm extends React.Component {
     })
     .then((res) => {
       if (res.status === 404) {
-        console.error('got a 404')
-        this.setState({ error_visible: true })
+        this.alert('Could not find that user in Apruve', 'warning')
         return
       } else if (res.status !== 200) {
         console.error('Bad status getting shopper_id: ', res.status)
-        this.setState({ error_visible: true })
+        this.alert('Error placing the order!', 'danger')
         return
       }
       res.json().then((data) => {
@@ -209,9 +201,9 @@ class OrderForm extends React.Component {
     })
     .then((res) => {
       if (res.status === 200) {
-        this.setState({ success_visible: true })
+        this.alert('Successfuly placed the order!', 'success')
       } else {
-        this.setState({ error_visible: true })
+        this.alert('Error placing the order!', 'danger')
       }
     })
     .catch((err) => {
@@ -233,6 +225,16 @@ class OrderForm extends React.Component {
     this.setState({ selected_customer })
   }
 
+  alert(alert_message, alert_color) {
+    this.setState({ alert_color })
+    this.setState({ alert_message })
+    this.setState({ alert_visible: true })
+  }
+
+  dismiss_alert() {
+    this.setState({ alert_visible: false })
+  }
+
   render() {
     let subtotal = this.state.orders.map((order) => Number(order.subtotal)).reduce((sum, current) => sum += current)
     let shipping = Number(this.state.shipping)
@@ -243,15 +245,12 @@ class OrderForm extends React.Component {
       marginTop: 24,
       marginBottom: 24
     }
-
+    console.log('alert color:', this.state.alert_color)
     return (
       <div>
         <div>
-          <Alert color="success" isOpen={this.state.success_visible} toggle={this.on_success_dismiss}>
-            Successfuly placed the order!
-          </Alert>
-          <Alert color="danger" isOpen={this.state.error_visible} toggle={this.on_error_dismiss}>
-            Could not submit the order, user was not found in Apruve.
+          <Alert color={this.state.alert_color} isOpen={this.state.alert_visible} toggle={this.dismiss_alert}>
+            {this.state.alert_message}
           </Alert>
         </div>
         <Row style={selectionStyle}>
