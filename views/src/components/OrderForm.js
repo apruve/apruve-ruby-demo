@@ -166,7 +166,7 @@ class OrderForm extends React.Component {
     })
     .then((res) => {
       if (res.status === 404) {
-        this.alert('Could not find that user in Apruve', 'warning')
+        this.alert('Could not find that user in Apruve', 'danger')
         return
       } else if (res.status !== 200) {
         console.error('Bad status getting shopper_id: ', res.status)
