@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem,  Container, Button, Input, Row, Col } from 'reactstrap'
+import { Alert, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button, Input, Row, Col } from 'reactstrap'
 import OrderTable from './OrderTable'
 import CustomerSelect from './CustomerSelect'
 
@@ -17,7 +17,9 @@ class OrderForm extends React.Component {
         price: '',
         quantity: '',
         subtotal: ''
-      }]
+      }],
+      error_visible: false,
+      success_visible: false
     }
 
     this.name = this.name.bind(this)
@@ -35,6 +37,8 @@ class OrderForm extends React.Component {
     this.shipping_update = this.shipping_update.bind(this)
     this.select_customer = this.select_customer.bind(this)
     this.get_shopper_id = this.get_shopper_id.bind(this)
+    this.on_success_dismiss = this.on_success_dismiss.bind(this)
+    this.on_error_dismiss = this.on_error_dismiss.bind(this)
   }
 
   componentDidMount() {
@@ -57,6 +61,14 @@ class OrderForm extends React.Component {
     .catch((err) => {
       console.error('Error getting customers.json: ', err)
     })
+  }
+
+  on_error_dismiss() {
+    this.setState({ error_visible: false })
+  }
+
+  on_success_dismiss() {
+    this.setState({ success_visible: false })
   }
 
   name(text, index) {
@@ -162,9 +174,11 @@ class OrderForm extends React.Component {
     .then((res) => {
       if (res.status === 404) {
         console.error('got a 404')
+        this.setState({ error_visible: true })
         return
       } else if (res.status !== 200) {
         console.error('Bad status getting shopper_id: ', res.status)
+        this.setState({ error_visible: true })
         return
       }
       res.json().then((data) => {
@@ -194,10 +208,11 @@ class OrderForm extends React.Component {
       })
     })
     .then((res) => {
-      console.log('result from post:', res)
-    })
-    .then((res) => {
-      console.log('second result from post:', res)
+      if (res.status === 200) {
+        this.setState({ success_visible: true })
+      } else {
+        this.setState({ error_visible: true })
+      }
     })
     .catch((err) => {
       console.error('Error from POST:', err)
@@ -231,53 +246,59 @@ class OrderForm extends React.Component {
 
     return (
       <div>
-        <Container>
-          <Row style={selectionStyle}>
-            <Col sm="4" md = "3" lg="3" xs="4">
-              Customer Name:
-              <CustomerSelect
-                customers={this.state.customers}
-                selected_customer={this.state.selected_customer}
-                select_customer={this.select_customer}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <OrderTable
-              orders={this.state.orders}
-              name={this.name}
-              sku={this.sku}
-              price={this.price}
-              price_update={this.price_update}
-              quantity={this.quantity}
-              quantity_update={this.quantity_update}
-              subtotal={this.subtotal}
-              subtotal_update={this.subtotal_update}
-              push_order={this.push_order}
-              delete_order={this.delete_order}
+        <div>
+          <Alert color="success" isOpen={this.state.success_visible} toggle={this.on_success_dismiss}>
+            Successfuly placed the order!
+          </Alert>
+          <Alert color="danger" isOpen={this.state.error_visible} toggle={this.on_error_dismiss}>
+            Could not submit the order, user was not found in Apruve.
+          </Alert>
+        </div>
+        <Row style={selectionStyle}>
+          <Col sm="4" md = "3" lg="3" xs="4">
+            Customer Name:
+            <CustomerSelect
+              customers={this.state.customers}
+              selected_customer={this.state.selected_customer}
+              select_customer={this.select_customer}
             />
-          </Row>
-          <Row>
-            <Col sm="6" md = "8" lg="9" xs="6"> </Col>
-            <Col sm="4" md = "2" lg="2" xs="4"><b>Subtotal:</b></Col>
-            <Col sm="2" md = "2" lg="1" xs="2">${subtotal.toFixed(2)}</Col>
-          </Row>
-          <Row>
-            <Col sm="6" md = "8" lg="9" xs="6"> </Col>
-            <Col sm="4" md = "2" lg="2" xs="4"><b>Shipping:</b></Col>
-            <Col sm="2" md = "2" lg="1" xs="2">
-              <Input type="text" value={this.state.shipping} onChange={this.shipping} onBlur={this.shipping_update} />
-            </Col>
-          </Row>
-          <Row>
-            <Col sm="6" md = "8" lg="9" xs="6"> </Col>
-            <Col sm="4" md = "2" lg="2" xs="4"><b>Total:</b></Col>
-            <Col sm="2" md = "2" lg="1" xs="2">${(subtotal + shipping).toFixed(2)}</Col>
-          </Row>
-          <Row>
-            <Button color="success" onClick={this.get_shopper_id}>Create Order</Button>
-          </Row>
-        </Container>
+          </Col>
+        </Row>
+        <Row>
+          <OrderTable
+            orders={this.state.orders}
+            name={this.name}
+            sku={this.sku}
+            price={this.price}
+            price_update={this.price_update}
+            quantity={this.quantity}
+            quantity_update={this.quantity_update}
+            subtotal={this.subtotal}
+            subtotal_update={this.subtotal_update}
+            push_order={this.push_order}
+            delete_order={this.delete_order}
+          />
+        </Row>
+        <Row>
+          <Col sm="6" md = "8" lg="9" xs="6"> </Col>
+          <Col sm="4" md = "2" lg="2" xs="4"><b>Subtotal:</b></Col>
+          <Col sm="2" md = "2" lg="1" xs="2">${subtotal.toFixed(2)}</Col>
+        </Row>
+        <Row>
+          <Col sm="6" md = "8" lg="9" xs="6"> </Col>
+          <Col sm="4" md = "2" lg="2" xs="4"><b>Shipping:</b></Col>
+          <Col sm="2" md = "2" lg="1" xs="2">
+            <Input type="text" value={this.state.shipping} onChange={this.shipping} onBlur={this.shipping_update} />
+          </Col>
+        </Row>
+        <Row>
+          <Col sm="6" md = "8" lg="9" xs="6"> </Col>
+          <Col sm="4" md = "2" lg="2" xs="4"><b>Total:</b></Col>
+          <Col sm="2" md = "2" lg="1" xs="2">${(subtotal + shipping).toFixed(2)}</Col>
+        </Row>
+        <Row>
+          <Button color="success" onClick={this.get_shopper_id}>Create Order</Button>
+        </Row>
       </div>
     )
   }
