@@ -78,6 +78,7 @@ post '/orders' do
   payload['orders'].each { |order|
     @order.order_items << Apruve::OrderItem.new(
       title: order['name'],
+      description: order['name'],
       sku: order['sku'],
       price_ea_cents: (order['price'].to_f * 100).round,
       quantity: order['quantity'].to_i,
