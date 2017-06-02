@@ -14,16 +14,24 @@ Clone this repository into a directory.
 
 ### Running
 
-Open a terminal in your newly created directory. Run `bundle install` to get the dependencies.
+Open a terminal in your newly created directory. Run `bundle install` to get the Ruby dependencies, and `npm install` for the Node/React dependencies.
 
     $ bundle install
+    $ npm install
 
-Set environment variables for your Merchant ID and API-Key (see .env_example file)
+You will also need to use `webpack` to bundle the Node assets. Install webpack and run `webpack`.
+
+    $ npm install webpack -g
+    $ webpack
+
+Set environment variables for your Merchant ID, Corporate Account ID, and API-Key (see .env_example file)
 
     $ APRUVE_API_KEY="your-api-key"
     $ export APRUVE_API_KEY
     $ APRUVE_MERCHANT_ID="your-merchant-id"
     $ export APRUVE_MERCHANT_ID
+    $ APRUVE_CORPORATE_ACCOUNT_ID="your-corporate-account-id"
+    $ export APRUVE_CORPORATE_ACCOUNT_ID 
     $ APRUVE_ENVIRONMENT="test"
     $ export APRUVE_ENVIROMENT
     $ APRUVE_CREDIT_APP_URL
