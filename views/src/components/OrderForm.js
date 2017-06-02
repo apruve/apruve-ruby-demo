@@ -1,12 +1,15 @@
 import React from 'react'
-import { Container, Button, Input, Row, Col } from 'reactstrap'
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem,  Container, Button, Input, Row, Col } from 'reactstrap'
 import OrderTable from './OrderTable'
+import CustomerSelect from './CustomerSelect'
 
 class OrderForm extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      customers: [],
+      selected_customer: 0,
       shipping: '0.00',
       orders: [{
         name: '',
@@ -30,18 +33,42 @@ class OrderForm extends React.Component {
     this.post_order = this.post_order.bind(this)
     this.shipping = this.shipping.bind(this)
     this.shipping_update = this.shipping_update.bind(this)
+    this.select_customer = this.select_customer.bind(this)
+    this.get_shopper_id = this.get_shopper_id.bind(this)
+  }
+
+  componentDidMount() {
+    let self = this
+    fetch('/customers', {
+      headers: {
+        'Accept': 'application/json',
+      },
+      method: 'GET'
+    })
+    .then((res) => {
+      if (res.status !== 200) {
+        console.error('Bad status getting customers.json: ', res.status)
+        return
+      }
+      res.json().then((customers) => {
+        self.setState({ customers })
+      })
+    })
+    .catch((err) => {
+      console.error('Error getting customers.json: ', err)
+    })
   }
 
   name(text, index) {
     let orders = this.state.orders.slice()
     orders[index].name = text
-    this.setState({ orders: orders })
+    this.setState({ orders })
   }
 
   sku(text, index) {
     let orders = this.state.orders.slice()
     orders[index].sku = text
-    this.setState({ orders: orders })
+    this.setState({ orders })
   }
 
   price(text, index) {
@@ -51,8 +78,8 @@ class OrderForm extends React.Component {
     let quantity = orders[index].quantity
     quantity = quantity.length === 0 ? 1 : Number(quantity)
     orders[index].subtotal = (quantity * price).toFixed(2)
-    orders[index].price = text 
-    this.setState({ orders: orders })
+    orders[index].price = text
+    this.setState({ orders })
   }
 
   price_update(index) {
@@ -62,7 +89,7 @@ class OrderForm extends React.Component {
     if (isNaN(price)) price = 0
     if (isNaN(quantity)) quantity = 1
     orders[index].price = price.toFixed(2)
-    this.setState({ orders: orders })
+    this.setState({ orders })
   }
 
   quantity(text, index) {
@@ -73,7 +100,7 @@ class OrderForm extends React.Component {
     if (isNaN(price)) price = 0
     orders[index].subtotal = (quantity * price).toFixed(2)
     orders[index].quantity = text
-    this.setState({ orders: orders })
+    this.setState({ orders })
   }
 
   quantity_update(index) {
@@ -82,26 +109,26 @@ class OrderForm extends React.Component {
     let price = Number(orders[index].price)
     if (isNaN(quantity)) {
       quantity = 1
-      orders[index].quantity = '' 
+      orders[index].quantity = ''
     }
     if (isNaN(price)) {
       orders[index].subtotal = ''
     } else {
-      orders[index].subtotal = (quantity * Number(orders[index].price)).toFixed(2) 
+      orders[index].subtotal = (quantity * Number(orders[index].price)).toFixed(2)
     }
-    this.setState({ orders: orders })
+    this.setState({ orders })
   }
 
   subtotal(text, index) {
     let orders = this.state.orders.slice()
     orders[index].subtotal = text
-    this.setState({ orders: orders })
+    this.setState({ orders })
   }
 
   subtotal_update(index) {
     let orders = this.state.orders.slice()
     orders[index].subtotal = Number(orders[index].price) * Number(orders[index].quantity).toFixed(2)
-    this.setState({ orders: orders })
+    this.setState({ orders })
   }
 
   push_order() {
@@ -120,10 +147,40 @@ class OrderForm extends React.Component {
   delete_order(index) {
     let orders = this.state.orders.slice()
     orders.splice(index, 1)
-    this.setState({ orders: orders })
+    this.setState({ orders })
   }
 
-  post_order(index) {
+  get_shopper_id() {
+    let self = this
+    const url = '/shopper_id/' + this.state.customers[this.state.selected_customer].email
+    fetch(url, {
+      headers: {
+        'Accept': 'application/json',
+      },
+      method: 'GET'
+    })
+    .then((res) => {
+      if (res.status === 404) {
+        console.error('got a 404')
+        return
+      } else if (res.status !== 200) {
+        console.error('Bad status getting shopper_id: ', res.status)
+        return
+      }
+      res.json().then((data) => {
+        if (!data || !data.shopper_id || !data.shopper_id.length === 0) {
+          self.post_order(this.state.customers[this.state.selected_customer].shopper_id)
+        } else {
+          self.post_order(data.shopper_id)
+        }
+      })
+    })
+    .catch((err) => {
+      console.error('Error getting shopper_id: ', err)
+    })
+  }
+
+  post_order(shopper_id) {
     fetch('/orders', {
       headers: {
         'Accept': 'application/json',
@@ -132,14 +189,18 @@ class OrderForm extends React.Component {
       method: 'POST',
       body: JSON.stringify({
         shipping: this.state.shipping,
-        orders: this.state.orders
+        orders: this.state.orders,
+        shopper_id: shopper_id
       })
     })
-    .then(function(res) {
-      console.log('res1:', res)
+    .then((res) => {
+      console.log('result from post:', res)
     })
-    .then(function(res) {
-      console.log('res2:', res)
+    .then((res) => {
+      console.log('second result from post:', res)
+    })
+    .catch((err) => {
+      console.error('Error from POST:', err)
     })
   }
 
@@ -153,19 +214,34 @@ class OrderForm extends React.Component {
     this.setState({ shipping: shipping.toFixed(2) })
   }
 
+  select_customer(selected_customer) {
+    this.setState({ selected_customer })
+  }
+
   render() {
     let subtotal = this.state.orders.map((order) => Number(order.subtotal)).reduce((sum, current) => sum += current)
     let shipping = Number(this.state.shipping)
     if (isNaN(subtotal)) subtotal = 0
     if (isNaN(shipping)) shipping = 0
 
-    let s = {
-      float: 'left'
+    const selectionStyle = {
+      marginTop: 24,
+      marginBottom: 24
     }
 
     return (
       <div>
         <Container>
+          <Row style={selectionStyle}>
+            <Col sm="4" md = "3" lg="3" xs="4">
+              Customer Name:
+              <CustomerSelect
+                customers={this.state.customers}
+                selected_customer={this.state.selected_customer}
+                select_customer={this.select_customer}
+              />
+            </Col>
+          </Row>
           <Row>
             <OrderTable
               orders={this.state.orders}
@@ -199,7 +275,7 @@ class OrderForm extends React.Component {
             <Col sm="2" md = "2" lg="1" xs="2">${(subtotal + shipping).toFixed(2)}</Col>
           </Row>
           <Row>
-            <Button color="success" onClick={this.post_order}>Create Order</Button>
+            <Button color="success" onClick={this.get_shopper_id}>Create Order</Button>
           </Row>
         </Container>
       </div>

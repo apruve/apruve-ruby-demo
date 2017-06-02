@@ -6,7 +6,7 @@ module.exports = {
   },
   resolve: {
     modules: [__dirname, 'node_modules'],
-    extensions: ['*', '.js', '.jsx']
+    extensions: ['*', '.js', '.jsx', '.json']
   },
   module: {
     loaders: [
@@ -17,6 +17,10 @@ module.exports = {
         },
         test: /\.js?$/,
         exclude: /(node_modules|bower_components)/
+      },
+      {
+        test:/\.json$/,
+        loader: 'json-loader'
       }
     ]
   }

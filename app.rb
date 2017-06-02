@@ -7,6 +7,7 @@ require 'apruve'
 require 'openssl'
 require 'base64'
 require 'dotenv'
+require 'json'
 
 Dotenv.load
 
@@ -31,6 +32,7 @@ config_overrides[:host] = ENV['APRUVE_HOST'] unless ENV['APRUVE_HOST'].nil?
 config_overrides[:port] = ENV['APRUVE_PORT'] unless ENV['APRUVE_PORT'].nil?
 Apruve.configure(ENV['APRUVE_API_KEY'], apruve_environment, config_overrides)
 merchant_id = ENV['APRUVE_MERCHANT_ID']
+corporate_account_id = ENV['APRUVE_CORPORATE_ACCOUNT_ID']
 
 before '/webhook_notify' do
   request.body.rewind
@@ -41,30 +43,45 @@ get '/orders' do
   send_file File.expand_path('orders.html', settings.public_folder)
 end
 
+get '/customers' do
+  content_type :json
+  send_file File.expand_path('customers.json', settings.public_folder)
+end
+
+get '/shopper_id/:email' do
+  corporate_account = Apruve::CorporateAccount.find(merchant_id, params['email'])
+  content_type :json
+  if corporate_account.nil?
+    status 404
+    return ''
+  end
+  { shopper_id: corporate_account.customer_uuid }.to_json
+end
+
 post '/orders' do
   request.body.rewind
   payload = JSON.parse request.body.read
-  total_amount_cents = payload['orders'].map {|order|
+  total_amount_cents = payload['orders'].map { |order|
     order['subtotal'].to_f
   }.reduce(:+)
   total_amount_cents = ((total_amount_cents + payload['shipping'].to_f) * 100).round
 
   @order = Apruve::Order.new(
-      merchant_id: merchant_id,
-      shopper_id: 'd03bf60f2e5b8d983e7131a9a1df4cd1',
-      currency: 'USD',
-      amount_cents: total_amount_cents,
-      shipping_cents: (payload['shipping'].to_f * 100).round,
-      payment_term: {corporate_account_id: '8d8c66b9051e5c1b8e7a523e21ee7575'}
+    merchant_id: merchant_id,
+    shopper_id: payload['shopper_id'],
+    currency: 'USD',
+    amount_cents: total_amount_cents,
+    shipping_cents: (payload['shipping'].to_f * 100).round,
+    payment_term: { corporate_account_id: corporate_account_id }
   )
 
-  payload['orders'].each {|order|
+  payload['orders'].each { |order|
     @order.order_items << Apruve::OrderItem.new(
-        title: order['name'],
-        sku: order['sku'],
-        price_ea_cents: (order['price'].to_f * 100).round,
-        quantity: order['quantity'].to_i,
-        price_total_cents: (order['subtotal'].to_f * 100).round
+      title: order['name'],
+      sku: order['sku'],
+      price_ea_cents: (order['price'].to_f * 100).round,
+      quantity: order['quantity'].to_i,
+      price_total_cents: (order['subtotal'].to_f * 100).round
     )
   }
 
