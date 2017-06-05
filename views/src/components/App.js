@@ -9,19 +9,13 @@ class App extends React.Component {
         <Container>
           <Row>
             <Navbar color="faded" light>
-              <NavbarBrand href="/">reactstrap</NavbarBrand>
+              <NavbarBrand href="/">apruve</NavbarBrand>
               <Nav className="ml-auto" navbar>
                 <NavItem>
                   <NavLink href="/">Orders</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink href="/">Customers</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="/">Payments</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="/">Settings</NavLink>
+                  <NavLink href="/orders">Offline Orders</NavLink>
                 </NavItem>
               </Nav>
             </Navbar>

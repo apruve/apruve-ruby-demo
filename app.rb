@@ -39,8 +39,8 @@ before '/webhook_notify' do
   @webhook_body = request.body.read
 end
 
-get '/orders' do
-  send_file File.expand_path('orders.html', settings.public_folder)
+get '/offline_order' do
+  erb :offline_orders
 end
 
 get '/customers' do
@@ -49,13 +49,14 @@ get '/customers' do
 end
 
 get '/shopper_id/:email' do
-  corporate_account = Apruve::CorporateAccount.find(merchant_id, params['email'])
   content_type :json
-  if corporate_account.nil?
+  begin
+    corporate_account = Apruve::CorporateAccount.find(merchant_id, params['email'])
+    return { shoper_id: corporate_account.customer_uuid } .to_json
+  rescue Apruve::NotFound
     status 404
     return ''
   end
-  { shopper_id: corporate_account.customer_uuid }.to_json
 end
 
 post '/orders' do
