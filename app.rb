@@ -32,7 +32,6 @@ config_overrides[:host] = ENV['APRUVE_HOST'] unless ENV['APRUVE_HOST'].nil?
 config_overrides[:port] = ENV['APRUVE_PORT'] unless ENV['APRUVE_PORT'].nil?
 Apruve.configure(ENV['APRUVE_API_KEY'], apruve_environment, config_overrides)
 merchant_id = ENV['APRUVE_MERCHANT_ID']
-corporate_account_id = ENV['APRUVE_CORPORATE_ACCOUNT_ID']
 
 before '/webhook_notify' do
   request.body.rewind
@@ -43,19 +42,24 @@ get '/offline_order' do
   erb :offline_orders
 end
 
-get '/customers' do
-  content_type :json
-  send_file File.expand_path('customers.json', settings.public_folder)
+get '/corporate_accounts' do
+  begin
+    Apruve::CorporateAccount.find_all(merchant_id).to_json
+  rescue Apruve::NotFound
+    status 404
+    ''
+  end
 end
 
-get '/shopper_id/:email' do
+get '/corporate_account/:email' do
   content_type :json
   begin
     corporate_account = Apruve::CorporateAccount.find(merchant_id, params['email'])
-    return { shoper_id: corporate_account.customer_uuid } .to_json
+    puts "customer_id: #{corporate_account.customer_uuid}, id: #{corporate_account.id}"
+    { customer_id: corporate_account.customer_uuid, corporate_account_id: corporate_account.id} .to_json
   rescue Apruve::NotFound
     status 404
-    return ''
+    ''
   end
 end
 
@@ -73,7 +77,7 @@ post '/orders' do
     currency: 'USD',
     amount_cents: total_amount_cents,
     shipping_cents: (payload['shipping'].to_f * 100).round,
-    payment_term: { corporate_account_id: corporate_account_id }
+    payment_term: { corporate_account_id: payload['corporate_account_id'] }
   )
 
   payload['orders'].each { |order|
@@ -93,31 +97,28 @@ end
 get '/' do
   # Create a payment request and some line items
   @order = Apruve::Order.new(
-      merchant_id: merchant_id,
-      shopper_id: 'd03bf60f2e5b8d983e7131a9a1df4cd1',
-      currency: 'USD',
-      amount_cents: 6000,
-      shipping_cents: 500,
-      payment_term: {corporate_account_id: '8d8c66b9051e5c1b8e7a523e21ee7575'}
-
+    merchant_id: merchant_id,
+    currency: 'USD',
+    amount_cents: 6000,
+    shipping_cents: 500,
   )
   @order.order_items << Apruve::OrderItem.new(
-      title: 'Letter Paper',
-      description: '20 lb ream (500 Sheets). Paper dimensions are 8.5 x 11.00 inches.',
-      sku: 'LTR-20R',
-      price_ea_cents: 1200,
-      quantity: 3,
-      amount_cents: 3600,
-      view_product_url: 'https://merchant-demo.herokuapp.com'
+    title: 'Letter Paper',
+    description: '20 lb ream (500 Sheets). Paper dimensions are 8.5 x 11.00 inches.',
+    sku: 'LTR-20R',
+    price_ea_cents: 1200,
+    quantity: 3,
+    amount_cents: 3600,
+    view_product_url: 'https://merchant-demo.herokuapp.com'
   )
   @order.order_items << Apruve::OrderItem.new(
-      title: 'Legal Paper',
-      description: '24 lb ream (250 Sheets). Paper dimensions are 8.5 x 14.00 inches.',
-      sku: 'LGL-24R',
-      price_ea_cents: 950,
-      quantity: 2,
-      amount_cents: 1900,
-      view_product_url: 'https://merchant-demo.herokuapp.com'
+    title: 'Legal Paper',
+    description: '24 lb ream (250 Sheets). Paper dimensions are 8.5 x 14.00 inches.',
+    sku: 'LGL-24R',
+    price_ea_cents: 950,
+    quantity: 2,
+    amount_cents: 1900,
+    view_product_url: 'https://merchant-demo.herokuapp.com'
   )
   erb :index
 end

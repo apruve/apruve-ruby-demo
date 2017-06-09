@@ -44,7 +44,7 @@ class OrderForm extends React.Component {
 
   componentDidMount() {
     let self = this
-    fetch('/customers', {
+    fetch('/corporate_accounts', {
       headers: {
         'Accept': 'application/json',
       },
@@ -52,15 +52,24 @@ class OrderForm extends React.Component {
     })
     .then((res) => {
       if (res.status !== 200) {
-        console.error('Bad status getting customers.json: ', res.status)
+        console.error('Bad status getting corporate_accounts: ', res.status)
         return
       }
-      res.json().then((customers) => {
-        self.setState({ customers })
+      res.json().then((corporate_accounts) => {
+        let authorized_buyers = corporate_accounts.map((corporate_account) => {
+          return corporate_account.authorized_buyers
+        })
+        authorized_buyers = [].concat.apply([], authorized_buyers) // flatten the array
+        authorized_buyers = authorized_buyers.concat({ // not real (for error case)
+          name: 'Tommy Crumrine',
+          email: 'tommy@apruve.com',
+          id: '55dd34f29c61cb1fbe79ed9012312333'
+        })
+        self.setState({ customers: authorized_buyers })
       })
     })
     .catch((err) => {
-      console.error('Error getting customers.json: ', err)
+      console.error('Error getting corporate_accounts: ', err)
     })
   }
 
@@ -157,7 +166,7 @@ class OrderForm extends React.Component {
 
   get_shopper_id() {
     let self = this
-    const url = '/shopper_id/' + this.state.customers[this.state.selected_customer].email
+    const url = '/corporate_account/' + this.state.customers[this.state.selected_customer].email
     fetch(url, {
       headers: {
         'Accept': 'application/json',
@@ -169,15 +178,19 @@ class OrderForm extends React.Component {
         this.alert('Could not find that user in Apruve', 'danger')
         return
       } else if (res.status !== 200) {
-        console.error('Bad status getting shopper_id: ', res.status)
+        console.error('Bad status getting customer_id to be used as shopper_id: ', res.status)
         this.alert('Error placing the order!', 'danger')
         return
       }
       res.json().then((data) => {
-        if (!data || !data.shopper_id || !data.shopper_id.length === 0) {
-          self.post_order(this.state.customers[this.state.selected_customer].shopper_id)
+        if (!data || !data.customer_id || data.customer_id.length === 0) {
+          console.error('blank customer_id to be used as shopper_id')
+          this.alert('Error placing the order!', 'danger')
+        } else if(!data || !data.corporate_account_id || data.corporate_account_id.length === 0) {
+          console.error('blank corporate_account_id')
+          this.alert('Error placing the order!', 'danger')
         } else {
-          self.post_order(data.shopper_id)
+          self.post_order(data.customer_id, data.corporate_account_id)
         }
       })
     })
@@ -186,7 +199,7 @@ class OrderForm extends React.Component {
     })
   }
 
-  post_order(shopper_id) {
+  post_order(shopper_id, corporate_account_id) {
     fetch('/orders', {
       headers: {
         'Accept': 'application/json',
@@ -196,7 +209,8 @@ class OrderForm extends React.Component {
       body: JSON.stringify({
         shipping: this.state.shipping,
         orders: this.state.orders,
-        shopper_id: shopper_id
+        shopper_id,
+        corporate_account_id
       })
     })
     .then((res) => {
@@ -245,7 +259,7 @@ class OrderForm extends React.Component {
       marginTop: 24,
       marginBottom: 24
     }
-    console.log('alert color:', this.state.alert_color)
+
     return (
       <div>
         <div>
