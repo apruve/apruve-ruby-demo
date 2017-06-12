@@ -4,7 +4,7 @@
   "description": "Demo for our apruve-ruby gem",
   "main": "webpack.config.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
     "webpack:deploy": "webpack",
     "heroku-postbuild": "npm run webpack:deploy"
   },
