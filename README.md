@@ -14,9 +14,15 @@ Clone this repository into a directory.
 
 ### Running
 
-Open a terminal in your newly created directory. Run `bundle install` to get the dependencies.
+Open a terminal in your newly created directory. Run `bundle install` to get the Ruby dependencies, and `npm install` for the Node/React dependencies.
 
     $ bundle install
+    $ npm install
+
+You will also need to use `webpack` to bundle the Node assets. Install webpack and run `webpack`.
+
+    $ npm install webpack -g
+    $ webpack
 
 Set environment variables for your Merchant ID and API-Key (see .env_example file)
 

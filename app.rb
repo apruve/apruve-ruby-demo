@@ -7,6 +7,7 @@ require 'apruve'
 require 'openssl'
 require 'base64'
 require 'dotenv'
+require 'json'
 
 Dotenv.load
 
@@ -37,31 +38,87 @@ before '/webhook_notify' do
   @webhook_body = request.body.read
 end
 
+get '/offline_order' do
+  erb :offline_orders
+end
+
+get '/corporate_accounts' do
+  begin
+    Apruve::CorporateAccount.find_all(merchant_id).to_json
+  rescue Apruve::NotFound
+    status 404
+    ''
+  end
+end
+
+get '/corporate_account/:email' do
+  content_type :json
+  begin
+    corporate_account = Apruve::CorporateAccount.find(merchant_id, params['email'])
+    puts "customer_id: #{corporate_account.customer_uuid}, id: #{corporate_account.id}"
+    { customer_id: corporate_account.customer_uuid, corporate_account_id: corporate_account.id} .to_json
+  rescue Apruve::NotFound
+    status 404
+    ''
+  end
+end
+
+post '/orders' do
+  request.body.rewind
+  payload = JSON.parse request.body.read
+  total_amount_cents = payload['orders'].map { |order|
+    order['subtotal'].to_f
+  }.reduce(:+)
+  total_amount_cents = ((total_amount_cents + payload['shipping'].to_f) * 100).round
+
+  @order = Apruve::Order.new(
+    merchant_id: merchant_id,
+    shopper_id: payload['shopper_id'],
+    currency: 'USD',
+    amount_cents: total_amount_cents,
+    shipping_cents: (payload['shipping'].to_f * 100).round,
+    payment_term: { corporate_account_id: payload['corporate_account_id'] }
+  )
+
+  payload['orders'].each { |order|
+    @order.order_items << Apruve::OrderItem.new(
+      title: order['name'],
+      description: order['name'],
+      sku: order['sku'],
+      price_ea_cents: (order['price'].to_f * 100).round,
+      quantity: order['quantity'].to_i,
+      price_total_cents: (order['subtotal'].to_f * 100).round
+    )
+  }
+
+  @order.save!
+end
+
 get '/' do
   # Create a payment request and some line items
   @order = Apruve::Order.new(
-      merchant_id: merchant_id,
-      currency: 'USD',
-      amount_cents: 6000,
-      shipping_cents: 500
+    merchant_id: merchant_id,
+    currency: 'USD',
+    amount_cents: 6000,
+    shipping_cents: 500
   )
   @order.order_items << Apruve::OrderItem.new(
-      title: 'Letter Paper',
-      description: '20 lb ream (500 Sheets). Paper dimensions are 8.5 x 11.00 inches.',
-      sku: 'LTR-20R',
-      price_ea_cents: 1200,
-      quantity: 3,
-      amount_cents: 3600,
-      view_product_url: 'https://merchant-demo.herokuapp.com'
+    title: 'Letter Paper',
+    description: '20 lb ream (500 Sheets). Paper dimensions are 8.5 x 11.00 inches.',
+    sku: 'LTR-20R',
+    price_ea_cents: 1200,
+    quantity: 3,
+    amount_cents: 3600,
+    view_product_url: 'https://merchant-demo.herokuapp.com'
   )
   @order.order_items << Apruve::OrderItem.new(
-      title: 'Legal Paper',
-      description: '24 lb ream (250 Sheets). Paper dimensions are 8.5 x 14.00 inches.',
-      sku: 'LGL-24R',
-      price_ea_cents: 950,
-      quantity: 2,
-      amount_cents: 1900,
-      view_product_url: 'https://merchant-demo.herokuapp.com'
+    title: 'Legal Paper',
+    description: '24 lb ream (250 Sheets). Paper dimensions are 8.5 x 14.00 inches.',
+    sku: 'LGL-24R',
+    price_ea_cents: 950,
+    quantity: 2,
+    amount_cents: 1900,
+    view_product_url: 'https://merchant-demo.herokuapp.com'
   )
   erb :index
 end
@@ -73,10 +130,10 @@ post '/finish_order' do
 
   if order.status == 'accepted'
     invoices = Apruve::Order.invoices_for(params[:token])
-    if invoices.all? { |invoice| invoice.status == 'closed'}
+    if invoices.all? {|invoice| invoice.status == 'closed'}
       # The order is accepted and fully paid for.  Report that goods are being shipped.
       @status = 'accepted'
-    elsif order.payment_terms && order.payment_terms['final_state_at']
+    elsif order.payment_term && order.payment_term['final_state_at']
       # The order was accepted with payment terms.  Report that goods are being shipped.
       @status = 'accepted'
     else
