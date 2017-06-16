@@ -100,7 +100,7 @@ get '/' do
     merchant_id: merchant_id,
     currency: 'USD',
     amount_cents: 6000,
-    shipping_cents: 500,
+    shipping_cents: 500
   )
   @order.order_items << Apruve::OrderItem.new(
     title: 'Letter Paper',
