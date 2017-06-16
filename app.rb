@@ -133,7 +133,7 @@ post '/finish_order' do
     if invoices.all? {|invoice| invoice.status == 'closed'}
       # The order is accepted and fully paid for.  Report that goods are being shipped.
       @status = 'accepted'
-    elsif order.payment_terms && order.payment_terms['final_state_at']
+    elsif order.payment_term && order.payment_term['final_state_at']
       # The order was accepted with payment terms.  Report that goods are being shipped.
       @status = 'accepted'
     else
