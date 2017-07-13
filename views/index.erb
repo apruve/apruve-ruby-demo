@@ -23,9 +23,6 @@
       if (values['payment-method'] == 'apruve') {
         apruve.startCheckout();
       }
-      else {
-        alert('Credit card payments are not supported in this demo. Please pay with Apruve.')
-      }
       return false;
     });
   });
@@ -138,15 +135,6 @@
             <img src="/img/apruve.png" width="75" height="20">
             <div>
               <small>Business Credit</small>
-            </div>
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="payment-method" id="payment-method-2" value="credit-card">
-            <img src="/img/credit-card-logos-sm.png" width="132" height="25">
-            <div>
-              <small>Credit Card</small>
             </div>
           </label>
         </div>
