@@ -54,7 +54,7 @@ end
 get '/corporate_account/:email' do
   content_type :json
   begin
-    corporate_account = Apruve::CorporateAccount.find(merchant_id, Rack::Utils.escape_path(params['email']))
+    corporate_account = Apruve::CorporateAccount.find(merchant_id, params['email'])
     puts "customer_id: #{corporate_account.customer_uuid}, id: #{corporate_account.id}"
     { customer_id: corporate_account.customer_uuid, corporate_account_id: corporate_account.id} .to_json
   rescue Apruve::NotFound
