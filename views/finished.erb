@@ -1,18 +1,9 @@
 <div id="thankYou" style="padding-top:60px;">
   <div class="row">
     <div class="text-center">
-      <% if @status == 'accepted' %>
+      <% if ['accepted', 'pending_approval', 'pending_payment'].include? @status  %>
           <h1>Thank you for your order!</h1>
 
-          <h3>Your order has been accepted. We'll ship that right out.</h3>
-      <% elsif @status == 'pending_approval'%>
-          <h1>Thank you for your order!</h1>
-
-          <h3>Your order will be shipped as soon as final payment is approved.</h3>
-      <% elsif @status == 'pending_payment'%>
-          <h1>Thank you for your order!</h1>
-
-          <h3>Your order will be shipped as soon as final payment is completed.</h3>
       <% elsif @status == 'canceled' %>
           <h1>Payment for your order has been rejected.</h1>
 
