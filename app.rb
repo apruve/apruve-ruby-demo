@@ -38,6 +38,10 @@ before '/webhook_notify' do
   @webhook_body = request.body.read
 end
 
+before do
+  Apruve.configure(ENV['APRUVE_API_KEY'], apruve_environment, config_overrides)
+end
+
 get '/offline_order' do
   erb :offline_orders
 end
