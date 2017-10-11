@@ -30,8 +30,11 @@ config_overrides = {}
 config_overrides[:scheme] = ENV['APRUVE_SCHEME'] unless ENV['APRUVE_SCHEME'].nil?
 config_overrides[:host] = ENV['APRUVE_HOST'] unless ENV['APRUVE_HOST'].nil?
 config_overrides[:port] = ENV['APRUVE_PORT'] unless ENV['APRUVE_PORT'].nil?
-Apruve.configure(ENV['APRUVE_API_KEY'], apruve_environment, config_overrides)
 merchant_id = ENV['APRUVE_MERCHANT_ID']
+
+before do
+  Apruve.configure(ENV['APRUVE_API_KEY'], apruve_environment, config_overrides)
+end
 
 before '/webhook_notify' do
   request.body.rewind
