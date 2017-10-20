@@ -1,4 +1,5 @@
 import React from 'react'
+import 'whatwg-fetch'
 import { Alert, Button, Input, Row, Col } from 'reactstrap'
 import OrderTable from './OrderTable'
 import CustomerSelect from './CustomerSelect'

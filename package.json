@@ -30,6 +30,7 @@
     "react-addons-transition-group": "^15.5.2",
     "react-dom": "^15.5.4",
     "reactstrap": "^4.6.2",
-    "webpack": "^2.6.1"
+    "webpack": "^2.6.1",
+    "whatwg-fetch": "^2.0.3"
   }
 }
