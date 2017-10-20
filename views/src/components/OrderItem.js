@@ -59,7 +59,7 @@ class OrderItem extends React.Component {
           <Button type='button' size='sm' color='danger' disabled={this.props.disabled} onClick={this.delete_order}>X</Button>
         </td>
         <td>
-          <Input type='text' value={this.props.order.name} onChange={this.name} />
+          <Input type='text' pattern=".{3,}"   required title="3 characters minimum" value={this.props.order.name} onChange={this.name} />
         </td>
         <td>
           <Input type='text' value={this.props.order.sku} onChange={this.sku} />
