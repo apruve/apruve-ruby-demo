@@ -214,10 +214,13 @@ class OrderForm extends React.Component {
       })
     })
     .then((res) => {
+      let self = this;
       if (res.status === 200) {
         this.alert('Successfuly placed the order!', 'success')
       } else {
-        this.alert('Error placing the order!', 'danger')
+        res.text().then(function (text) {
+          self.alert('Error placing the order! ' + text , 'danger');
+        });
       }
     })
     .catch((err) => {
