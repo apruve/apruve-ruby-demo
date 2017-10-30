@@ -9,7 +9,7 @@ gem 'activemodel'
 gem 'coffee-script'
 gem 'json', '>= 1.8.3'
 gem 'rack-flash3'
-gem 'apruve' #, :path => '../apruve-ruby'
+gem 'apruve'
 gem 'dotenv'
 
 group :test do
