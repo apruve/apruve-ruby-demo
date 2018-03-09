@@ -19,7 +19,7 @@ apruve_public_key = OpenSSL::PKey.read(File.new(('apruve.pub')))
 
 # default the environment to test.apruve.com
 apruve_environment = ENV['APRUVE_ENVIRONMENT'].nil? ? 'test' : ENV['APRUVE_ENVIRONMENT']
-
+apruve_corporate_account_id = ENV['APRUVE_CORPORATE_ACCOUNT_ID']
 
 # set the default credit application url
 ENV['APRUVE_CREDIT_APP_URL'] ||= 'http://localhost:3000/apply/munder-difflin-inc'
@@ -47,7 +47,9 @@ end
 
 get '/corporate_accounts' do
   begin
-    Apruve::CorporateAccount.find_all(merchant_id).to_json
+    corporate_accounts = Apruve::CorporateAccount.find_all(merchant_id)
+    corporate_accounts = corporate_accounts.select { |ca| ca.id == apruve_corporate_account_id } if apruve_corporate_account_id
+    corporate_accounts
   rescue Apruve::NotFound
     status 404
     ''
