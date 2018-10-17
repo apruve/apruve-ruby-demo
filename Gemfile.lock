@@ -34,12 +34,12 @@ GEM
     json (1.8.3)
     minitest (5.9.0)
     multipart-post (2.0.0)
-    mustermann (1.0.2)
+    mustermann (1.0.3)
     public_suffix (3.0.0)
     rack (2.0.4)
     rack-flash3 (1.0.5)
       rack
-    rack-protection (2.0.1)
+    rack-protection (2.0.4)
       rack
     rspec (3.4.0)
       rspec-core (~> 3.4.0)
@@ -62,10 +62,10 @@ GEM
     shoulda-context (1.2.1)
     shoulda-matchers (2.8.0)
       activesupport (>= 3.0.0)
-    sinatra (2.0.1)
+    sinatra (2.0.4)
       mustermann (~> 1.0)
       rack (~> 2.0)
-      rack-protection (= 2.0.1)
+      rack-protection (= 2.0.4)
       tilt (~> 2.0)
     thin (1.7.0)
       daemons (~> 1.0, >= 1.0.9)
@@ -91,11 +91,11 @@ DEPENDENCIES
   shotgun
   shoulda
   shoulda-matchers
-  sinatra
+  sinatra (~> 2.0.2)
   thin
 
 RUBY VERSION
    ruby 2.3.7p456
 
 BUNDLED WITH
-   1.16.5
+   1.16.6
