@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.3.7'
 gem 'rack'
-gem 'sinatra'
+gem 'sinatra', '~> 2.0.2'
 gem 'shotgun'
 gem 'thin'
 gem 'activemodel'
