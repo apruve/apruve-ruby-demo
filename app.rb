@@ -47,8 +47,11 @@ end
 
 get '/corporate_accounts' do
   begin
-    corporate_accounts = Apruve::CorporateAccount.find_all(merchant_id)
-    corporate_accounts = corporate_accounts.select { |ca| ca.id == apruve_corporate_account_id } if apruve_corporate_account_id
+    corporate_accounts = if apruve_corporate_account_id
+                           [Apruve::CorporateAccount.find_by_uuid(merchant_id, apruve_corporate_account_id)]
+                         else
+                           Apruve::CorporateAccount.find_all(merchant_id)
+                         end
     corporate_accounts.to_json
   rescue Apruve::NotFound
     status 404
