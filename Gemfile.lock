@@ -36,7 +36,7 @@ GEM
     multipart-post (2.0.0)
     mustermann (1.0.3)
     public_suffix (3.0.0)
-    rack (2.0.4)
+    rack (2.0.6)
     rack-flash3 (1.0.5)
       rack
     rack-protection (2.0.4)
@@ -85,7 +85,7 @@ DEPENDENCIES
   coffee-script
   dotenv
   json (>= 1.8.3)
-  rack
+  rack (>= 2.0.6)
   rack-flash3
   rspec
   shotgun
