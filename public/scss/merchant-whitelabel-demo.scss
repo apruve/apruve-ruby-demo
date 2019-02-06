@@ -1,0 +1,44 @@
+$color-primary: #78b33a;
+$color-primary-lighten: lighten($color-primary, 25%);
+$color-primary-darken: darken($color-primary, 25%);
+
+$color-secondary: #644c14;
+$color-secondary-lighten: lighten($color-secondary, 25%);
+$color-secondary-darken: darken($color-secondary, 25%);
+
+$color-tertiary: #666;
+$color-tertiary-lighten: lighten($color-tertiary, 25%);
+$color-tertiary-darken: darken($color-tertiary, 25%);
+
+$white: #fff;
+
+$merchant-logo: "https://apruve.com/wp-content/uploads/2019/01/KEMPS-LOGO-GOLD.jpg";
+
+a {
+  color: $color-primary;
+}
+
+.header {
+  background-color: $white;
+  a {
+    display: block;
+  }
+  .merchant-logo {
+    background: $white url(#{$merchant-logo}) no-repeat top left;
+    background-size: contain;
+    width: 250px;
+    height: 100px;
+  }
+}
+
+.btn-primary {
+  text-shadow: none;
+  background-image: none;
+  background-color: $color-primary;
+  border: 0;
+  &:hover {
+    background-color: $color-primary-darken;
+  }
+}
+
+

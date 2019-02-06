@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAgBA,CAAE,CACA,KAAK,CAjBS,OAAO,CAoBvB,OAAQ,CACN,gBAAgB,CATV,IAAI,CAUV,SAAE,CACA,OAAO,CAAE,KAAK,CAEhB,sBAAe,CACb,UAAU,CAAE,8FAAgD,CAC5D,eAAe,CAAE,OAAO,CACxB,KAAK,CAAE,KAAK,CACZ,MAAM,CAAE,KAAK,CAIjB,YAAa,CACX,WAAW,CAAE,IAAI,CACjB,gBAAgB,CAAE,IAAI,CACtB,gBAAgB,CApCF,OAAO,CAqCrB,MAAM,CAAE,CAAC,CACT,kBAAQ,CACN,gBAAgB,CArCG,OAA2B",
+"sources": ["../scss/merchant-whitelabel-demo.scss"],
+"names": [],
+"file": "merchant-whitelabel-demo.css"
+}
