@@ -1,37 +1,24 @@
 import React from 'react'
-import { Input } from 'reactstrap'
-
+import Select from "react-dropdown-select";
 class CustomerSelect extends React.Component {
   constructor(props) {
-    super(props)
-
+    super(props);
     this.select_customer = this.select_customer.bind(this)
   }
-
-  select_customer(event) {
-    this.props.select_customer(event.target.selectedIndex)
+  select_customer(index) {
+    this.props.select_customer(index);
   }
 
   render() {
-    let customer_options = null
-    let selected_customer = ''
 
-    if (this.props.customers) {
-      customer_options = this.props.customers.map((customer, index) => {
-        return (
-          <option key={index} value={customer.name}>{customer.name}</option>
-        )
-      })
-      if (this.props.customers[this.props.selected_customer]) {
-        selected_customer = this.props.customers[this.props.selected_customer].name
-      }
-    }
+    const custOptionsReactSelectDropdown = this.props.customers.map((customer, index) => ({
+      label: `${customer.name} (${customer.email})`,
+      value: index,
+      index,
+      search: customer.name
+    }));
 
-    return (
-      <Input type="select" value={selected_customer} onChange={this.select_customer}>
-        {customer_options}
-      </Input>
-    )
+    return <Select options={custOptionsReactSelectDropdown} labelField="label" searchBy="search" onChange={(value) => this.select_customer(value[0].index)}/>
   }
 }
 

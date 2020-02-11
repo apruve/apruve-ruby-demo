@@ -10,7 +10,7 @@ class OrderForm extends React.Component {
 
     this.state = {
       customers: [],
-      selected_customer: 0,
+      selected_customer: null,
       shipping: '0.00',
       orders: [{
         name: '',
@@ -44,7 +44,7 @@ class OrderForm extends React.Component {
   }
 
   componentDidMount() {
-    let self = this
+    let self = this;
     fetch('/corporate_accounts', {
       headers: {
         'Accept': 'application/json',
@@ -52,31 +52,20 @@ class OrderForm extends React.Component {
       method: 'GET'
     })
     .then((res) => {
-      if (res.status !== 200) {
-        console.error('Bad status getting corporate_accounts: ', res.status)
-        return
-      }
-      res.json().then((corporate_accounts) => {
-        let authorized_buyers = corporate_accounts.map((corporate_account) => {
-          return corporate_account.authorized_buyers
-        })
-        authorized_buyers = [].concat.apply([], authorized_buyers) // flatten the array
-        authorized_buyers = authorized_buyers.concat({ // not real (for error case)
-          name: 'Tommy Crumrine',
-          email: 'tommy@apruve.com',
-          id: '55dd34f29c61cb1fbe79ed9012312333'
-        })
-        self.setState({ customers: authorized_buyers })
-      })
-    })
-    .catch((err) => {
-      console.error('Error getting corporate_accounts: ', err)
-    })
+          if (res.status !== 200) {
+            return Promise.reject('Bad status getting corporate_accounts: ' + res.status);
+          } else {
+            return res.json();
+          }
+        }
+    ).then(corporate_accounts =>
+      self.setState({customers: corporate_accounts.map(acct => acct.authorized_buyers.map(buyer => (Object.assign({}, buyer, {corporate_account: acct})))).flat(1)})
+    ).catch((err) => console.error('Error getting corporate_accounts: ', err))
   }
 
   name(text, index) {
-    let orders = this.state.orders.slice()
-    orders[index].name = text
+    let orders = this.state.orders.slice();
+    orders[index].name = text;
     this.setState({ orders })
   }
 
@@ -240,6 +229,7 @@ class OrderForm extends React.Component {
   }
 
   select_customer(selected_customer) {
+    console.log(`Selected Customer: ${selected_customer}, name: ${this.state.customers[selected_customer].name}`);
     this.setState({ selected_customer })
   }
 
@@ -281,6 +271,11 @@ class OrderForm extends React.Component {
             />
           </Col>
         </Row>
+        {this.state.selected_customer !== null && <Row>
+          <Col sm="4" md = "3" lg="3" xs="4">
+            <div>${(this.state.customers[this.state.selected_customer].corporate_account.credit_available_cents / 100).toFixed(2)} available</div>
+          </Col>
+        </Row>}
         <Row>
           <OrderTable
             orders={this.state.orders}
