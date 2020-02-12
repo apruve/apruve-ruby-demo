@@ -7597,7 +7597,7 @@ var CustomerSelect = function (_React$Component) {
           label: customer.name + " (" + customer.email + ")",
           value: index,
           index: index,
-          search: customer.name
+          search: customer.email
         };
       });
 
@@ -7690,6 +7690,7 @@ var OrderForm = function (_React$Component) {
     _this.get_shopper_id = _this.get_shopper_id.bind(_this);
     _this.alert = _this.alert.bind(_this);
     _this.dismiss_alert = _this.dismiss_alert.bind(_this);
+    _this.order_exceeds_available_credit = _this.order_exceeds_available_credit.bind(_this);
     return _this;
   }
 
@@ -7916,6 +7917,24 @@ var OrderForm = function (_React$Component) {
       this.setState({ alert_visible: false });
     }
   }, {
+    key: 'order_exceeds_available_credit',
+    value: function order_exceeds_available_credit() {
+      if (this.state.selected_customer === null) {
+        return false;
+      }
+
+      var available_credit_cents = this.state.customers[this.state.selected_customer].corporate_account.credit_available_cents;
+      var subtotal = this.state.orders.map(function (order) {
+        return Number(order.subtotal);
+      }).reduce(function (sum, current) {
+        return sum += current;
+      });
+      var shipping = Number(this.state.shipping);
+      if (isNaN(subtotal)) subtotal = 0;
+      if (isNaN(shipping)) shipping = 0;
+      return subtotal + shipping > available_credit_cents;
+    }
+  }, {
     key: 'render',
     value: function render() {
       var subtotal = this.state.orders.map(function (order) {
@@ -7930,6 +7949,10 @@ var OrderForm = function (_React$Component) {
       var selectionStyle = {
         marginTop: 24,
         marginBottom: 24
+      };
+
+      var inlineAlertStyle = {
+        display: 'inline-block'
       };
 
       return _react2.default.createElement(
@@ -7949,27 +7972,27 @@ var OrderForm = function (_React$Component) {
           { style: selectionStyle },
           _react2.default.createElement(
             _reactstrap.Col,
-            { sm: '4', md: '3', lg: '3', xs: '4' },
+            { xs: '12' },
             'Customer Name:',
-            _react2.default.createElement(_CustomerSelect2.default, {
-              customers: this.state.customers,
-              selected_customer: this.state.selected_customer,
-              select_customer: this.select_customer
-            })
-          )
-        ),
-        this.state.selected_customer !== null && _react2.default.createElement(
-          _reactstrap.Row,
-          null,
-          _react2.default.createElement(
-            _reactstrap.Col,
-            { sm: '4', md: '3', lg: '3', xs: '4' },
             _react2.default.createElement(
-              'div',
+              _reactstrap.Row,
               null,
-              '$',
-              (this.state.customers[this.state.selected_customer].corporate_account.credit_available_cents / 100).toFixed(2),
-              ' available'
+              _react2.default.createElement(
+                _reactstrap.Col,
+                { xs: '4', sm: '4', md: '3', lg: '3' },
+                _react2.default.createElement(_CustomerSelect2.default, {
+                  customers: this.state.customers,
+                  selected_customer: this.state.selected_customer,
+                  select_customer: this.select_customer
+                })
+              ),
+              this.state.selected_customer !== null && _react2.default.createElement(
+                _reactstrap.Col,
+                { sm: '4', md: '3', lg: '3', xs: '4', className: 'my-auto' },
+                '$',
+                (this.state.customers[this.state.selected_customer].corporate_account.credit_available_cents / 100).toFixed(2),
+                ' available'
+              )
             )
           )
         ),
@@ -8061,12 +8084,25 @@ var OrderForm = function (_React$Component) {
             (subtotal + shipping).toFixed(2)
           )
         ),
+        this.order_exceeds_available_credit() && _react2.default.createElement(
+          _reactstrap.Row,
+          null,
+          _react2.default.createElement(
+            _reactstrap.Col,
+            null,
+            _react2.default.createElement(
+              _reactstrap.Alert,
+              { color: 'danger', fade: false, isOpen: this.order_exceeds_available_credit(), style: inlineAlertStyle },
+              'This order exceeds the available credit'
+            )
+          )
+        ),
         _react2.default.createElement(
           _reactstrap.Row,
           null,
           _react2.default.createElement(
             _reactstrap.Button,
-            { color: 'success', onClick: this.get_shopper_id },
+            { color: this.order_exceeds_available_credit() ? 'failure' : 'success', className: this.order_exceeds_available_credit() ? 'disabled' : '', onClick: this.get_shopper_id },
             'Create Order'
           )
         )

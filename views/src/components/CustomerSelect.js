@@ -15,7 +15,7 @@ class CustomerSelect extends React.Component {
       label: `${customer.name} (${customer.email})`,
       value: index,
       index,
-      search: customer.name
+      search: customer.email
     }));
 
     return <Select options={custOptionsReactSelectDropdown} labelField="label" searchBy="search" onChange={(value) => this.select_customer(value[0].index)}/>
