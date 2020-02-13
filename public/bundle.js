@@ -7979,7 +7979,7 @@ var OrderForm = function (_React$Component) {
               null,
               _react2.default.createElement(
                 _reactstrap.Col,
-                { xs: '4', sm: '4', md: '3', lg: '3' },
+                { xs: '8', sm: '8', md: '8', lg: '6' },
                 _react2.default.createElement(_CustomerSelect2.default, {
                   customers: this.state.customers,
                   selected_customer: this.state.selected_customer,
@@ -7988,7 +7988,7 @@ var OrderForm = function (_React$Component) {
               ),
               this.state.selected_customer !== null && _react2.default.createElement(
                 _reactstrap.Col,
-                { sm: '4', md: '3', lg: '3', xs: '4', className: 'my-auto' },
+                { sm: '4', md: '4', lg: '4', xs: '4', className: 'my-auto' },
                 '$',
                 (this.state.customers[this.state.selected_customer].corporate_account.credit_available_cents / 100).toFixed(2),
                 ' available'
