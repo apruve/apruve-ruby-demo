@@ -6,11 +6,11 @@ import CustomerSelect from './CustomerSelect'
 
 class OrderForm extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       customers: [],
-      selected_customer: 0,
+      selected_customer: null,
       shipping: '0.00',
       orders: [{
         name: '',
@@ -22,29 +22,30 @@ class OrderForm extends React.Component {
       alert_message: 'hi',
       alert_color: 'success',
       alert_visible: false
-    }
+    };
 
-    this.name = this.name.bind(this)
-    this.sku = this.sku.bind(this)
-    this.price = this.price.bind(this)
-    this.quantity = this.quantity.bind(this)
-    this.subtotal = this.subtotal.bind(this)
-    this.price_update = this.price_update.bind(this)
-    this.quantity_update = this.quantity_update.bind(this)
-    this.subtotal_update = this.subtotal_update.bind(this)
-    this.push_order = this.push_order.bind(this)
-    this.delete_order = this.delete_order.bind(this)
-    this.post_order = this.post_order.bind(this)
-    this.shipping = this.shipping.bind(this)
-    this.shipping_update = this.shipping_update.bind(this)
-    this.select_customer = this.select_customer.bind(this)
-    this.get_shopper_id = this.get_shopper_id.bind(this)
-    this.alert = this.alert.bind(this)
-    this.dismiss_alert = this.dismiss_alert.bind(this)
+    this.name = this.name.bind(this);
+    this.sku = this.sku.bind(this);
+    this.price = this.price.bind(this);
+    this.quantity = this.quantity.bind(this);
+    this.subtotal = this.subtotal.bind(this);
+    this.price_update = this.price_update.bind(this);
+    this.quantity_update = this.quantity_update.bind(this);
+    this.subtotal_update = this.subtotal_update.bind(this);
+    this.push_order = this.push_order.bind(this);
+    this.delete_order = this.delete_order.bind(this);
+    this.post_order = this.post_order.bind(this);
+    this.shipping = this.shipping.bind(this);
+    this.shipping_update = this.shipping_update.bind(this);
+    this.select_customer = this.select_customer.bind(this);
+    this.get_shopper_id = this.get_shopper_id.bind(this);
+    this.alert = this.alert.bind(this);
+    this.dismiss_alert = this.dismiss_alert.bind(this);
+    this.order_exceeds_available_credit = this.order_exceeds_available_credit.bind(this);
   }
 
   componentDidMount() {
-    let self = this
+    let self = this;
     fetch('/corporate_accounts', {
       headers: {
         'Accept': 'application/json',
@@ -52,31 +53,20 @@ class OrderForm extends React.Component {
       method: 'GET'
     })
     .then((res) => {
-      if (res.status !== 200) {
-        console.error('Bad status getting corporate_accounts: ', res.status)
-        return
-      }
-      res.json().then((corporate_accounts) => {
-        let authorized_buyers = corporate_accounts.map((corporate_account) => {
-          return corporate_account.authorized_buyers
-        })
-        authorized_buyers = [].concat.apply([], authorized_buyers) // flatten the array
-        authorized_buyers = authorized_buyers.concat({ // not real (for error case)
-          name: 'Tommy Crumrine',
-          email: 'tommy@apruve.com',
-          id: '55dd34f29c61cb1fbe79ed9012312333'
-        })
-        self.setState({ customers: authorized_buyers })
-      })
-    })
-    .catch((err) => {
-      console.error('Error getting corporate_accounts: ', err)
-    })
+          if (res.status !== 200) {
+            return Promise.reject('Bad status getting corporate_accounts: ' + res.status);
+          } else {
+            return res.json();
+          }
+        }
+    ).then(corporate_accounts =>
+      self.setState({customers: corporate_accounts.map(acct => acct.authorized_buyers.map(buyer => (Object.assign({}, buyer, {corporate_account: acct})))).flat(1)})
+    ).catch((err) => console.error('Error getting corporate_accounts: ', err))
   }
 
   name(text, index) {
-    let orders = this.state.orders.slice()
-    orders[index].name = text
+    let orders = this.state.orders.slice();
+    orders[index].name = text;
     this.setState({ orders })
   }
 
@@ -240,6 +230,7 @@ class OrderForm extends React.Component {
   }
 
   select_customer(selected_customer) {
+    console.log(`Selected Customer: ${selected_customer}, name: ${this.state.customers[selected_customer].name}`);
     this.setState({ selected_customer })
   }
 
@@ -253,8 +244,21 @@ class OrderForm extends React.Component {
     this.setState({ alert_visible: false })
   }
 
+  order_exceeds_available_credit() {
+    if (this.state.selected_customer === null) {
+      return false;
+    }
+
+    const available_credit_cents = this.state.customers[this.state.selected_customer].corporate_account.credit_available_cents;
+    let subtotal = this.state.orders.map((order) => Number(order.subtotal)).reduce((sum, current) => sum += current);
+    let shipping = Number(this.state.shipping);
+    if (isNaN(subtotal)) subtotal = 0;
+    if (isNaN(shipping)) shipping = 0;
+    return subtotal + shipping > available_credit_cents;
+  }
+
   render() {
-    let subtotal = this.state.orders.map((order) => Number(order.subtotal)).reduce((sum, current) => sum += current)
+    let subtotal = this.state.orders.map((order) => Number(order.subtotal)).reduce((sum, current) => sum += current);
     let shipping = Number(this.state.shipping)
     if (isNaN(subtotal)) subtotal = 0
     if (isNaN(shipping)) shipping = 0
@@ -262,7 +266,11 @@ class OrderForm extends React.Component {
     const selectionStyle = {
       marginTop: 24,
       marginBottom: 24
-    }
+    };
+
+    const inlineAlertStyle = {
+      display: 'inline-block'
+    };
 
     return (
       <div>
@@ -272,15 +280,26 @@ class OrderForm extends React.Component {
           </Alert>
         </div>
         <Row style={selectionStyle}>
-          <Col sm="4" md = "3" lg="3" xs="4">
+          <Col xs="12">
             Customer Name:
-            <CustomerSelect
-              customers={this.state.customers}
-              selected_customer={this.state.selected_customer}
-              select_customer={this.select_customer}
-            />
+            <Row>
+              <Col xs="4" sm="4" md="3" lg="3">
+                <CustomerSelect
+                  customers={this.state.customers}
+                  selected_customer={this.state.selected_customer}
+                  select_customer={this.select_customer}
+                />
+              </Col>
+              {this.state.selected_customer !== null &&
+                <Col sm="4" md = "3" lg="3" xs="4" className="my-auto">
+                  ${(this.state.customers[this.state.selected_customer].corporate_account.credit_available_cents / 100).toFixed(2)} available
+                </Col>
+              }
+            </Row>
           </Col>
+
         </Row>
+
         <Row>
           <OrderTable
             orders={this.state.orders}
@@ -313,9 +332,18 @@ class OrderForm extends React.Component {
           <Col sm="4" md = "2" lg="2" xs="4"><b>Total:</b></Col>
           <Col sm="2" md = "2" lg="1" xs="2">${(subtotal + shipping).toFixed(2)}</Col>
         </Row>
+        {this.order_exceeds_available_credit() &&
         <Row>
-          <Button color="success" onClick={this.get_shopper_id}>Create Order</Button>
+          <Col>
+            <Alert color="danger" fade={false} isOpen={this.order_exceeds_available_credit()} style={inlineAlertStyle}>This order exceeds the available credit</Alert>
+          </Col>
         </Row>
+        }
+        <Row>
+          <Button color={this.order_exceeds_available_credit() ? 'failure' : 'success'} className={this.order_exceeds_available_credit() ? 'disabled' : ''} onClick={this.get_shopper_id}>Create Order</Button>
+
+        </Row>
+
       </div>
     )
   }

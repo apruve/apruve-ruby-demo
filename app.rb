@@ -107,7 +107,8 @@ get '/' do
       merchant_id:    merchant_id,
       currency:       'USD',
       amount_cents:   6000,
-      shipping_cents: 500
+      shipping_cents: 500,
+	invoice_on_create: false
   )
   @order.order_items << Apruve::OrderItem.new(
       title:            'Letter Paper',
@@ -128,6 +129,28 @@ get '/' do
       view_product_url:  'https://merchant-demo.herokuapp.com'
   )
   erb :index
+end
+
+get '/invoice-badly/:token' do
+  token = params['token']
+  address = {
+      address_1: '8995 Creola Ville',
+      address_2: 'Apt. 945',
+      city: 'Friesentown',
+      state: 'MNN',
+      postal_code: '62685',
+      country_code: 'US',
+      phone_number: '6123456789',
+      fax_number: '6123456789',
+      contact_name: 'Zelda Pagac',
+      name: 'Jacobson, Conn and Kreiger',
+      notes: 'Est corrupti quis cumque.'
+  }
+  invoice = Apruve::Invoice.new(
+      order_id: token,
+      amount_cents: 2000,
+      )
+  invoice.save!
 end
 
 post '/finish_order' do
