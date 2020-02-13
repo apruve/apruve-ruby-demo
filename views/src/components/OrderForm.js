@@ -283,7 +283,7 @@ class OrderForm extends React.Component {
           <Col xs="12">
             Customer Name:
             <Row>
-              <Col xs="4" sm="4" md="3" lg="3">
+              <Col xs="8" sm="8" md="8" lg="6">
                 <CustomerSelect
                   customers={this.state.customers}
                   selected_customer={this.state.selected_customer}
@@ -291,7 +291,7 @@ class OrderForm extends React.Component {
                 />
               </Col>
               {this.state.selected_customer !== null &&
-                <Col sm="4" md = "3" lg="3" xs="4" className="my-auto">
+                <Col sm="4" md = "4" lg="4" xs="4" className="my-auto">
                   ${(this.state.customers[this.state.selected_customer].corporate_account.credit_available_cents / 100).toFixed(2)} available
                 </Col>
               }
