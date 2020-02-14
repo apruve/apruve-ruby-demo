@@ -6,7 +6,7 @@
 
 <%= Apruve.js %>
 <script type="text/javascript">
-    apruve.setOrder(<%= @order.to_hash.merge(po_number: 'abcd').to_json %>, '<%= @order.secure_hash %>');
+    apruve.setOrder(<%= @order.to_hash.to_json %>, '<%= @order.secure_hash %>');
     apruve.registerApruveCallback(apruve.APRUVE_COMPLETE_EVENT, function (orderId) {
         $('#tokenField').val(orderId);
         $('#chargeAmount').val(<%= @order.amount_cents %>);
