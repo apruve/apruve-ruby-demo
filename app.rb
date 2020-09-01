@@ -113,17 +113,14 @@ get '/' do
 
   if params[:code] && oauth2_client_ready? && !session[:access_token]
 
-    puts "got code #{params[:code]}"
-    puts "redirect_uri #{self_base_url}"
-    access_token = oauth2_client.auth_code.get_token(params[:code], redirect_uri: self_base_url)
+    access_token = oauth2_client.auth_code.get_token(params[:code], redirect_uri: redirect_url)
     session[:access_token] = access_token.token
     session[:refresh_token] = access_token.refresh_token
     session[:corporate_account_id] = access_token.params['corporate_account_id']
   end
 
   if oauth2_client_ready? && session[:access_token].nil?
-    puts "redirect_uri #{self_base_url}"
-    @authorization_url = oauth2_client.auth_code.authorize_url(redirect_uri: self_base_url)
+    @authorization_url = oauth2_client.auth_code.authorize_url(redirect_uri: redirect_url)
   end
 
   @access_token = session[:access_token]
