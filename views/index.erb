@@ -19,6 +19,7 @@
       });
     });
 </script>
+<% if @access_token.nil? %>
 <script type="text/javascript">
   $(function() {
     $('#checkout-options').submit(function() {
@@ -36,6 +37,7 @@
     });
   });
 </script>
+<% end %>
 
 <div id="thankYou" style="display:none">
   <div class="row">
@@ -59,11 +61,28 @@
     </h1>
   </div>
   <div class="span6 pull-right">
-    <a class="credit-app-button pull-right" href="<%= ENV['APRUVE_CREDIT_APP_URL'] %>" target="_blank">Get a Corporate Account with Munder Difflin</a>
+    <% if @user %>
+      <p class="pull-right">
+        Signed in as <strong><%= @user %></strong>
+        <%= '(Linked with Apruve)' if @access_token %>
+      </p>
+    <% else %>
+      <a class="sign-in-button pull-right" href="/signin">Sign In</a>
+    <% end %>
   </div>
   <div class="span6 pull-right">
-    <a class="credit-app-button pull-right" href="/offline_order">Make an offline order</a>
+    <% if @user && @authorization_url %>
+      <p class="pull-right">
+        <a class="apruve-link" href=<%= @authorization_url %>>Link Account with Apruve</a>
+      </p>
+    <% end %>
   </div>
+<!--  <div class="span6 pull-right">-->
+<!--    <a class="credit-app-button pull-right" href="<%#= ENV['APRUVE_CREDIT_APP_URL'] %>" target="_blank">Get a Corporate Account with Munder Difflin</a>-->
+<!--  </div>-->
+<!--  <div class="span6 pull-right">-->
+<!--    <a class="credit-app-button pull-right" href="/offline_order">Make an offline order</a>-->
+<!--  </div>-->
 </div>
 <div id="shoppingCart">
   <div class="row-fluid">
@@ -137,7 +156,7 @@
       </h4>
     </div>
     <div class="span3">
-      <form id="checkout-options">
+      <form id="checkout-options" action="/demo_order" method="POST">
         <div class="radio" style="margin-bottom: 10px;">
           <label>
             <input type="radio" name="payment-method" id="payment-method-1" value="apruve" checked>
