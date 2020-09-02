@@ -4,8 +4,10 @@ module Apruve
     def method_missing(method, *args, &block)
       if is_http_method? method
         if config[:access_token]
+          puts "Using Bearer #{config[:access_token]}"
           conn.headers['Authorization'] = "Bearer #{config[:access_token]}"
         elsif @api_key
+          puts "Using Apruve-Api-Key #{@api_key}"
           conn.headers['Apruve-Api-Key'] = @api_key
         end
         conn.send method, *args
