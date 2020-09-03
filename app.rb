@@ -8,11 +8,16 @@ require 'openssl'
 require 'base64'
 require 'dotenv'
 require 'json'
+require 'money'
 require './lib/apruve_overrides'
 require './helpers/demo_order_helper'
 require './helpers/oauth_helper'
 
 Dotenv.load
+
+# for money gem
+I18n.config.available_locales = :en
+I18n.locale = :en
 
 set :bind, '0.0.0.0'
 
@@ -124,6 +129,13 @@ get '/' do
   end
 
   @access_token = session[:access_token]
+
+  if @access_token && session[:corporate_account_id]
+    overrides_with_token = config_overrides.merge(access_token: @access_token)
+    Apruve.configure(ENV['APRUVE_API_KEY'], apruve_environment, overrides_with_token)
+    @corporate_account = Apruve::CorporateAccount.find_by_uuid(merchant_id, session[:corporate_account_id])
+    @credit_available = Money.new(@corporate_account.credit_available_cents, @corporate_account.instance_variable_get(:@currency))
+  end
 
   @order = demo_order
   @order.merchant_id = merchant_id

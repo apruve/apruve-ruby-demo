@@ -64,7 +64,9 @@
     <% if @user %>
       <p class="pull-right">
         Signed in as <strong><%= @user %></strong>
-        <%= '(Linked with Apruve)' if @access_token %>
+        <% if @access_token && @credit_available %>
+          (Linked with Apruve <strong><%= @credit_available.format %></strong>)
+        <% end %>
       </p>
     <% else %>
       <a class="sign-in-button pull-right" href="/signin">Sign In</a>
