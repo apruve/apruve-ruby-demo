@@ -11,6 +11,8 @@ gem 'json', '>= 1.8.3'
 gem 'rack-flash3'
 gem 'apruve'
 gem 'dotenv'
+gem 'oauth2'
+gem 'money'
 
 group :test do
   gem 'rspec'

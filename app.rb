@@ -8,8 +8,16 @@ require 'openssl'
 require 'base64'
 require 'dotenv'
 require 'json'
+require 'money'
+require './lib/apruve_overrides'
+require './helpers/demo_order_helper'
+require './helpers/oauth_helper'
 
 Dotenv.load
+
+# for money gem
+I18n.config.available_locales = :en
+I18n.locale = :en
 
 set :bind, '0.0.0.0'
 
@@ -31,6 +39,10 @@ config_overrides[:scheme] = ENV['APRUVE_SCHEME'] unless ENV['APRUVE_SCHEME'].nil
 config_overrides[:host]   = ENV['APRUVE_HOST'] unless ENV['APRUVE_HOST'].nil?
 config_overrides[:port]   = ENV['APRUVE_PORT'] unless ENV['APRUVE_PORT'].nil?
 merchant_id               = ENV['APRUVE_MERCHANT_ID']
+
+enable :sessions
+
+helpers DemoOrderHelper, OauthHelper
 
 before do
   Apruve.configure(ENV['APRUVE_API_KEY'], apruve_environment, config_overrides)
@@ -102,32 +114,51 @@ post '/orders' do
 end
 
 get '/' do
-  # Create a payment request and some line items
-  @order = Apruve::Order.new(
-      merchant_id:    merchant_id,
-      currency:       'USD',
-      amount_cents:   6000,
-      shipping_cents: 500
-  )
-  @order.order_items << Apruve::OrderItem.new(
-      title:            'Letter Paper',
-      description:      '20 lb ream (500 Sheets). Paper dimensions are 8.5 x 11.00 inches.',
-      sku:              'LTR-20R',
-      price_ea_cents:   1200,
-      quantity:         3,
-      price_total_cents:     3600,
-      view_product_url: 'https://merchant-demo.herokuapp.com'
-  )
-  @order.order_items << Apruve::OrderItem.new(
-      title:             'Legal Paper',
-      description:       '24 lb ream (250 Sheets). Paper dimensions are 8.5 x 14.00 inches.',
-      sku:               'LGL-24R',
-      price_ea_cents:    950,
-      quantity:          2,
-      price_total_cents: 1900,
-      view_product_url:  'https://merchant-demo.herokuapp.com'
-  )
+  @user = session[:user]
+
+  if params[:code] && oauth2_client_ready? && !session[:access_token]
+
+    access_token = oauth2_client.auth_code.get_token(params[:code], redirect_uri: redirect_url)
+    session[:access_token] = access_token.token
+    session[:refresh_token] = access_token.refresh_token
+    session[:corporate_account_id] = access_token.params['corporate_account_id']
+  end
+
+  if oauth2_client_ready? && session[:access_token].nil?
+    @authorization_url = oauth2_client.auth_code.authorize_url(redirect_uri: redirect_url)
+  end
+
+  @access_token = session[:access_token]
+
+  if @access_token && session[:corporate_account_id]
+    overrides_with_token = config_overrides.merge(access_token: @access_token)
+    Apruve.configure(ENV['APRUVE_API_KEY'], apruve_environment, overrides_with_token)
+    @corporate_account = Apruve::CorporateAccount.find_by_uuid(merchant_id, session[:corporate_account_id])
+    @credit_available = Money.new(@corporate_account.credit_available_cents, @corporate_account.instance_variable_get(:@currency))
+  end
+
+  @order = demo_order
+  @order.merchant_id = merchant_id
   erb :index
+end
+
+# Easier to just make a route for this
+post '/demo_order' do
+  @order = demo_order
+  access_token = session[:access_token]
+
+  overrides_with_token = config_overrides.merge(access_token: access_token) if access_token
+  Apruve.configure(ENV['APRUVE_API_KEY'], apruve_environment, overrides_with_token)
+
+  @order.payment_term = { corporate_account_id: session[:corporate_account_id] }
+  @order.merchant_id = merchant_id
+  @order.save!
+  @status = @order.status
+  erb :finished
+end
+
+get '/signin' do
+  erb :login
 end
 
 get '/invoice-badly/:token' do
@@ -150,6 +181,11 @@ get '/invoice-badly/:token' do
       amount_cents: 2000,
       )
   invoice.save!
+end
+
+post '/signin' do
+  session[:user] = params[:email]
+  redirect '/'
 end
 
 post '/finish_order' do
