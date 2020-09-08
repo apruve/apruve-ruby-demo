@@ -50,6 +50,8 @@ tmp/*
 # scm revert files
 **.orig
 
+node_modules
+
 # Mac finder artifacts
 .DS_Store
 
