@@ -57,6 +57,10 @@ get '/offline_order' do
   erb :offline_orders
 end
 
+get '/settings' do
+  erb :settings
+end
+
 get '/corporate_accounts' do
   begin
     corporate_accounts = if apruve_corporate_account_id
