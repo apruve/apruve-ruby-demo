@@ -62,7 +62,7 @@ get '/settings' do
 end
 
 get '/layout' do
-  erb :settings
+  erb :layout
 end
 
 get '/corporate_accounts' do
