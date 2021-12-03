@@ -251,5 +251,5 @@ post '/save_image' do
     f.write(file.read)
   end
   
-  erb :show_image
+  erb :layout
 end
