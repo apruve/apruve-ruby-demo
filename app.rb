@@ -61,6 +61,10 @@ get '/settings' do
   erb :settings
 end
 
+get '/layout' do
+  erb :layout
+end
+
 get '/corporate_accounts' do
   begin
     corporate_accounts = if apruve_corporate_account_id
