@@ -70,6 +70,8 @@ GEM
       rack
     rack-protection (2.0.8.1)
       rack
+    rack-test (1.1.0)
+      rack (>= 1.0, < 3)
     rexml (3.2.5)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
@@ -127,6 +129,7 @@ DEPENDENCIES
   oauth2
   rack (>= 2.0.6)
   rack-flash3
+  rack-test
   rspec
   shotgun
   shoulda

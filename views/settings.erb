@@ -9,33 +9,32 @@
  <title>Setting changes</title>
 </head>
 <body>
-<html>
-    <body>
+    <div class="row-fluid">
+    <h3>Change Banner</h3>
+    <form action="/change_header" method="POST">
+        <select id ="select_header" style="margin-bottom:0px;" class= "select_bar" name="color_select" onchange="change()" >
+            <option value = "" selected disabled> -- select color -- </option>
+            <option value = "var(--prussian-blue)" >Prussian Blue</option>
+            <option value = "var(--sea-green)">Sea Green</option>
+            <option value = "var(--cool-slate)">Cool Slate</option>
+            <option value = "var(--lime-green)">Lime Green</option>
+            <option value = "var(--tuscany)">Tuscany</option>
+            <option value = "var(--punch)">Punch</option>
+            <option value = "var(--sea-green-lime-gradient)">Sea-Lime Gradient</option>
+            <option value = "var(--prussian-sea-green-gradient)">Prussian-Sea Gradient</option>
+            <option value = "var(--punch-tuscany-gradient)">Punch-Tuscany Gradient</option>
+        </select>
 
-        <h3>Change Header Color</h3>
-        <form action="/change_header" method="POST">
-            <select id ="select_header" style="margin-bottom:0px;" class= "select_bar" name="color_select" onchange="change()" >
-                <option value = "" selected disabled> -- select color -- </option>
-                <option value = "#014965" >Prussian Blue</option>
-                <option value = "#00a3a0">Sea Green</option>
-                <option value = "#899aa5">Cool Slate</option>
-                <option value = "#a0c51e">Lime Green</option>
-                <option value = "#cc6230">Tuscany</option>
-                <option value = "#cc3224">Punch</option>
-                <option value = "linear-gradient(0.25turn, #00a3a0, #a0c51e)">Gradient 1</option>
-            </select>
+        <input type="submit" style="width: 70px;" class="btn btn-primary" value="Save"/>   
+    </form>
 
-            <input type="submit" style="width: 70px;" class="btn btn-primary" value="Save"/>   
-        </form>
-
-        <h3>Upload Logo</h3>
+    <h3>Upload Logo</h3>
         
-        <form class= "settings_form"  action="/upload" method="POST" enctype="multipart/form-data" accept="image/*">
-            <input type="file" name="image" style="width: 220px; margin-right: 10px;" required />
-            <input type="submit" style="width: 70px;" class="btn btn-primary" value="Upload"/>
-        </form>
-    </body>
-</html>
+    <form class= "settings_form"  action="/upload" method="POST" enctype="multipart/form-data" accept="image/*">
+        <input type="file" name="image" style="width: 220px; margin-right: 10px;" required />
+        <input type="submit" style="width: 70px;" class="btn btn-primary" value="Upload"/>
+    </form>
+    </div>
 <script src="bundle.js"></script>
 <script src="update_header.js"></script>
 </body>

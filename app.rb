@@ -271,79 +271,18 @@ post '/change_header' do
 
 end
 
-
-#
-# Table name: image_uploads
-#
-#  *id                 :integer          not null, primary key
-#  direct_upload_url  :string
-#  state              :string
-#  image_file_name    :string
-#  image_content_type :string
-#  image_file_size    :integer
-#  image_updated_at   :datetime
-#  *created_at         :datetime
-#  *updated_at         :datetime
-#  type               :string
-#
-
-
-# s3 = Aws::S3::Resource.new(region: 'us-east-1')
-# bucket_aw = s3.bucket('apruve_profile_img_test')
-
-####file upload trying
-
-########only has file name, no file path???
-### {tempfile: XXXXX Image: XXXX}
 post '/upload' do
-
-  def logger
-    request.logger
-  end
-  # obj = bucket.objects
-  # logger.info(obj)
-  
-  ### log params
-  logger.info("Params info #{params}")
 
   tempfile = params[:image][:tempfile]
   @@filename = params[:image][:filename]
 
-  # @imageUpload = Apruve::MerchantLogo.new(
-  #   image_file_name:     @@filename,
-  #   direct_upload_url:     tempfile,
-  #   state: "ready"
-  
-  # )
-  # @imageUpload.process!
-  # rescu
-  # @imageUpload.save!
+  # Store image to AWS bucket
+  AWS::S3::S3Object.store(@@filename,open(tempfile), 'apruve_profile_img_test')
 
-
-  # bucket = AWS::S3::Bucket.find('apruve-file-uploads-test')
-
-  logger.info(AWS::S3::S3Object.store(@@filename,open(tempfile), 'apruve_profile_img_test'))
-  # logger.info(AWS::S3::Bucket.objects('apruve-file-uploads-test').size)
-  # logger.info(AWS::S3::S3Object.find(@@filename, 'apruve-file-uploads-test'))
-
-  # signer = Aws::S3::Presigner.new
-  # url = signer.presigned_url(:get_object, bucket: "bucket", key: "key")
-
-  # obj = bucket_aw.object(@@filename)
-  # logger.info("Presigned!:"+ obj.presigned_url(:get, expires_in: 3600))
-  # logger.info(obj.public_url)
-
-  logger.info(AWS::S3::S3Object.url_for(@@filename, 'apruve_profile_img_test'))
+  # Get url to image
   @@headpic = AWS::S3::S3Object.url_for(@@filename, 'apruve_profile_img_test')
 
-
-
-  # File.open("public/img/#{@@filename}", 'wb') {|f| f.write tempfile.read }
-
-  flash[:alert_danger] = "logo successfully updated!"
-
+  flash[:alert] = "logo successfully updated!"
   redirect '/'
-  
-
   
 end

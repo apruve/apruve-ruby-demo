@@ -21,4 +21,5 @@ group :test do
   gem 'rspec'
   gem 'shoulda-matchers'
   gem 'shoulda'
+  gem 'rack-test'
 end

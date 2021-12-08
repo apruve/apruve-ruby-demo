@@ -9,12 +9,38 @@
   <script src="//code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
   <script src="js/rails.js"></script>
   <link href="css/merchant-demo.css" rel="stylesheet" />
+  <link href="css/bootstrap.min.css" rel="stylesheet" media="screen"/>
   <link rel="icon" type="image/png" href="/img/favicon.png" />
 
   
 </head>
 <body>
 <div class="container">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Munder Difflin</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor03">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="/">Home
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/settings">Settings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/offline_order">Offline Order</a>
+        </li>
+      </ul>
+      <button class="btn btn-secondary my-2 my-sm-0" onclick="window.location.href='/signin'">Sign In</button>
+    </div>
+  </div>
+</nav>
   <div id = "header" class="row-fluid header" style = "background:<%= $header_color%>">
     <div class="pull-left">
       <a href="/">

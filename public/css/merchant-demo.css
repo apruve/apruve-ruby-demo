@@ -1,7 +1,14 @@
 :root {
   --prussian-blue: #014965;
-  --secondary-green: #a0c51e;
+  --lime-green: #a0c51e;
+  --sea-green: #00a3a0;
+  --cool-slate:#899aa5;
   --cool-grey: #d9d8d6;
+  --tuscany:#cc6230;
+  --punch:#cc3224;
+  --sea-green-lime-gradient:linear-gradient(0.25turn, #00a3a0, #a0c51e);
+  --prussian-sea-green-gradient:linear-gradient(0.25turn, #014965, #00a3a0);
+  --punch-tuscany-gradient:linear-gradient(0.25turn, #cc3224, #cc6230);
 }
 
 html,body {
@@ -14,7 +21,7 @@ body {
 
 .container {
   background-color:#ffffff;
-  max-width:940px;
+  max-width :1000px;
   min-height:100%;
   width:100%!important;
 }
@@ -82,11 +89,17 @@ th {
 }
 
 #logo{
-  height:109px;
+  max-height:100px;
+  max-width:190px;
+  padding-top: 5px;
+}
+
+#header{
+  height:130px;
 }
 
 #flash{
-  background-color: var(--secondary-green);
+  background-color: var(--lime-green);
   color: white;
   padding:10px;
   margin-bottom: 5px;
