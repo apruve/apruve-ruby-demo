@@ -12,6 +12,17 @@ require 'money'
 require './lib/apruve_overrides'
 require './helpers/demo_order_helper'
 require './helpers/oauth_helper'
+require 'sinatra/flash'
+require 'aws-sdk'
+enable :sessions
+use Rack::Logger
+
+require 'aws/s3'
+AWS::S3::Base.establish_connection!(
+    :access_key_id => 'AKIASFWBQ35QI6KVTWQC',
+    :secret_access_key => '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', 
+)
+
 
 Dotenv.load
 
@@ -61,9 +72,6 @@ get '/settings' do
   erb :settings
 end
 
-get '/layout' do
-  erb :lily
-end
 
 get '/corporate_accounts' do
   begin
@@ -147,6 +155,11 @@ get '/' do
 
   @order = demo_order
   @order.merchant_id = merchant_id
+  
+  @@filename ||= "MunderDifflin.png"
+  @@headpic ||= "https://s3.amazonaws.com/apruve_profile_img_test/merchant_logos/images/000/002/471/web/logo.png?1614036281"
+  $header_color ||= "#014965"
+
   erb :index
 end
 
@@ -246,14 +259,91 @@ error 400 do
   $stdout.print 'Apruve::BadRequest(400)'
 end
 
-post '/save_image' do
-  
-  @filename = params[:file][:filename]
-  file = params[:file][:tempfile]
 
-  File.open("./public/#{@filename}", 'wb') do |f|
-    f.write(file.read)
+post '/change_header' do
+
+  color_selected = params[:color_select]
+
+  $header_color = color_selected
+  logger.info("Params info #{$header_color}")
+
+  erb :settings
+
+end
+
+
+#
+# Table name: image_uploads
+#
+#  *id                 :integer          not null, primary key
+#  direct_upload_url  :string
+#  state              :string
+#  image_file_name    :string
+#  image_content_type :string
+#  image_file_size    :integer
+#  image_updated_at   :datetime
+#  *created_at         :datetime
+#  *updated_at         :datetime
+#  type               :string
+#
+
+
+# s3 = Aws::S3::Resource.new(region: 'us-east-1')
+# bucket_aw = s3.bucket('apruve_profile_img_test')
+
+####file upload trying
+
+########only has file name, no file path???
+### {tempfile: XXXXX Image: XXXX}
+post '/upload' do
+
+  def logger
+    request.logger
   end
+  # obj = bucket.objects
+  # logger.info(obj)
   
-  erb :finished
+  ### log params
+  logger.info("Params info #{params}")
+
+  tempfile = params[:image][:tempfile]
+  @@filename = params[:image][:filename]
+
+  # @imageUpload = Apruve::MerchantLogo.new(
+  #   image_file_name:     @@filename,
+  #   direct_upload_url:     tempfile,
+  #   state: "ready"
+  
+  # )
+  # @imageUpload.process!
+  # rescu
+  # @imageUpload.save!
+
+
+  # bucket = AWS::S3::Bucket.find('apruve-file-uploads-test')
+
+  logger.info(AWS::S3::S3Object.store(@@filename,open(tempfile), 'apruve_profile_img_test'))
+  # logger.info(AWS::S3::Bucket.objects('apruve-file-uploads-test').size)
+  # logger.info(AWS::S3::S3Object.find(@@filename, 'apruve-file-uploads-test'))
+
+  # signer = Aws::S3::Presigner.new
+  # url = signer.presigned_url(:get_object, bucket: "bucket", key: "key")
+
+  # obj = bucket_aw.object(@@filename)
+  # logger.info("Presigned!:"+ obj.presigned_url(:get, expires_in: 3600))
+  # logger.info(obj.public_url)
+
+  logger.info(AWS::S3::S3Object.url_for(@@filename, 'apruve_profile_img_test'))
+  @@headpic = AWS::S3::S3Object.url_for(@@filename, 'apruve_profile_img_test')
+
+
+
+  # File.open("public/img/#{@@filename}", 'wb') {|f| f.write tempfile.read }
+
+  flash[:alert_danger] = "logo successfully updated!"
+
+  redirect '/'
+  
+
+  
 end

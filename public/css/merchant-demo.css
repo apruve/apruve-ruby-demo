@@ -1,3 +1,9 @@
+:root {
+  --prussian-blue: #014965;
+  --secondary-green: #a0c51e;
+  --cool-grey: #d9d8d6;
+}
+
 html,body {
   height:100%;
 }
@@ -14,7 +20,7 @@ body {
 }
 
 .header {
-  background-color:#15384e;
+  background-color:var(--prussian-blue);
   padding:10px 20px;
   margin-bottom:30px;
 }
@@ -73,4 +79,24 @@ th {
 
 .credit-app-button {
   margin-top: 25px;
+}
+
+#logo{
+  height:109px;
+}
+
+#flash{
+  background-color: var(--secondary-green);
+  color: white;
+  padding:10px;
+  margin-bottom: 5px;
+  font-size:16px;
+}
+
+.settings_form{
+  display:inline-block;
+}
+.select_bar{
+  width: 220px;
+  margin-right: 10px;
 }

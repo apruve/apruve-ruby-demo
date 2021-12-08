@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <title>Munder Difflin Paper Company</title>
+  <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="//code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+  <script src="js/rails.js"></script>
+  <link href="css/merchant-demo.css" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="/img/favicon.png" />
+
+  
+</head>
+<body>
+<div class="container">
+  <div id = "header" class="row-fluid header" style = "background:<%= $header_color%>">
+    <div class="pull-left">
+      <a href="/">
+        <img id = "logo" src= "<%= @@headpic %>"/>
+      </a>
+    </div>
+  </div>
+
+  <% flash.keys.each do |alert| %>
+  <div id = "flash">
+    <%= flash[alert] %>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <% end %>
+
+  <div class="wrapper">
+  <%= yield %>
+  </div>
+</div>
+</body>
+</html>
+
