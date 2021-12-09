@@ -26,9 +26,14 @@ AWS::S3::Base.establish_connection!(
 
 Dotenv.load
 
+set :views, Dir.pwd + '/views'
 # for money gem
 I18n.config.available_locales = :en
 I18n.locale = :en
+
+@@filename ||= "MunderDifflin.png"
+@@headpic ||= "https://s3.amazonaws.com/apruve_profile_img_test/merchant_logos/images/000/002/471/web/logo.png?1614036281"
+$header_color ||= "#014965"
 
 set :bind, '0.0.0.0'
 
@@ -70,6 +75,7 @@ end
 
 get '/settings' do
   erb :settings
+
 end
 
 
@@ -155,10 +161,7 @@ get '/' do
 
   @order = demo_order
   @order.merchant_id = merchant_id
-  
-  @@filename ||= "MunderDifflin.png"
-  @@headpic ||= "https://s3.amazonaws.com/apruve_profile_img_test/merchant_logos/images/000/002/471/web/logo.png?1614036281"
-  $header_color ||= "#014965"
+
 
   erb :index
 end

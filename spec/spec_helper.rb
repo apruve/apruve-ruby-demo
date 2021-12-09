@@ -1,4 +1,6 @@
 require 'sinatra'
+# require 'capybara'
+# require 'capybara/dsl'
 require 'rack/test'
 
 # setup test environment
