@@ -11,8 +11,9 @@
 <body>
     <div class="row-fluid">
     <h3>Change Banner</h3>
-    <form action="/change_header" method="POST">
-        <select id ="select_header" style="margin-bottom:0px;" class= "select_bar" name="color_select" onchange="change()" >
+    <form class = " settings_form form-control" action="/change_header" method="POST">
+    <p class= "settings_row">
+        <select id ="select_header" class= "select_dropdown settings_cell" name="color_select" onchange="change()" >
             <option value = "" selected disabled> -- select color -- </option>
             <option value = "var(--prussian-blue)" >Prussian Blue</option>
             <option value = "var(--sea-green)">Sea Green</option>
@@ -24,15 +25,15 @@
             <option value = "var(--prussian-sea-green-gradient)">Prussian-Sea Gradient</option>
             <option value = "var(--punch-tuscany-gradient)">Punch-Tuscany Gradient</option>
         </select>
-
-        <input type="submit" style="width: 70px;" class="btn btn-primary" value="Save"/>   
+        <input type="submit" style="width: 85px;" class="btn btn-primary settings_cell" value="Save"/>   
+    </p>
     </form>
 
     <h3>Upload Logo</h3>
         
-    <form class= "settings_form"  action="/upload" method="POST" enctype="multipart/form-data" accept="image/*">
-        <input type="file" name="image" style="width: 220px; margin-right: 10px;" required />
-        <input type="submit" style="width: 70px;" class="btn btn-primary" value="Upload"/>
+    <form class= "settings_form form-control" action="/upload" method="POST" enctype="multipart/form-data" accept="image/*">
+        <input type="file" name="image"  required />
+        <input type="submit" style="width: 85px;" class="btn btn-primary" value="Upload"/>
     </form>
     </div>
 <script src="bundle.js"></script>

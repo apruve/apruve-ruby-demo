@@ -60,26 +60,6 @@
       Your Cart
     </h1>
   </div>
-  <div class="pull-right">
-    <% if @user %>
-      Signed in as <strong><%= @user %></strong>
-      <% if @access_token && @credit_available %>
-        (Linked with Apruve <strong><%= @credit_available.format %></strong>)
-      <% end %>
-    <% else %>
-      <a class="sign-in-button pull-right" href="/signin">Sign In</a>
-    <% end %>
-    <% if @user && @authorization_url %>
-       | <a class="apruve-link" href=<%= @authorization_url %>>Link Account with Apruve</a>
-    <% end %>
-  </div>
-</div>
-<div class="row-fluid">
-  <div class="pull-right">
-    <a class="credit-app-button" href="<%= ENV['APRUVE_CREDIT_APP_URL'] %>" target="_blank">
-      Get a Corporate Account with Munder Difflin
-    </a>
-  </div>
 </div>
 <div id="shoppingCart">
   <div class="row-fluid">

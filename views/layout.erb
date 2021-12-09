@@ -18,15 +18,10 @@
 <div class="container">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">Munder Difflin</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
     <div class="collapse navbar-collapse" id="navbarColor03">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link active" href="/">Home
+          <a class= "nav-link" href="/" > Cart
             <span class="visually-hidden">(current)</span>
           </a>
         </li>
@@ -36,8 +31,23 @@
         <li class="nav-item">
           <a class="nav-link" href="/offline_order">Offline Order</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<%= ENV['APRUVE_CREDIT_APP_URL'] %>" target="_blank">Get a Corporate Account</a>
+        </li>
       </ul>
-      <button class="btn btn-secondary my-2 my-sm-0" onclick="window.location.href='/signin'">Sign In</button>
+      <div class="pull-right">
+        <% if @user %>
+          Signed in as <strong><%= @user %></strong>
+          <% if @access_token && @credit_available %>
+            (Linked with Apruve <strong><%= @credit_available.format %></strong>)
+          <% end %>
+        <% else %>
+          <button class="btn btn-secondary my-2 my-sm-0" onclick="window.location.href='/signin'">Sign In</button>
+        <% end %>
+        <% if @user && @authorization_url %>
+          <a class="apruve-link" href=<%= @authorization_url %>>Link Account with Apruve</a>
+        <% end %>
+      </div>
     </div>
   </div>
 </nav>
@@ -51,8 +61,10 @@
 
   <% flash.keys.each do |alert| %>
   <div id = "flash">
-    <%= flash[alert] %>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <div class = "flash_word">
+      <%= flash[alert] %>
+    </div>
+    <button type="button" id = "flash-close-button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
