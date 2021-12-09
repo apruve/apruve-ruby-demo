@@ -281,7 +281,7 @@ post '/upload' do
   @@filename = params[:image][:filename]
 
   # Store image to AWS bucket
-  AWS::S3::S3Object.store(@@filename,open(tempfile), 'apruve_profile_img_test')
+  AWS::S3::S3Object.store(@@filename, open(tempfile), 'apruve_profile_img_test')
 
   # Get url to image
   @@headpic = AWS::S3::S3Object.url_for(@@filename, 'apruve_profile_img_test')

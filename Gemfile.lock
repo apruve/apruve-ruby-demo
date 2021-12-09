@@ -28,6 +28,15 @@ GEM
     aws-sdk-resources (2.0.48)
       aws-sdk-core (= 2.0.48)
     builder (3.2.4)
+    capybara (3.36.0)
+      addressable
+      matrix
+      mini_mime (>= 0.1.3)
+      nokogiri (~> 1.8)
+      rack (>= 1.6.0)
+      rack-test (>= 0.6.3)
+      regexp_parser (>= 1.5, < 3.0)
+      xpath (~> 3.2)
     coffee-script (2.4.1)
       coffee-script-source
       execjs
@@ -47,9 +56,11 @@ GEM
     jmespath (1.4.0)
     json (2.3.1)
     jwt (2.2.2)
+    matrix (0.1.0)
     mime-types (3.4.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2021.1115)
+    mini_mime (1.1.2)
     minitest (5.14.2)
     money (6.13.8)
       i18n (>= 0.6.4, <= 2)
@@ -58,6 +69,8 @@ GEM
     multipart-post (2.1.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
+    nokogiri (1.12.5-arm64-darwin)
+      racc (~> 1.4)
     oauth2 (1.4.4)
       faraday (>= 0.8, < 2.0)
       jwt (>= 1.0, < 3.0)
@@ -65,6 +78,7 @@ GEM
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
     public_suffix (4.0.5)
+    racc (1.6.0)
     rack (2.2.3)
     rack-flash3 (1.0.5)
       rack
@@ -72,6 +86,7 @@ GEM
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
+    regexp_parser (2.2.0)
     rexml (3.2.5)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
@@ -112,6 +127,8 @@ GEM
       thread_safe (~> 0.1)
     xml-simple (1.1.9)
       rexml
+    xpath (3.2.0)
+      nokogiri (~> 1.8)
     zeitwerk (2.4.0)
 
 PLATFORMS
@@ -122,6 +139,7 @@ DEPENDENCIES
   apruve
   aws-s3
   aws-sdk (~> 2.0.22)
+  capybara
   coffee-script
   dotenv
   json (>= 1.8.3)
