@@ -29,7 +29,7 @@ body {
 .header {
   background-color:var(--prussian-blue);
   padding:10px 20px;
-  margin-bottom:30px;
+  margin-bottom:0px;
 }
 
 h1 {
@@ -51,7 +51,7 @@ h1 {
 }
 
 .wrapper {
-  padding:0 20px;
+  padding:0 20px; /* left right padding*/
 }
 
 table {
@@ -89,9 +89,10 @@ th {
 }
 
 #logo{
-  height:90px;
+  height:100px;
   max-width:320px;
   margin-top: 35px;
+  margin-left: 35px;
 }
 
 #header{
@@ -140,4 +141,42 @@ th {
   
 }
 
+.green{
+  display:inline-block;
+  height: 150px;
+  width: 62%;
+  background: lightgreen;
+  box-sizing: border-box;
+}
+
+.check-out-section{
+  display:inline-block;
+  height: 150px;
+  width:35%;
+  box-sizing: border-box;
+  margin:10px;
+  height: 500px;
+}
+
+section{
+  background: #eee;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.check-out-card{
+  padding:15px;
+  background-color:white;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  border-radius:10px;
+}
+
+.check-out-title{
+  font-size: 28px;
+  padding-top:10px;
+}
+
+.check-out-data{
+  color:var(--bs-body-color);
+}
 

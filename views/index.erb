@@ -39,6 +39,60 @@
 
 
 
+<section>
+    <div class="green">Width: 50%</div>
+    <div class="check-out-section">
+      <div class="check-out-card">
+        <h5 class="mb-3 px-1 pb-1 check-out-title">Payment</h5>
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-2 pb-1">
+            Subtotal
+            <span class ="check-out-data">$55.00</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-2">
+            Shipping
+          <span class ="check-out-data">$5.00</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center border-1 px-2 mb-3">
+            <div>
+              <strong>Total</strong>
+            </div>
+            <span class ="check-out-data"><strong>$60.00</strong></span>
+          </li>
+           <h5 class="mb-3 px-1 pb-1 check-out-data">Choose Payment Method</h5>
+            <div class="span3 px-2 pb-2">
+              <form id="checkout-options" action="/demo_order" method="POST">
+                <div class="radio" style="margin-bottom: 10px;">
+                  <label>
+                    <input type="radio" name="payment-method" id="payment-method-1" value="apruve" checked>
+                    <img src="/img/apruve.png" width="75" height="20">
+                    <div>
+                      <small>Business Credit</small>
+                    </div>
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="payment-method" id="payment-method-2" value="credit-card">
+                    <img src="/img/credit-card-logos-sm.png" width="132" height="25">
+                    <div>
+                      <small>Credit Card</small>
+                    </div>
+                  </label>
+                </div>
+                <br>
+                <button type="submit" style = "width:100%;" class="btn btn-primary btn-block">Checkout</button>
+              </form>
+              <div style="display: none;">
+                <%= Apruve.button %>
+              </div>
+            </div>
+        </ul>
+
+        </div>
+    </div>
+</section>
+
 <div id="thankYou" style="display:none">
   <div class="row">
     <div class="span6 offset3">
@@ -54,6 +108,7 @@
     </div>
   </div>
 </div>
+
 <div class="row-fluid">
   <div class="span6">
     <h1>
@@ -96,70 +151,6 @@
           <td>$19.00</td>
         </tr>
       </table>
-    </div>
-  </div>
-  <div class="row-fluid">
-    <div class="span9"></div>
-    <div class="span3">
-      <div class="text-right totals">
-        <p>
-          <strong class="pull-left">
-            Subtotal:
-          </strong>
-          $55.00
-        </p>
-
-        <p>
-          <strong class="pull-left">
-            Shipping:
-          </strong>
-          $5.00
-        </p>
-
-        <p>
-          <strong class="pull-left">
-            Total:
-          </strong>
-          $60.00
-        </p>
-      </div>
-      <hr>
-    </div>
-  </div>
-  <div class="row-fluid">
-    <div class="span9 text-right">
-      <h4 style="margin-right: 20px; margin-top: 0;">
-        Choose Your Payment Method
-      </h4>
-    </div>
-    <div class="span3">
-      <form id="checkout-options" action="/demo_order" method="POST">
-        <div class="radio" style="margin-bottom: 10px;">
-          <label>
-            <input type="radio" name="payment-method" id="payment-method-1" value="apruve" checked>
-            <img src="/img/apruve.png" width="75" height="20">
-            <div>
-              <small>Business Credit</small>
-            </div>
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="payment-method" id="payment-method-2" value="credit-card">
-            <img src="/img/credit-card-logos-sm.png" width="132" height="25">
-            <div>
-              <small>Credit Card</small>
-            </div>
-          </label>
-        </div>
-        <br>
-        <button class="btn btn-large btn-primary" type="submit">
-          Checkout
-        </button>
-      </form>
-      <div style="display: none;">
-        <%= Apruve.button %>
-      </div>
     </div>
   </div>
 </div>
