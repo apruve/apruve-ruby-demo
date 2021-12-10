@@ -19,8 +19,8 @@ use Rack::Logger
 
 require 'aws/s3'
 AWS::S3::Base.establish_connection!(
-    :access_key_id => 'AKIASFWBQ35QI6KVTWQC',
-    :secret_access_key => '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', 
+    :access_key_id => ENV['APRUVE_AWS_ACCESS_KEY'],
+    :secret_access_key => ENV['SECRET_AWS_ACCESS_KEY'], 
 )
 
 
