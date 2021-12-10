@@ -54,20 +54,33 @@ h1 {
   padding:0 20px; /* left right padding*/
 }
 
+
+/* cart table */
+
 .table-checkout {
-  border:1px solid #aaa;
-  border-color:#aaa!important;
+  border:0px;
 }
 
 tr,th,td {
-  border-color:#aaa!important;
-  padding:8px;
+  border-color:#d4d4d4!important;
+  padding-bottom:5px;
+  padding-top:5px;
+  padding-right:25px;
+  padding-left:20px;
 }
 
 th {
-  background-color:#e0e0e0;
+  background-color:#f8f9fa;
 }
 
+/* row of table*/
+tr{
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+}
+
+.row-of-item{
+  height: 200px;
+}
 .cardLogos {
   margin-bottom:20px;
   display:inline-block;
@@ -142,23 +155,23 @@ th {
   
 }
 
-.cart-section{
+
+.check-out-section,.cart-section{
   display:inline-block;
   height: 150px;
-  width: 65%;
-  box-sizing: border-box;
   height: 500px;
   position:relative;
+  box-sizing: border-box;
+
+}
+
+.cart-section{
+  width: 68%;
 }
 
 .check-out-section{
-  display:inline-block;
-  height: 150px;
-  width:30%;
-  box-sizing: border-box;
+  width:25%;
   margin:10px;
-  height: 500px;
-  position:relative;
 }
 
 section{
@@ -167,23 +180,24 @@ section{
   white-space: nowrap;
 }
 
-.check-out-card{
-  top: 10px;
+.check-out-card,.cart-card{
   position: absolute;
   padding:15px;
-  width:400px;
-  background-color:white;
+
+}
+
+.check-out-card{
+  top: 10px;
+  width:380px;
+  background-color:linear-gradient(0.25turn, #cc3224, #cc6230);;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   border-radius:10px;
 }
 
 .cart-card{
-  top: -10px;
-  position: absolute;
-  padding:15px;
-  background-color:#f8f9fa;
-  border-radius:10px;
-  height: 480px;
+  background-color:linear-gradient(0.25turn, #f8f9fa, white);
+  border-right:0px;
+  height: 550px;
   margin:10px;
   width:780px;
 }
@@ -198,3 +212,22 @@ section{
 }
 
 
+.pic-sample{
+  background-color:white;
+  width:150px;
+  height:150px;
+  border-radius:10px;
+  text-align:center;
+  position:relative;
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
+  
+}
+
+.pic-item{
+  width:100px;
+  height:100px;
+  align-self:center;
+  position:absolute;
+  right:20%;
+  top:20%;
+}

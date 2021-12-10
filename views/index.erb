@@ -41,41 +41,54 @@
 <section style= "padding-bottom:100px; background-color:#f8f9fa;">
     <div class="cart-section">
       <div class="cart-card">
-          <h1>
+          <h2 class="mb-0 px-3 pb-1">
             Your Cart
-          </h1>
-          <table class="table-bordered table-checkout">
+          </h2>
+          <table class="table-checkout">
              <thead>
-                <tr>
-                  <th></th>
+                <tr style= "box-shadow:none;">
                   <th>Product</th>
-                  <th>Description</th>
-                  <th>Unit Price</th>
+                  <th></th>
+                  <th>Price</th>
                   <th>Qty</th>
-                  <th>Line Total</th>
+                  <th>Sub Total</th>
                 </tr>
               </thead>
-                <tr>
+                <tr class = "row-of-item">
                   <td>
-                    <img src="/img/letterpaper.jpg" class="productPhoto" width="80" height="80"/>
+                    <div class="pic-sample">
+                    <img class="pic-item" src="/img/letterpaper.jpg" class="productPhoto" alt="Sample"/>
+                    </div>
                   </td>
-                  <td>Letter Paper</td>
-                  <td>20 lb ream (500 Sheets). 
-                  <br>Paper dimensions 8.5 x 11.00 inches.</td>
+                  <td>
+                  <h5>Letter Paper</h5>
+                  <br>
+                  <div style= "font-size:14px;">
+                    20 lb ream (500 Sheets). 
+                  <br>Paper dimensions 8.5 x 11.00 inches
+                  </div>
+                  </td>
                   <td>$12.00</td>
                   <td>3</td>
-                  <td>$36.00</td>
+                  <td><strong>$36.00</strong></td>
                 </tr>
-                <tr>
+                <tr class = "row-of-item">
                   <td>
-                    <img src="/img/legalpaper.jpg" class="productPhoto" width="80" height="80"/>
+                    <div class="pic-sample">
+                    <img class="pic-item" src="/img/legalpaper.jpg" class="productPhoto"/>
+                    </div>
                   </td>
-                  <td>Legal Paper</td>
-                  <td>24 lb ream (250 Sheets). 
-                  <br>Paper dimensions 8.5 x 14.00 inches.</td>
+                  <td>
+                  <h5>Legal Paper</h5>
+                  <br>
+                  <div style= "font-size:14px;">
+                    24 lb ream (250 Sheets). 
+                  <br>Paper dimensions 8.5 x 14.00 inches
+                  </div>
+                  </td>
                   <td>$9.50</td>
                   <td>2</td>
-                  <td>$19.00</td>
+                  <td><strong>$19.00</strong></td>
                 </tr>
            </table>
   
@@ -85,7 +98,7 @@
     <div class="check-out-section">
       <div class="check-out-card">
         <h5 class="mb-3 px-1 pb-1 check-out-title">Payment</h5>
-        <ul class="list-group">
+        <ul class="list-group" >
           <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-2 pb-1">
             Subtotal
             <span class ="check-out-data">$55.00</span>
@@ -94,7 +107,7 @@
             Shipping
           <span class ="check-out-data">$5.00</span>
           </li>
-          <li class="list-group-item d-flex justify-content-between align-items-center border-1 px-2 mb-3">
+          <li class="list-group-item d-flex justify-content-between align-items-center border-1 px-2 mb-3" style ="border-right:0px; border-left:0px;">
             <div>
               <strong>Total</strong>
             </div>
