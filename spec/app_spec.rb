@@ -2,20 +2,10 @@ require 'rspec'
 require './spec/spec_helper.rb'
 require 'aws/s3'
 require 'aws-sdk'
-require 'tempfile'
 require 'sinatra'
-require 'capybara'
-require 'capybara/dsl'
 require 'rack/test'
 require './app.rb'
-require 'sinatra/flash'
-enable :sessions
-use Rack::Logger
 
-
-def logger
-    request.logger
-end
     
 describe 'app' do
     include Rack::Test::Methods

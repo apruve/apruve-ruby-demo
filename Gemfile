@@ -22,5 +22,4 @@ group :test do
   gem 'shoulda-matchers'
   gem 'shoulda'
   gem 'rack-test'
-  gem 'capybara'
 end
