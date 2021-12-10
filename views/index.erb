@@ -38,9 +38,50 @@
 <% end %>
 
 
-
-<section>
-    <div class="green">Width: 50%</div>
+<section style= "padding-bottom:100px; background-color:#f8f9fa;">
+    <div class="cart-section">
+      <div class="cart-card">
+          <h1>
+            Your Cart
+          </h1>
+          <table class="table-bordered table-checkout">
+             <thead>
+                <tr>
+                  <th></th>
+                  <th>Product</th>
+                  <th>Description</th>
+                  <th>Unit Price</th>
+                  <th>Qty</th>
+                  <th>Line Total</th>
+                </tr>
+              </thead>
+                <tr>
+                  <td>
+                    <img src="/img/letterpaper.jpg" class="productPhoto" width="80" height="80"/>
+                  </td>
+                  <td>Letter Paper</td>
+                  <td>20 lb ream (500 Sheets). 
+                  <br>Paper dimensions 8.5 x 11.00 inches.</td>
+                  <td>$12.00</td>
+                  <td>3</td>
+                  <td>$36.00</td>
+                </tr>
+                <tr>
+                  <td>
+                    <img src="/img/legalpaper.jpg" class="productPhoto" width="80" height="80"/>
+                  </td>
+                  <td>Legal Paper</td>
+                  <td>24 lb ream (250 Sheets). 
+                  <br>Paper dimensions 8.5 x 14.00 inches.</td>
+                  <td>$9.50</td>
+                  <td>2</td>
+                  <td>$19.00</td>
+                </tr>
+           </table>
+  
+    </div>
+  </div> 
+         
     <div class="check-out-section">
       <div class="check-out-card">
         <h5 class="mb-3 px-1 pb-1 check-out-title">Payment</h5>
@@ -59,8 +100,8 @@
             </div>
             <span class ="check-out-data"><strong>$60.00</strong></span>
           </li>
-           <h5 class="mb-3 px-1 pb-1 check-out-data">Choose Payment Method</h5>
-            <div class="span3 px-2 pb-2">
+           <h5 class="mb-3 px-2 pb-2 check-out-data">Choose Payment Method</h5>
+            <div class="span3 px-3 pb-3">
               <form id="checkout-options" action="/demo_order" method="POST">
                 <div class="radio" style="margin-bottom: 10px;">
                   <label>
@@ -109,48 +150,3 @@
   </div>
 </div>
 
-<div class="row-fluid">
-  <div class="span6">
-    <h1>
-      Your Cart
-    </h1>
-  </div>
-</div>
-<div id="shoppingCart">
-  <div class="row-fluid">
-    <div class="span12">
-      <table class="table table-bordered">
-        <thead>
-        <tr>
-          <th></th>
-          <th>Product</th>
-          <th>Description</th>
-          <th>Unit Price</th>
-          <th>Qty</th>
-          <th>Line Total</th>
-        </tr>
-        </thead>
-        <tr>
-          <td>
-            <img src="/img/letterpaper.jpg" class="productPhoto" width="80" height="80"/>
-          </td>
-          <td>Letter Paper</td>
-          <td>20 lb ream (500 Sheets). Paper dimensions are 8.5 x 11.00 inches.</td>
-          <td>$12.00</td>
-          <td>3</td>
-          <td>$36.00</td>
-        </tr>
-        <tr>
-          <td>
-            <img src="/img/legalpaper.jpg" class="productPhoto" width="80" height="80"/>
-          </td>
-          <td>Legal Paper</td>
-          <td>24 lb ream (250 Sheets). Paper dimensions are 8.5 x 14.00 inches.</td>
-          <td>$9.50</td>
-          <td>2</td>
-          <td>$19.00</td>
-        </tr>
-      </table>
-    </div>
-  </div>
-</div>

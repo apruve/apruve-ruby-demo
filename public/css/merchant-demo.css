@@ -54,13 +54,14 @@ h1 {
   padding:0 20px; /* left right padding*/
 }
 
-table {
+.table-checkout {
   border:1px solid #aaa;
   border-color:#aaa!important;
 }
 
 tr,th,td {
   border-color:#aaa!important;
+  padding:8px;
 }
 
 th {
@@ -141,21 +142,23 @@ th {
   
 }
 
-.green{
+.cart-section{
   display:inline-block;
   height: 150px;
-  width: 62%;
-  background: lightgreen;
+  width: 65%;
   box-sizing: border-box;
+  height: 500px;
+  position:relative;
 }
 
 .check-out-section{
   display:inline-block;
   height: 150px;
-  width:35%;
+  width:30%;
   box-sizing: border-box;
   margin:10px;
   height: 500px;
+  position:relative;
 }
 
 section{
@@ -165,10 +168,24 @@ section{
 }
 
 .check-out-card{
+  top: 10px;
+  position: absolute;
   padding:15px;
+  width:400px;
   background-color:white;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   border-radius:10px;
+}
+
+.cart-card{
+  top: -10px;
+  position: absolute;
+  padding:15px;
+  background-color:#f8f9fa;
+  border-radius:10px;
+  height: 480px;
+  margin:10px;
+  width:780px;
 }
 
 .check-out-title{
@@ -179,4 +196,5 @@ section{
 .check-out-data{
   color:var(--bs-body-color);
 }
+
 
