@@ -32,10 +32,18 @@ Set environment variables for your Merchant ID and API-Key (see .env_example fil
     $ export APRUVE_MERCHANT_ID
     $ APRUVE_ENVIRONMENT="test"
     $ export APRUVE_ENVIROMENT
-    $ APRUVE_CREDIT_APP_URL
+    $ APRUVE_CREDIT_APP_URL="credit-app-url"
     $ export APRUVE_CREDIT_APP_URL
-    $ APRUVE_CORPORATE_ACCOUNT_ID
+    $ APRUVE_CORPORATE_ACCOUNT_ID="corporate-account-id"
     $ export APRUVE_CORPORATE_ACCOUNT_ID
+    $ APRUVE_AWS_ACCESS_KEY="aws-access-key"
+    $ export APRUVE_AWS_ACCESS_KEY
+    $ SECRET_AWS_ACCESS_KEY="secret-aws-access-key"
+    $ export SECRET_AWS_ACCESS_KEY
+
+Set .env file
+
+    $ cp .env_example .env
 
 Run the app
 
@@ -51,3 +59,21 @@ View the app at http://localhost:4567
 4. Commit your changes. (`git commit -am 'Added my feature!'`)
 5. Push to your branch. (`git push origin my-new-feature`)
 6. Create new pull request.
+
+## Potential installation error
+This app requires ruby version 2.6.7
+For m1 macs that install this ruby version via the following command:
+
+    $ rbenv install 2.6.7
+    
+This error may occur:
+
+    BUILD FAILED (macOS 11.0 using ruby-build 20211203)
+
+    Inspect or clean up the working tree at /var/folders/6k/v0msdhkn1hsfzbxp2xcqb3gm0000gn/T/ruby-build.20211211210439.78348.Qp4iVL
+    Results logged to /var/folders/6k/v0msdhkn1hsfzbxp2xcqb3gm0000gn/T/ruby-build.20211211210439.78348.log
+    
+To resolve, run the following command before rbenv install 2.6.7
+
+    export optflags="-Wno-error=implicit-function-declaration";
+
