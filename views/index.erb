@@ -1,4 +1,5 @@
 <script src="js/bootstrap.min.js"></script>
+<script src="js/variable_change.js"></script>
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen"/>
 <link href="css/merchant-demo.css" rel="stylesheet" media="screen"/>
 
@@ -66,9 +67,10 @@
                   <br>Paper dimensions 8.5 x 11.00 inches
                   </div>
                   </td>
-                  <td>$12.00</td>
-                  <td>3</td>
-                  <td><strong>$36.00</strong></td>
+                  <td id = "unit_price_1">$12.00</td>
+                  <td><span onclick= "plus_value_one()" type = "button" class="vsm-text plus">+</span> <span id = "qty_1">3</span> <span onclick= "minus_value_one()" type = "button" class="vsm-text minus">-</span>
+                  </td>
+                  <td><strong id = "total_1">$36.00</strong></td>
                 </tr>
                 <tr class = "row-of-item">
                   <td>
@@ -84,9 +86,10 @@
                   <br>Paper dimensions 8.5 x 14.00 inches
                   </div>
                   </td>
-                  <td>$9.50</td>
-                  <td>2</td>
-                  <td><strong>$19.00</strong></td>
+                  <td id = "unit_price_2">$9.50</td>
+                  <td><span onclick= "plus_value_two()" type = "button" class="vsm-text plus">+</span> <span id = "qty_2">2</span> <span onclick= "minus_value_two()" type = "button" class="vsm-text minus">-</span>
+                  </td>
+                  <td><strong id = "total_2">$19.00</strong></td>
                 </tr>
            </table>
   
