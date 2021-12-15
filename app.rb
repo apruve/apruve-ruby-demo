@@ -75,7 +75,6 @@ end
 
 get '/settings' do
   erb :settings
-
 end
 
 
@@ -161,7 +160,6 @@ get '/' do
 
   @order = demo_order
   @order.merchant_id = merchant_id
-
 
   erb :index
 end
