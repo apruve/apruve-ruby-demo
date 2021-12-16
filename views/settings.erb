@@ -42,8 +42,9 @@
     <p class= "settings_row">
         <select id ="select_header" class= "select_dropdown settings_cell" name="lang_select" onchange="change()" >
             <option value = "" selected disabled> -- select language -- </option>
-            <option value = "Chinese" ><%=lan_dict(@@language,:"Chinese")%></option>
              <option value = "English" >English</option>
+             <option value = "Chinese(Simplified)" ><%=lan_dict(@@language,:"Chinese(Simplified)")%></option>
+             <option value = "Chinese(Traditional)" ><%=lan_dict(@@language,:"Chinese(Traditional)")%></option>
         </select>
         <input type="submit" style="width: 85px;" class="btn btn-primary settings_cell" value="<%=lan_dict(@@language,:"Save")%>"/>   
     </p>

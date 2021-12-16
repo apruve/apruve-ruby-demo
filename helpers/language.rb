@@ -32,12 +32,16 @@ def lan_dict(lan,value)
             "Save": "Save",
             "Upload": "Upload",
             "Chinese": "Chinese",
+            "Chinese(Simplified)": "Chinese(Simplified)",
+            "Chinese(Traditional)": "Chinese(Traditional)",
             "Sign in to your account": "Sign in to your account",
             "Email": "Email",
-            "Password": "Password" 
-
+            "Password": "Password",
+            "logo successfully updated!": "logo successfully updated!",
+            "Sign In Failure: Invalid Email Format!": "Sign In Failure: Invalid Email Format!"
+            
         },
-        zh:{
+        zh_s:{
             "Your Cart": "您的购物车",
             "Cart": "购物车",
             "Product": "购物清单",
@@ -68,9 +72,52 @@ def lan_dict(lan,value)
             "Save": "保存",
             "Upload": "上传",
             "Chinese": "中文",
+            "Chinese(Simplified)": "中文(简体)",
+            "Chinese(Traditional)": "中文(繁體)",
             "Sign in to your account": "登陆您的账号",
             "Email": "电子邮箱",
-            "Password": "密码"   
+            "Password": "密码",
+            "logo successfully updated!": "标识上传成功",
+            "Sign In Failure: Invalid Email Format!": "登陆错误:邮箱格式不正确!"  
+        },
+        zh_t:{
+            "Your Cart": "您的購物車",
+            "Cart": "購物車",
+            "Product": "購物清單",
+            "Price": "單價",
+            "Sub Total": "小計(美金)",
+            "Qty": "數量",
+            "Payment": "結算",
+            "Subtotal": "小計",
+            "Shipping": "運費",
+            "Total": "總計",
+            "Choose Payment Method": "請選擇付款方式",
+            "Business Credit": "商業信用",
+            "Credit Card": "信用卡",
+            "Checkout": "付款",
+            "Letter Paper": "A4複印紙",
+            "Legal Paper": "多功能打印紙",
+            "Settings": "設置",
+            "Offline Order": "線下訂單",
+            "Get a Corporate Account": "獲得企業賬號",
+            "Sign In": "登陸",
+            "Link Account with Apruve": "將賬號與Apruve關聯",
+            "Signed in as": "您已登陸為",
+            "24_ream": "24磅，令(250 張紙). <br> 紙張尺寸 8.5 x 14.00 英尺",
+            "20_ream": "20磅 令(500 張紙). <br> 紙張尺寸 8.5 x 11.00 英尺",
+            "Change Banner": "編輯橫幅",
+            "Upload Logo": "上傳標識",
+            "Language Preference": "選擇語言",
+            "Save": "保存",
+            "Upload": "上傳",
+            "Chinese": "中文",
+            "Chinese(Simplified)": "中文(简体)",
+            "Chinese(Traditional)": "中文(繁體)",
+            "Sign in to your account": "登陸您的賬號",
+            "Email": "電子郵箱",
+            "Password": "密碼",
+            "logo successfully updated!": "標識上傳成功",
+            "Sign In Failure: Invalid Email Format!": "登陸錯誤:郵箱格式不正確!"       
         }
     } 
     return d[@@language][value]

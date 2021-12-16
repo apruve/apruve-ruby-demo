@@ -12,6 +12,7 @@ require 'money'
 require './lib/apruve_overrides'
 require './helpers/demo_order_helper'
 require './helpers/oauth_helper'
+require './helpers/language'
 require 'sinatra/flash'
 require 'aws-sdk'
 enable :sessions
@@ -215,7 +216,7 @@ post '/signin' do
     redirect '/'
   else
     @@flash_color ="var(--punch)"
-    flash[:error] = "Sign In Failure: Invalid Email Format!"
+    flash[:error] = lan_dict(@@language,:"Sign In Failure: Invalid Email Format!")
     redirect '/signin'
   end
 end
@@ -284,9 +285,12 @@ post '/change_language' do
   
   lang_selected = params[:lang_select]
 
-  if lang_selected == "Chinese"
-    @@language = :zh
-    flash[:success] = "您已将语言设置为中文"
+  if lang_selected == "Chinese(Simplified)"
+    @@language = :zh_s
+    flash[:success] = "您已将语言设置为简体中文"
+  elsif
+    @@language = :zh_t
+    flash[:success] = "您已將語言設置為繁體中文"
   else
     @@language = :eng
     flash[:success] = "You have selected English as preferred language"
@@ -307,6 +311,6 @@ post '/upload' do
   @@headpic = AWS::S3::S3Object.url_for(@@filename, 'apruve_profile_img_test')
 
   @@flash_color ="var(--lime-green)"
-  flash[:success] = "logo successfully updated!"
+  flash[:success] = lan_dict(@@language,:"logo successfully updated!")
   redirect '/' 
 end
