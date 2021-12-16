@@ -1,25 +1,20 @@
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen"/>
 <link href="css/merchant-demo.css" rel="stylesheet" media="screen"/>
+<script src="email-validation.js"></script>
 <div id="signinPage">
-  <div class="row-fluid">
-    <div class="span12">
-      <div class="row-fluid">
-        <div class="span12">
-          <h1>
-            Sign in to your Munder Difflin account
-          </h1>
+    <h3 class="pt-4 pb-3">Sign in to your Munder Difflin account</h3>
+      <form class= "form-group" id="LoginForm" action="/signin" method="POST">
+        <div class="pb-3">
+        <label for="email" >Email:</label><br>
+        <input id="email" placeholder="Your Email *" name="email" type="email" required>
         </div>
-      </div>
-      <form id="LoginForm" action="/signin" method="POST">
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email">
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password">
+        <div>
+        <label for="password">Password:</label><br>
+        <input id="password" placeholder="Your Password *" name="password" type="password" required>
+        </div>
         <br>
-        <button class="btn btn-primary" type="submit" style="margin-top:6px;">
+        <button class="btn btn-primary mt-3" type="submit" style="margin-top:6px;">
           Sign In
         </button>
       </form>
-    </div>
-  </div>
 </div>

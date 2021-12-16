@@ -8,6 +8,7 @@
   <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
   <script src="//code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
   <script src="js/rails.js"></script>
+  <script src="js/close_flash.js"></script>
   <link href="css/merchant-demo.css" rel="stylesheet" />
   <link href="css/bootstrap.min.css" rel="stylesheet" media="screen"/>
   <link rel="icon" type="image/png" href="/img/favicon.png" />
@@ -58,18 +59,23 @@
       </a>
     </div>
   </div>
-
-  <% flash.keys.each do |alert| %>
-  <div id = "flash">
-    <div class = "flash_word">
-      <%= flash[alert] %>
+  <div>
+    <% flash.keys.each do |alert| %>
+    <div id = "flash" style="background-color:<%= @@flash_color%>;">
+      <div class ="flash_word">
+        <% if flash.key?(:success)%>
+          <%@@flash_color = "var(--punch)"%>
+        <%else%>
+          <%@@flash_color = "var(--lime-green)"%>
+        <%end%>
+        <%= flash[alert]%>
+      </div>
+      <button type="button" id ="flash-close-button" onclick="close_flash()" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
-    <button type="button" id = "flash-close-button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <% end %>
   </div>
-  <% end %>
-
   <div class="wrapper">
   <%= yield %>
   </div>

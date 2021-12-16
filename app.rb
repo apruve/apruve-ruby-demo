@@ -34,6 +34,7 @@ I18n.locale = :en
 @@filename ||= "MunderDifflin.png"
 @@headpic ||= "https://s3.amazonaws.com/apruve_profile_img_test/merchant_logos/images/000/002/471/web/logo.png?1614036281"
 $header_color ||= "#014965"
+@@flash_color = "var(--lime-green)"
 
 set :bind, '0.0.0.0'
 
@@ -207,8 +208,15 @@ get '/invoice-badly/:token' do
 end
 
 post '/signin' do
-  session[:user] = params[:email]
-  redirect '/'
+  #validate email
+  VALID_EMAIL_REGEX = /\A([\w+\-]\.?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
+  if(params[:email] =~ VALID_EMAIL_REGEX)
+    session[:user] = params[:email]
+    redirect '/'
+  else
+    flash[:error] = "Sign In Failure: Invalid Email Format!"
+    redirect '/signin'
+  end
 end
 
 post '/finish_order' do
@@ -284,7 +292,7 @@ post '/upload' do
   # Get url to image
   @@headpic = AWS::S3::S3Object.url_for(@@filename, 'apruve_profile_img_test')
 
-  flash[:alert] = "logo successfully updated!"
+  flash[:success] = "logo successfully updated!"
   redirect '/'
   
 end
