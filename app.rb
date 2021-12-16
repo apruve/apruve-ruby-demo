@@ -37,6 +37,8 @@ I18n.locale = :en
 $header_color ||= "#014965"
 @@flash_color = "var(--lime-green)"
 @@language = :eng
+$order_total = 10000
+
 
 set :bind, '0.0.0.0'
 
@@ -115,7 +117,7 @@ post '/orders' do
   }.reduce(:+)
   total_amount_cents = ((total_amount_cents + payload['shipping'].to_f) * 100).round
 
-  @order = Apruve::Order.new(
+  @@order = Apruve::Order.new(
       merchant_id:    merchant_id,
       shopper_id:     payload['shopper_id'],
       currency:       'USD',
@@ -125,7 +127,7 @@ post '/orders' do
   )
 
   payload['orders'].each { |order|
-    @order.order_items << Apruve::OrderItem.new(
+    @@order.order_items << Apruve::OrderItem.new(
         title:             order['name'],
         description:       order['name'],
         sku:               order['sku'],
@@ -134,7 +136,7 @@ post '/orders' do
         price_total_cents: (order['subtotal'].to_f * 100).round
     )
   }
-  @order.save!
+  @@order.save!
 end
 
 get '/' do
@@ -161,23 +163,36 @@ get '/' do
     @credit_available = Money.new(@corporate_account.credit_available_cents, @corporate_account.instance_variable_get(:@currency))
   end
 
-  @order = demo_order
-  @order.merchant_id = merchant_id
+  def logger
+    request.logger
+  end
+  logger.info("HHHHHHHHH")
+
   erb :index
 end
 
 # Easier to just make a route for this
+# Dead Code, Never Triggered
 post '/demo_order' do
-  @order = demo_order
-  access_token = session[:access_token]
+  # @order.amount_cents = 9289
+  $order_total = params["all_total"]
+  @@order = demo_order()
+  @@order.merchant_id = merchant_id
+  logger.info(params)
+  @@order.amount_cents = params["all_total"]
+  logger.info(params["all_total"])
+  logger.info(@@order.amount_cents)
 
-  overrides_with_token = config_overrides.merge(access_token: access_token) if access_token
-  Apruve.configure(ENV['APRUVE_API_KEY'], apruve_environment, overrides_with_token)
 
-  @order.payment_term = { corporate_account_id: session[:corporate_account_id] }
-  @order.merchant_id = merchant_id
-  @order.save!
-  @status = @order.status
+
+  #This never worked
+  # access_token = session[:access_token]
+  # overrides_with_token = config_overrides.merge(access_token: access_token) if access_token
+  # Apruve.configure(ENV['APRUVE_API_KEY'], apruve_environment, overrides_with_token)
+  # @order.payment_term = { corporate_account_id: session[:corporate_account_id] }
+  # @order.merchant_id = merchant_id
+  # @order.save!
+  # @status = @order.status
   erb :finished
 end
 

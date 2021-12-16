@@ -1,15 +1,18 @@
 <% require './helpers/language' %>
 <script src="js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="//code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
 <script src="js/variable_change.js"></script>
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen"/>
 <link href="css/merchant-demo.css" rel="stylesheet" media="screen"/>
 
+
 <%= Apruve.js %>
 <script type="text/javascript">
-    apruve.setOrder(<%= @order.to_hash.to_json %>, '<%= @order.secure_hash %>');
+    apruve.setOrder(<%= @@order.to_hash.to_json %>, '<%= @@order.secure_hash %>');
     apruve.registerApruveCallback(apruve.APRUVE_COMPLETE_EVENT, function (orderId) {
         $('#tokenField').val(orderId);
-        $('#chargeAmount').val(<%= @order.amount_cents %>);
+        $('#chargeAmount').val(<%= @@order.amount_cents %>);
         $('#finishOrder').submit();
     });
     $(function() {
