@@ -300,16 +300,32 @@ post '/change_language' do
   redirect '/settings'
 end
 
+def logger
+  request.logger
+end
+
 post '/upload' do
 
   tempfile = params[:image][:tempfile]
   @@filename = params[:image][:filename]
 
   # Store image to AWS bucket
-  AWS::S3::S3Object.store(@@filename, open(tempfile), 'apruve_profile_img_test')
+  AWS::S3::S3Object.store(@@filename, open(tempfile), ENV['APRUVE_S3_BUCKET_NAME'])
+
+  s3 = Aws::S3::Client.new(
+    region:               'us-east-1', #or any other region
+    access_key_id:        ENV['APRUVE_AWS_ACCESS_KEY'],
+    secret_access_key:    ENV['SECRET_AWS_ACCESS_KEY']
+  )
 
   # Get url to image
-  @@headpic = AWS::S3::S3Object.url_for(@@filename, 'apruve_profile_img_test')
+  signer = Aws::S3::Presigner.new(client: s3)
+  @@headpic = signer.presigned_url(
+    :get_object,
+    bucket: ENV['APRUVE_S3_BUCKET_NAME'],
+    key: "#{@@filename}",
+    expires_in: 21600 #6 hours
+  )
 
   @@flash_color ="var(--lime-green)"
   flash[:success] = lan_dict(@@language,:"logo successfully updated!")
