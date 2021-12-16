@@ -214,6 +214,7 @@ post '/signin' do
     session[:user] = params[:email]
     redirect '/'
   else
+    @@flash_color ="var(--punch)"
     flash[:error] = "Sign In Failure: Invalid Email Format!"
     redirect '/signin'
   end
@@ -292,6 +293,7 @@ post '/upload' do
   # Get url to image
   @@headpic = AWS::S3::S3Object.url_for(@@filename, 'apruve_profile_img_test')
 
+  @@flash_color ="var(--lime-green)"
   flash[:success] = "logo successfully updated!"
   redirect '/'
   

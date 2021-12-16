@@ -63,11 +63,6 @@
     <% flash.keys.each do |alert| %>
     <div id = "flash" style="background-color:<%= @@flash_color%>;">
       <div class ="flash_word">
-        <% if flash.key?(:success)%>
-          <%@@flash_color = "var(--punch)"%>
-        <%else%>
-          <%@@flash_color = "var(--lime-green)"%>
-        <%end%>
         <%= flash[alert]%>
       </div>
       <button type="button" id ="flash-close-button" onclick="close_flash()" class="close" data-dismiss="alert" aria-label="Close">
