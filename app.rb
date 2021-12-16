@@ -284,11 +284,12 @@ end
 post '/change_language' do
   
   lang_selected = params[:lang_select]
+  @@flash_color ="var(--lime-green)"
 
   if lang_selected == "Chinese(Simplified)"
     @@language = :zh_s
     flash[:success] = "您已将语言设置为简体中文"
-  elsif
+  elsif lang_selected == "Chinese(Traditional)"
     @@language = :zh_t
     flash[:success] = "您已將語言設置為繁體中文"
   else
