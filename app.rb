@@ -24,6 +24,9 @@ AWS::S3::Base.establish_connection!(
     :secret_access_key => ENV['SECRET_AWS_ACCESS_KEY'], 
 )
 
+def logger
+  request.logger
+end
 
 Dotenv.load
 
@@ -272,19 +275,34 @@ error 400 do
 end
 
 post '/change_settings' do
-  image = params[:image]
   color_selected = params[:color_select]
   lang_selected = params[:lang_select]
 
   # handle image selection
-  tempfile = image[:tempfile]
-  @@filename = image[:filename]
+  unless params[:image].nil?
+    image = params[:image]
+    tempfile = image[:tempfile]
+    @@filename = image[:filename]
 
-  # Store image to AWS bucket
-  AWS::S3::S3Object.store(@@filename, open(tempfile), 'apruve_profile_img_test')
+    # Store image to AWS bucket
+    AWS::S3::S3Object.store(@@filename, open(tempfile), ENV['APRUVE_S3_BUCKET_NAME'])
 
-  # Get url to image
-  @@headpic = AWS::S3::S3Object.url_for(@@filename, 'apruve_profile_img_test')
+    # Get S3 client
+    s3 = Aws::S3::Client.new(
+      region:               'us-east-1', #or any other region
+      access_key_id:        ENV['APRUVE_AWS_ACCESS_KEY'],
+      secret_access_key:    ENV['SECRET_AWS_ACCESS_KEY']
+    )
+
+    # Get presigned url of image
+    signer = Aws::S3::Presigner.new(client: s3)
+    @@headpic = signer.presigned_url(
+      :get_object,
+      bucket: ENV['APRUVE_S3_BUCKET_NAME'],
+      key: "#{@@filename}",
+      expires_in: 21600 #6 hours
+    )
+  end
 
   # handle language selection
   if lang_selected == "Chinese(Simplified)"
@@ -295,37 +313,8 @@ post '/change_settings' do
     @@language = :eng
   end
 
-  redirect '/settings'
-end
-
-def logger
-  request.logger
-end
-
-post '/upload' do
-
-  tempfile = params[:image][:tempfile]
-  @@filename = params[:image][:filename]
-
-  # Store image to AWS bucket
-  AWS::S3::S3Object.store(@@filename, open(tempfile), ENV['APRUVE_S3_BUCKET_NAME'])
-
-  s3 = Aws::S3::Client.new(
-    region:               'us-east-1', #or any other region
-    access_key_id:        ENV['APRUVE_AWS_ACCESS_KEY'],
-    secret_access_key:    ENV['SECRET_AWS_ACCESS_KEY']
-  )
-
-  # Get url to image
-  signer = Aws::S3::Presigner.new(client: s3)
-  @@headpic = signer.presigned_url(
-    :get_object,
-    bucket: ENV['APRUVE_S3_BUCKET_NAME'],
-    key: "#{@@filename}",
-    expires_in: 21600 #6 hours
-  )
-  # handle color selection
   $header_color = color_selected
 
   redirect '/'
 end
+
