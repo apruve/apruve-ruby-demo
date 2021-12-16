@@ -40,7 +40,9 @@ Set environment variables for your Merchant ID and API-Key (see .env_example fil
     $ export APRUVE_AWS_ACCESS_KEY
     $ SECRET_AWS_ACCESS_KEY="secret-aws-access-key"
     $ export SECRET_AWS_ACCESS_KEY
-
+    $ APRUVE_S3_BUCKET_NAME='your-bucket-name'
+    $ export APRUVE_S3_BUCKET_NAME
+    
 Set .env file
 
     $ cp .env_example .env
