@@ -1,3 +1,4 @@
+<% require './helpers/language' %>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/variable_change.js"></script>
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen"/>
@@ -41,16 +42,16 @@
     <div class="cart-section">
       <div class="cart-card">
           <h2 class="mb-0 px-3 pb-1">
-            Your Cart
+            <%=lan_dict(@@language,:"Your Cart")%>
           </h2>
           <table class="table-checkout">
              <thead>
                 <tr style= "box-shadow:none;">
-                  <th>Product</th>
+                  <th><%=lan_dict(@@language,:"Product")%></th>
                   <th></th>
-                  <th>Price</th>
-                  <th>Qty</th>
-                  <th>Sub Total</th>
+                  <th><%=lan_dict(@@language,:"Price")%></th>
+                  <th><%=lan_dict(@@language,:"Qty")%></th>
+                  <th><%=lan_dict(@@language,:"Sub Total")%></th>
                 </tr>
               </thead>
                 <tr class = "row-of-item">
@@ -60,11 +61,10 @@
                     </div>
                   </td>
                   <td>
-                  <h5>Letter Paper</h5>
+                  <h5><%=lan_dict(@@language,:"Letter Paper")%></h5>
                   <br>
                   <div style= "font-size:14px;">
-                    20 lb ream (500 Sheets). 
-                  <br>Paper dimensions 8.5 x 11.00 inches
+                  <%=lan_dict(@@language,:"20_ream")%>
                   </div>
                   </td>
                   <td id = "unit_price_1">$12.00</td>
@@ -79,11 +79,10 @@
                     </div>
                   </td>
                   <td>
-                  <h5>Legal Paper</h5>
+                  <h5><%=lan_dict(@@language,:"Legal Paper")%></h5>
                   <br>
                   <div style= "font-size:14px;">
-                    24 lb ream (250 Sheets). 
-                  <br>Paper dimensions 8.5 x 14.00 inches
+                  <%=lan_dict(@@language,:"24_ream")%>
                   </div>
                   </td>
                   <td id = "unit_price_2">$9.50</td>
@@ -98,23 +97,23 @@
          
     <div class="check-out-section">
       <div class="check-out-card">
-        <h5 class="mb-3 px-1 pb-1 check-out-title">Payment</h5>
+        <h5 class="mb-3 px-1 pb-1 check-out-title"><%=lan_dict(@@language,:"Payment")%></h5>
         <ul class="list-group" >
           <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-2 pb-1">
-            Subtotal
+            <%=lan_dict(@@language,:"Subtotal")%>
             <span id= "subtotal" lass ="check-out-data">$55.00</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-2">
-            Shipping
+           <%=lan_dict(@@language,:"Shipping")%>
           <span class ="check-out-data">$5.00</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center border-1 px-2 mb-3" style ="border-right:0px; border-left:0px;">
             <div>
-              <strong>Total</strong>
+              <strong><%=lan_dict(@@language,:"Total")%></strong>
             </div>
             <span class ="check-out-data"><strong id= "all_total">$60.00</strong></span>
           </li>
-           <h5 class="mb-3 px-2 pb-2 check-out-data">Choose Payment Method</h5>
+           <h5 class="mb-3 px-2 pb-2 check-out-data"><%=lan_dict(@@language,:"Choose Payment Method")%></h5>
             <div class="span3 px-3 pb-3">
               <form id="checkout-options" action="/demo_order" method="POST">
                 <div class="radio" style="margin-bottom: 10px;">
@@ -122,7 +121,7 @@
                     <input type="radio" name="payment-method" id="payment-method-1" value="apruve" checked>
                     <img src="/img/apruve.png" width="75" height="20">
                     <div>
-                      <small>Business Credit</small>
+                      <small><%=lan_dict(@@language,:"Business Credit")%></small>
                     </div>
                   </label>
                 </div>
@@ -131,12 +130,12 @@
                     <input type="radio" name="payment-method" id="payment-method-2" value="credit-card">
                     <img src="/img/credit-card-logos-sm.png" width="132" height="25">
                     <div>
-                      <small>Credit Card</small>
+                      <small><%=lan_dict(@@language,:"Credit Card")%></small>
                     </div>
                   </label>
                 </div>
                 <br>
-                <button type="submit" style = "width:100%;" class="btn btn-primary btn-block">Checkout</button>
+                <button type="submit" style = "width:100%;" class="btn btn-primary btn-block"><%=lan_dict(@@language,:"Checkout")%></button>
               </form>
               <div style="display: none;">
                 <%= Apruve.button %>

@@ -1,3 +1,4 @@
+<% require './helpers/language' %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,31 +23,31 @@
     <div class="collapse navbar-collapse" id="navbarColor03">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class= "nav-link" href="/" > Cart
+          <a class= "nav-link" href="/" ><%=lan_dict(@@language,:"Cart")%>
             <span class="visually-hidden">(current)</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/settings">Settings</a>
+          <a class="nav-link" href="/settings"><%=lan_dict(@@language,:"Settings")%></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/offline_order">Offline Order</a>
+          <a class="nav-link" href="/offline_order"><%=lan_dict(@@language,:"Offline Order")%></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<%= ENV['APRUVE_CREDIT_APP_URL'] %>" target="_blank">Get a Corporate Account</a>
+          <a class="nav-link" href="<%= ENV['APRUVE_CREDIT_APP_URL'] %>" target="_blank"><%=lan_dict(@@language,:"Get a Corporate Account")%></a>
         </li>
       </ul>
       <div class="pull-right">
         <% if @user %>
-          Signed in as <strong><%= @user %></strong>
+          <%=lan_dict(@@language,:"Signed in as")%><strong><%= @user %></strong>
           <% if @access_token && @credit_available %>
             (Linked with Apruve <strong><%= @credit_available.format %></strong>)
           <% end %>
         <% else %>
-          <button class="btn btn-secondary my-2 my-sm-0" onclick="window.location.href='/signin'">Sign In</button>
+          <button class="btn btn-secondary my-2 my-sm-0" onclick="window.location.href='/signin'"><%=lan_dict(@@language,:"Sign In")%></button>
         <% end %>
         <% if @user && @authorization_url %>
-          <a class="apruve-link" href=<%= @authorization_url %>>Link Account with Apruve</a>
+          <a class="apruve-link" href=<%= @authorization_url %>><%=lan_dict(@@language,:"Link Account with Apruve")%></a>
         <% end %>
       </div>
     </div>

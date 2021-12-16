@@ -1,3 +1,4 @@
+<% require './helpers/language' %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,11 +11,11 @@
 </head>
 <body>
     <div class="row-fluid" style="padding-top:20px;">
-    <h3>Change Banner</h3>
+    <h4><%=lan_dict(@@language,:"Change Banner")%></h4>
     <form class = " settings_form form-control" action="/change_header" method="POST">
     <p class= "settings_row">
         <select id ="select_header" class= "select_dropdown settings_cell" name="color_select" onchange="change()" >
-            <option value = "" selected disabled> -- select color -- </option>
+            <option value = "<%=$header_color%>" selected disabled> -- select color -- </option>
             <option value = "var(--prussian-blue)" >Prussian Blue</option>
             <option value = "var(--sea-green)">Sea Green</option>
             <option value = "var(--cool-slate)">Cool Slate</option>
@@ -25,15 +26,27 @@
             <option value = "var(--prussian-sea-green-gradient)">Prussian-Sea Gradient</option>
             <option value = "var(--punch-tuscany-gradient)">Punch-Tuscany Gradient</option>
         </select>
-        <input type="submit" style="width: 85px;" class="btn btn-primary settings_cell" value="Save"/>   
+        <input type="submit" style="width: 85px;" class="btn btn-primary settings_cell" value="<%=lan_dict(@@language,:"Save")%>"/>   
     </p>
     </form>
 
-    <h3>Upload Logo</h3>     
+    <h4><%=lan_dict(@@language,:"Upload Logo")%></h4>     
     <form class= "settings_form form-control" action="/upload" method="POST" enctype="multipart/form-data" accept="image/*">
         <input type="file" name="image"  required />
-        <input type="submit" style="width: 85px;" class="btn btn-primary" value="Upload"/>
+        <input type="submit" style="width: 85px;" class="btn btn-primary" value="<%=lan_dict(@@language,:"Upload")%>"/>
     </form>
+
+
+    <h4><%=lan_dict(@@language,:"Language Preference")%></h4>     
+    <form class = " settings_form form-control" action="/change_language" method="POST">
+    <p class= "settings_row">
+        <select id ="select_header" class= "select_dropdown settings_cell" name="lang_select" onchange="change()" >
+            <option value = "" selected disabled> -- select language -- </option>
+            <option value = "Chinese" ><%=lan_dict(@@language,:"Chinese")%></option>
+             <option value = "English" >English</option>
+        </select>
+        <input type="submit" style="width: 85px;" class="btn btn-primary settings_cell" value="<%=lan_dict(@@language,:"Save")%>"/>   
+    </p>
     </div>
 <script src="bundle.js"></script>
 <script src="update_header.js"></script>

@@ -35,6 +35,7 @@ I18n.locale = :en
 @@headpic ||= "https://s3.amazonaws.com/apruve_profile_img_test/merchant_logos/images/000/002/471/web/logo.png?1614036281"
 $header_color ||= "#014965"
 @@flash_color = "var(--lime-green)"
+@@language = :eng
 
 set :bind, '0.0.0.0'
 
@@ -161,7 +162,6 @@ get '/' do
 
   @order = demo_order
   @order.merchant_id = merchant_id
-
   erb :index
 end
 
@@ -276,10 +276,23 @@ post '/change_header' do
   color_selected = params[:color_select]
 
   $header_color = color_selected
-  logger.info("Params info #{$header_color}")
 
   erb :settings
+end
 
+post '/change_language' do
+  
+  lang_selected = params[:lang_select]
+
+  if lang_selected == "Chinese"
+    @@language = :zh
+    flash[:success] = "您已将语言设置为中文"
+  else
+    @@language = :eng
+    flash[:success] = "You have selected English as preferred language"
+  end
+
+  redirect '/settings'
 end
 
 post '/upload' do
@@ -295,6 +308,5 @@ post '/upload' do
 
   @@flash_color ="var(--lime-green)"
   flash[:success] = "logo successfully updated!"
-  redirect '/'
-  
+  redirect '/' 
 end
