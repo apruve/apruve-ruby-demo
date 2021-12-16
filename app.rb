@@ -271,30 +271,28 @@ error 400 do
   $stdout.print 'Apruve::BadRequest(400)'
 end
 
-
-post '/change_header' do
-
+post '/change_settings' do
+  image = params[:image]
   color_selected = params[:color_select]
-
-  $header_color = color_selected
-
-  erb :settings
-end
-
-post '/change_language' do
-  
   lang_selected = params[:lang_select]
-  @@flash_color ="var(--lime-green)"
 
+  # handle image selection
+  tempfile = image[:tempfile]
+  @@filename = image[:filename]
+
+  # Store image to AWS bucket
+  AWS::S3::S3Object.store(@@filename, open(tempfile), 'apruve_profile_img_test')
+
+  # Get url to image
+  @@headpic = AWS::S3::S3Object.url_for(@@filename, 'apruve_profile_img_test')
+
+  # handle language selection
   if lang_selected == "Chinese(Simplified)"
     @@language = :zh_s
-    flash[:success] = "您已将语言设置为简体中文"
   elsif lang_selected == "Chinese(Traditional)"
     @@language = :zh_t
-    flash[:success] = "您已將語言設置為繁體中文"
-  else
+  elsif lang_selected == "English"
     @@language = :eng
-    flash[:success] = "You have selected English as preferred language"
   end
 
   redirect '/settings'
@@ -326,8 +324,8 @@ post '/upload' do
     key: "#{@@filename}",
     expires_in: 21600 #6 hours
   )
+  # handle color selection
+  $header_color = color_selected
 
-  @@flash_color ="var(--lime-green)"
-  flash[:success] = lan_dict(@@language,:"logo successfully updated!")
-  redirect '/' 
+  redirect '/'
 end

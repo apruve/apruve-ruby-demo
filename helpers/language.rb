@@ -26,7 +26,7 @@ def lan_dict(lan,value)
             "Signed in as": "Signed in as",
             "24_ream": "24 lb ream (250 Sheets). <br> Paper dimensions 8.5 x 14.00 inches",
             "20_ream": "20 lb ream (500 Sheets). <br>Paper dimensions 8.5 x 11.00 inches",
-            "Change Banner": "Change Banner",
+            "Change Banner": "Banner Color",
             "Upload Logo": "Upload Logo",
             "Language Preference": "Language Preference",
             "Save": "Save",

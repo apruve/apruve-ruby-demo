@@ -241,3 +241,12 @@ section{
   transform: scale(1.5);
   cursor: zoom-in;
 }
+
+.settings-form #submit {
+  float: right;
+}
+
+.settings-form .input-block {
+  width: 100%;
+  margin-bottom: 30px;
+}
