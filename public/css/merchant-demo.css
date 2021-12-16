@@ -9,6 +9,7 @@
   --sea-green-lime-gradient:linear-gradient(0.25turn, #00a3a0, #a0c51e);
   --prussian-sea-green-gradient:linear-gradient(0.25turn, #014965, #00a3a0);
   --punch-tuscany-gradient:linear-gradient(0.25turn, #cc3224, #cc6230);
+  --bs-gray-100:#f8f9fa;
 }
 
 html,body {
@@ -189,14 +190,15 @@ section{
 
 .check-out-card{
   top: 10px;
-  width:380px;
-  background-color:linear-gradient(0.25turn, #cc3224, #cc6230);;
+  width:360px;
+  background:var(--bs-gray-100);
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   border-radius:10px;
+
 }
 
 .cart-card{
-  background-color:linear-gradient(0.25turn, #f8f9fa, white);
+  background-color:linear-gradient(0.25turn, var(--bs-gray-100), white);
   border-right:0px;
   height: 550px;
   margin:10px;
@@ -221,6 +223,7 @@ section{
   text-align:center;
   position:relative;
   box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
+  overflow: hidden;
   
 }
 
@@ -229,6 +232,12 @@ section{
   height:100px;
   align-self:center;
   position:absolute;
+  transition: transform .4s; /* Animation */
   right:20%;
   top:20%;
+}
+
+.pic-item:hover {
+  transform: scale(1.5);
+  cursor: zoom-in;
 }
