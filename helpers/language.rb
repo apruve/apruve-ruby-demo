@@ -38,7 +38,9 @@ def lan_dict(lan,value)
             "Email": "Email",
             "Password": "Password",
             "logo successfully updated!": "logo successfully updated!",
+            "Settings Changed Successfully": "Settings Changed Successfully!",
             "Sign In Failure: Invalid Email Format!": "Sign In Failure: Invalid Email Format!",
+            "No changes have been made": "No changes have been made",
             "Credit card payments not supported": "Credit card payments are not supported in this demo. Please pay with Apruve.",
             "$": "$" 
             
@@ -81,6 +83,8 @@ def lan_dict(lan,value)
             "Password": "密码",
             "logo successfully updated!": "标识上传成功",
             "Sign In Failure: Invalid Email Format!": "登陆错误:邮箱格式不正确!",
+            "Settings Changed Successfully": "设定编辑成功!",
+            "No changes have been made": "设定未改变",
             "Credit card payments not supported": "抱歉，演示软件不支持信用卡支付，请用Apruve支付.",
             "$": "¥"   
         },
@@ -122,6 +126,8 @@ def lan_dict(lan,value)
             "Password": "密碼",
             "logo successfully updated!": "標識上傳成功",
             "Sign In Failure: Invalid Email Format!": "登陸錯誤:郵箱格式不正確!",
+            "Settings Changed Successfully": "設定編輯成功!",
+            "No changes have been made": "設定未改變",
             "Credit card payments not supported": "抱歉，演示軟件不支持信用卡支付，請用Apruve支付.",
             "$": "¥"      
         }

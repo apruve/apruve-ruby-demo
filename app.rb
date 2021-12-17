@@ -318,8 +318,20 @@ post '/change_settings' do
   elsif lang_selected == "English"
     @@language = :eng
   end
+ 
 
+  unless color_selected.nil?
   $header_color = color_selected
+  end
+
+  if !color_selected.nil? or !params[:image].nil? or !params[:lang_select].nil?
+    @@flash_color ="var(--lime-green)"
+    flash[:success] = lan_dict(@@language,:"Settings Changed Successfully")
+  else
+    @@flash_color ="var(--cool-slate)"
+    flash[:success] = lan_dict(@@language,:"No changes have been made")
+  
+  end
 
   redirect '/'
 end
