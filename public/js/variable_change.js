@@ -21,11 +21,5 @@ function reload_total(){
     var line_total_2 = parseInt(document.getElementById('total_2').innerHTML.substring(1))
     document.getElementById('subtotal').innerHTML = '$'+ String(line_total_1+line_total_2) +'.00';
     document.getElementById('all_total').innerHTML = '$'+ String(line_total_1+line_total_2+5) +'.00';
-    $.ajax({
-        type: 'POST',
-        url: '/demo_order',
-        data: {'all_total': (line_total_1+line_total_2+5)*100}
-    });
-    
 }
 
