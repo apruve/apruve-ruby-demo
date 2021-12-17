@@ -70,10 +70,10 @@
                   <%=lan_dict(@@language,:"20_ream")%>
                   </div>
                   </td>
-                  <td id = "unit_price_1">$12.00</td>
-                  <td><span onclick= "plus_value('qty_1','unit_price_1','total_1')" type = "button" class="vsm-text plus">+</span> <span id = "qty_1" >3</span> <span onclick= "minus_value('qty_1','unit_price_1','total_1')" type = "button" class="vsm-text minus">-</span>
+                  <td id = "unit_price_1"><%=lan_dict(@@language,:"$")%>12.00</td>
+                  <td><span onclick= "plus_value('qty_1','unit_price_1','total_1','<%=lan_dict(@@language,:'$')%>')" type = "button" class="vsm-text plus">+</span> <span id = "qty_1" >3</span> <span onclick= "minus_value('qty_1','unit_price_1','total_1','<%=lan_dict(@@language,:'$')%>')" type = "button" class="vsm-text minus">-</span>
                   </td>
-                  <td><strong id = "total_1">$36.00</strong></td>
+                  <td><strong id = "total_1"><%=lan_dict(@@language,:"$")%>36.00</strong></td>
                 </tr>
                 <tr class = "row-of-item">
                   <td>
@@ -88,10 +88,10 @@
                   <%=lan_dict(@@language,:"24_ream")%>
                   </div>
                   </td>
-                  <td id = "unit_price_2">$9.50</td>
-                  <td><span onclick= "plus_value('qty_2','unit_price_2','total_2')" type = "button" class="vsm-text plus">+</span> <span id = "qty_2">2</span> <span onclick= "minus_value('qty_2','unit_price_2','total_2')" type = "button" class="vsm-text minus">-</span>
+                  <td id = "unit_price_2"><%=lan_dict(@@language,:"$")%>9.50</td>
+                  <td><span onclick= "plus_value('qty_2','unit_price_2','total_2','<%=lan_dict(@@language,:'$')%>')" type = "button" class="vsm-text plus">+</span> <span id = "qty_2">2</span> <span onclick= "minus_value('qty_2','unit_price_2','total_2','<%=lan_dict(@@language,:'$')%>')" type = "button" class="vsm-text minus">-</span>
                   </td>
-                  <td><strong id = "total_2">$19.00</strong></td>
+                  <td><strong id = "total_2"><%=lan_dict(@@language,:"$")%>19.00</strong></td>
                 </tr>
            </table>
   
@@ -104,17 +104,17 @@
         <ul class="list-group" >
           <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-2 pb-1">
             <%=lan_dict(@@language,:"Subtotal")%>
-            <span id= "subtotal" lass ="check-out-data">$55.00</span>
+            <span id= "subtotal" lass ="check-out-data"><%=lan_dict(@@language,:"$")%>55.00</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-2">
            <%=lan_dict(@@language,:"Shipping")%>
-          <span class ="check-out-data">$5.00</span>
+          <span class ="check-out-data"><%=lan_dict(@@language,:"$")%>5.00</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center border-1 px-2 mb-3" style ="border-right:0px; border-left:0px;">
             <div>
               <strong><%=lan_dict(@@language,:"Total")%></strong>
             </div>
-            <span class ="check-out-data"><strong id= "all_total">$60.00</strong></span>
+            <span class ="check-out-data"><strong id= "all_total"><%=lan_dict(@@language,:"$")%>60.00</strong></span>
           </li>
            <h5 class="mb-3 px-2 pb-2 check-out-data"><%=lan_dict(@@language,:"Choose Payment Method")%></h5>
             <div class="span3 px-3 pb-3">

@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="row-fluid settings-form" style="padding-top:20px;">
-      <h3>Settings</h3>
+      <h3><%=lan_dict(@@language,:"Settings")%></h3>
 
       <form class = "settings_form form-control" action="/change_settings" enctype="multipart/form-data" method="POST">
         <div class="input-block">
@@ -34,7 +34,7 @@
 
         <div class="input-block">
           <h6><%=lan_dict(@@language,:"Upload Logo")%></h6>
-          <input type="file" name="image" />
+          <input type="file" name="image"/>
         </div>
 
 

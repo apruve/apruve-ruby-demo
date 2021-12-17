@@ -312,6 +312,7 @@ post '/change_settings' do
   # handle language selection
   if lang_selected == "Chinese(Simplified)"
     @@language = :zh_s
+    # Apruve.setSettings({"language":'zz'})
   elsif lang_selected == "Chinese(Traditional)"
     @@language = :zh_t
   elsif lang_selected == "English"

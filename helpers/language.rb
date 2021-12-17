@@ -39,7 +39,8 @@ def lan_dict(lan,value)
             "Password": "Password",
             "logo successfully updated!": "logo successfully updated!",
             "Sign In Failure: Invalid Email Format!": "Sign In Failure: Invalid Email Format!",
-            "Credit card payments not supported": "Credit card payments are not supported in this demo. Please pay with Apruve."
+            "Credit card payments not supported": "Credit card payments are not supported in this demo. Please pay with Apruve.",
+            "$": "$" 
             
         },
         zh_s:{
@@ -80,7 +81,8 @@ def lan_dict(lan,value)
             "Password": "密码",
             "logo successfully updated!": "标识上传成功",
             "Sign In Failure: Invalid Email Format!": "登陆错误:邮箱格式不正确!",
-            "Credit card payments not supported": "抱歉，演示软件不支持信用卡支付，请用Apruve支付."  
+            "Credit card payments not supported": "抱歉，演示软件不支持信用卡支付，请用Apruve支付.",
+            "$": "¥"   
         },
         zh_t:{
             "Your Cart": "您的購物車",
@@ -120,7 +122,8 @@ def lan_dict(lan,value)
             "Password": "密碼",
             "logo successfully updated!": "標識上傳成功",
             "Sign In Failure: Invalid Email Format!": "登陸錯誤:郵箱格式不正確!",
-            "Credit card payments not supported": "抱歉，演示軟件不支持信用卡支付，請用Apruve支付."       
+            "Credit card payments not supported": "抱歉，演示軟件不支持信用卡支付，請用Apruve支付.",
+            "$": "¥"      
         }
     } 
     return d[@@language][value]
