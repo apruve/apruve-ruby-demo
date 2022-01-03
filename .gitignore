@@ -93,4 +93,3 @@ Vagrantfile
 
 # Local environment variable files
 .env
-.env

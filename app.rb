@@ -124,7 +124,7 @@ post '/orders' do
       merchant_id:    merchant_id,
       shopper_id:     payload['shopper_id'],
       currency:       'USD',
-      amount_cents:   $order_total,
+      amount_cents:   total_amount_cents,
       shipping_cents: (payload['shipping'].to_f * 100).round,
       payment_term:   { corporate_account_id: payload['corporate_account_id'] }
   )
