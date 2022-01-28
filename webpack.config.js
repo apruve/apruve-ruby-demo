@@ -9,10 +9,10 @@ module.exports = {
     extensions: ['*', '.js', '.jsx', '.json']
   },
   module: {
-    loaders: [
+    rules: [
       {
         loader: 'babel-loader',
-        query: {
+        options: {
           presets: ['react', 'es2015']
         },
         test: /\.js?$/,
