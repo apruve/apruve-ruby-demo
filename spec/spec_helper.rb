@@ -1,4 +1,6 @@
 require 'sinatra'
+# require 'capybara' TODO: include selenium headless chrome driver feature specs in spec file
+# require 'capybara/dsl'
 require 'rack/test'
 
 # setup test environment

@@ -1,20 +1,26 @@
+<% require './helpers/language' %>
 <script src="js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="//code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+<script src="js/variable_change.js"></script>
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+<link href="css/merchant-demo.css" rel="stylesheet" media="screen"/>
+
 
 <%= Apruve.js %>
 <script type="text/javascript">
-    apruve.setOrder(<%= @order.to_hash.to_json %>, '<%= @order.secure_hash %>');
-    apruve.registerApruveCallback(apruve.APRUVE_COMPLETE_EVENT, function (orderId) {
-        $('#tokenField').val(orderId);
-        $('#chargeAmount').val(<%= @order.amount_cents %>);
-        $('#finishOrder').submit();
-    });
-    $(function() {
+  apruve.setOrder(<%= $order.to_hash.to_json %>, '<%= $order.secure_hash %>');
+  apruve.registerApruveCallback(apruve.APRUVE_COMPLETE_EVENT, function (orderId) {
+      $('#tokenField').val(orderId);
+      $('#chargeAmount').val(<%= $order.amount_cents %>);
+      $('#finishOrder').submit();
+  });
+  $(function() {
+    apruve.setShopper($('#shopperEmail').val());
+    $('#shopperEmail').on('blur', function(event) {
       apruve.setShopper($('#shopperEmail').val());
-      $('#shopperEmail').on('blur', function(event) {
-        apruve.setShopper($('#shopperEmail').val());
-      });
     });
+  });
 </script>
 <% if @access_token.nil? %>
 <script type="text/javascript">
@@ -28,13 +34,123 @@
         apruve.startCheckout();
       }
       else {
-        alert('Credit card payments are not supported in this demo. Please pay with Apruve.')
+        alert("<%=lan_dict(@@language,:"Credit card payments not supported")%>");
       }
       return false;
     });
   });
 </script>
 <% end %>
+<section style= "padding-bottom:100px; background-color:#f8f9fa;">
+    <div class="cart-section">
+      <div class="cart-card">
+          <h2 class="mb-0 px-3 pb-1">
+            <%=lan_dict(@@language,:"Your Cart")%>
+          </h2>
+          <table class="table-checkout">
+             <thead>
+                <tr style= "box-shadow:none;">
+                  <th><%=lan_dict(@@language,:"Product")%></th>
+                  <th></th>
+                  <th><%=lan_dict(@@language,:"Price")%></th>
+                  <th><%=lan_dict(@@language,:"Qty")%></th>
+                  <th><%=lan_dict(@@language,:"Sub Total")%></th>
+                </tr>
+              </thead>
+                <tr class = "row-of-item">
+                  <td>
+                    <div class="pic-sample">
+                    <img class="pic-item" src="/img/letterpaper.jpg" class="productPhoto" alt="Sample"/>
+                    </div>
+                  </td>
+                  <td>
+                  <h5><%=lan_dict(@@language,:"Letter Paper")%></h5>
+                  <br>
+                  <div style= "font-size:14px;">
+                  <%=lan_dict(@@language,:"20_ream")%>
+                  </div>
+                  </td>
+                  <td id = "unit_price_1"><%=lan_dict(@@language,:"$")%>12.00</td>
+                  <td><span id = "qty_1" >3</span>
+<!--  TODO: For Changing Quantity                <td><span onclick= "plus_value('qty_1','unit_price_1','total_1','<%=lan_dict(@@language,:'$')%>')" type = "button" class="vsm-text plus">+</span> <span id = "qty_1" >3</span> <span onclick= "minus_value('qty_1','unit_price_1','total_1','<%=lan_dict(@@language,:'$')%>')" type = "button" class="vsm-text minus">-</span>-->
+                  </td>
+                  <td><strong id = "total_1"><%=lan_dict(@@language,:"$")%>36.00</strong></td>
+                </tr>
+                <tr class = "row-of-item">
+                  <td>
+                    <div class="pic-sample">
+                    <img class="pic-item" src="/img/legalpaper.jpg" class="productPhoto"/>
+                    </div>
+                  </td>
+                  <td>
+                  <h5><%=lan_dict(@@language,:"Legal Paper")%></h5>
+                  <br>
+                  <div style= "font-size:14px;">
+                  <%=lan_dict(@@language,:"24_ream")%>
+                  </div>
+                  </td>
+                  <td id = "unit_price_2"><%=lan_dict(@@language,:"$")%>9.50</td>
+                  <td><span id = "qty_2">2</span>
+<!--                  <td><span onclick= "plus_value('qty_2','unit_price_2','total_2','<%=lan_dict(@@language,:'$')%>')" type = "button" class="vsm-text plus">+</span> <span id = "qty_2">2</span> <span onclick= "minus_value('qty_2','unit_price_2','total_2','<%=lan_dict(@@language,:'$')%>')" type = "button" class="vsm-text minus">-</span>-->
+                  </td>
+                  <td><strong id = "total_2"><%=lan_dict(@@language,:"$")%>19.00</strong></td>
+                </tr>
+           </table>
+  
+    </div>
+  </div> 
+         
+    <div class="check-out-section">
+      <div class="check-out-card">
+        <h5 class="mb-3 px-1 pb-1 check-out-title"><%=lan_dict(@@language,:"Payment")%></h5>
+        <ul class="list-group" >
+          <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-2 pb-1">
+            <%=lan_dict(@@language,:"Subtotal")%>
+            <span id= "subtotal" lass ="check-out-data"><%=lan_dict(@@language,:"$")%>55.00</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-2">
+           <%=lan_dict(@@language,:"Shipping")%>
+          <span class ="check-out-data"><%=lan_dict(@@language,:"$")%>5.00</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center border-1 px-2 mb-3" style ="border-right:0px; border-left:0px;">
+            <div>
+              <strong><%=lan_dict(@@language,:"Total")%></strong>
+            </div>
+            <span class ="check-out-data"><strong id= "all_total"><%=lan_dict(@@language,:"$")%>60.00</strong></span>
+          </li>
+           <h5 class="mb-3 px-2 pb-2 check-out-data"><%=lan_dict(@@language,:"Choose Payment Method")%></h5>
+            <div class="span3 px-3 pb-3">
+              <form id="checkout-options" action="/demo_order" method="POST">
+                <div class="radio" style="margin-bottom: 10px;">
+                  <label>
+                    <input type="radio" name="payment-method" id="payment-method-1" value="apruve" checked>
+                    <img src="/img/apruve.png" width="75" height="20">
+                    <div>
+                      <small><%=lan_dict(@@language,:"Business Credit")%></small>
+                    </div>
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="payment-method" id="payment-method-2" value="credit-card">
+                    <img src="/img/credit-card-logos-sm.png" width="132" height="25">
+                    <div>
+                      <small><%=lan_dict(@@language,:"Credit Card")%></small>
+                    </div>
+                  </label>
+                </div>
+                <br>
+                <button type="submit" style = "width:100%;" class="btn btn-primary btn-block"><%=lan_dict(@@language,:"Checkout")%></button>
+              </form>
+              <div style="display: none;">
+                <%= Apruve.button %>
+              </div>
+            </div>
+        </ul>
+
+        </div>
+    </div>
+</section>
 
 <div id="thankYou" style="display:none">
   <div class="row">
@@ -51,139 +167,4 @@
     </div>
   </div>
 </div>
-<div class="row-fluid">
-  <div class="span6">
-    <h1>
-      Your Cart
-    </h1>
-  </div>
-  <div class="pull-right">
-    <% if @user %>
-      Signed in as <strong><%= @user %></strong>
-      <% if @access_token && @credit_available %>
-        (Linked with Apruve <strong><%= @credit_available.format %></strong>)
-      <% end %>
-    <% else %>
-      <a class="sign-in-button pull-right" href="/signin">Sign In</a>
-    <% end %>
-    <% if @user && @authorization_url %>
-       | <a class="apruve-link" href=<%= @authorization_url %>>Link Account with Apruve</a>
-    <% end %>
-  </div>
-</div>
-<div class="row-fluid">
-  <div class="pull-right">
-    <a class="credit-app-button" href="<%= ENV['APRUVE_CREDIT_APP_URL'] %>" target="_blank">
-      Get a Corporate Account with Munder Difflin
-    </a>
-  </div>
-</div>
-<div class="row-fluid">
-  <div class="pull-right">
-    <a class="offline-order" href="/offline_order">
-      Make an offline order
-    </a>
-  </div>
-</div>
-<div id="shoppingCart">
-  <div class="row-fluid">
-    <div class="span12">
-      <table class="table table-bordered">
-        <thead>
-        <tr>
-          <th></th>
-          <th>Product</th>
-          <th>Description</th>
-          <th>Unit Price</th>
-          <th>Qty</th>
-          <th>Line Total</th>
-        </tr>
-        </thead>
-        <tr>
-          <td>
-            <img src="/img/letterpaper.jpg" class="productPhoto" width="80" height="80"/>
-          </td>
-          <td>Letter Paper</td>
-          <td>20 lb ream (500 Sheets). Paper dimensions are 8.5 x 11.00 inches.</td>
-          <td>$12.00</td>
-          <td>3</td>
-          <td>$36.00</td>
-        </tr>
-        <tr>
-          <td>
-            <img src="/img/legalpaper.jpg" class="productPhoto" width="80" height="80"/>
-          </td>
-          <td>Legal Paper</td>
-          <td>24 lb ream (250 Sheets). Paper dimensions are 8.5 x 14.00 inches.</td>
-          <td>$9.50</td>
-          <td>2</td>
-          <td>$19.00</td>
-        </tr>
-      </table>
-    </div>
-  </div>
-  <div class="row-fluid">
-    <div class="span9"></div>
-    <div class="span3">
-      <div class="text-right totals">
-        <p>
-          <strong class="pull-left">
-            Subtotal:
-          </strong>
-          $55.00
-        </p>
 
-        <p>
-          <strong class="pull-left">
-            Shipping:
-          </strong>
-          $5.00
-        </p>
-
-        <p>
-          <strong class="pull-left">
-            Total:
-          </strong>
-          $60.00
-        </p>
-      </div>
-      <hr>
-    </div>
-  </div>
-  <div class="row-fluid">
-    <div class="span9 text-right">
-      <h4 style="margin-right: 20px; margin-top: 0;">
-        Choose Your Payment Method
-      </h4>
-    </div>
-    <div class="span3">
-      <form id="checkout-options" action="/demo_order" method="POST">
-        <div class="radio" style="margin-bottom: 10px;">
-          <label>
-            <input type="radio" name="payment-method" id="payment-method-1" value="apruve" checked>
-            <img src="/img/apruve.png" width="75" height="20">
-            <div>
-              <small>Business Credit</small>
-            </div>
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="payment-method" id="payment-method-2" value="credit-card">
-            <img src="/img/credit-card-logos-sm.png" width="132" height="25">
-            <div>
-              <small>Credit Card</small>
-            </div>
-          </label>
-        </div>
-        <br>
-        <button class="btn btn-large btn-primary" type="submit">
-          Checkout
-        </button>
-      </form>
-      <div style="display: none;">
-        <%= Apruve.button %>
-      </div>
-    </div>
-  </div>
-</div>

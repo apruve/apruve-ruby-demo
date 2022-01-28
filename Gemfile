@@ -13,9 +13,13 @@ gem 'apruve'
 gem 'dotenv'
 gem 'oauth2'
 gem 'money'
+gem 'sinatra-flash'
+gem 'aws-s3'
+gem 'aws-sdk', '~> 2.0.22'
 
 group :test do
   gem 'rspec'
   gem 'shoulda-matchers'
   gem 'shoulda'
+  gem 'rack-test'
 end

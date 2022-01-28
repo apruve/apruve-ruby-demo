@@ -12,12 +12,36 @@ require 'money'
 require './lib/apruve_overrides'
 require './helpers/demo_order_helper'
 require './helpers/oauth_helper'
+require './helpers/language'
+require 'sinatra/flash'
+require 'aws-sdk'
+enable :sessions
+use Rack::Logger
+
+require 'aws/s3'
+AWS::S3::Base.establish_connection!(
+    :access_key_id => ENV['APRUVE_AWS_ACCESS_KEY'],
+    :secret_access_key => ENV['SECRET_AWS_ACCESS_KEY'], 
+)
+
+def logger
+  request.logger
+end
 
 Dotenv.load
 
+set :views, Dir.pwd + '/views'
 # for money gem
 I18n.config.available_locales = :en
 I18n.locale = :en
+
+@@filename ||= "MunderDifflin.png"
+@@headpic ||= "https://s3.amazonaws.com/apruve_profile_img_test/merchant_logos/images/000/002/471/web/logo.png?1614036281"
+$header_color ||= "#014965"
+@@flash_color = "var(--lime-green)"
+@@language = :eng
+
+
 
 set :bind, '0.0.0.0'
 
@@ -57,6 +81,11 @@ get '/offline_order' do
   erb :offline_orders
 end
 
+get '/settings' do
+  erb :settings
+end
+
+
 get '/corporate_accounts' do
   begin
     corporate_accounts = if apruve_corporate_account_id
@@ -91,7 +120,7 @@ post '/orders' do
   }.reduce(:+)
   total_amount_cents = ((total_amount_cents + payload['shipping'].to_f) * 100).round
 
-  @order = Apruve::Order.new(
+  $order = Apruve::Order.new(
       merchant_id:    merchant_id,
       shopper_id:     payload['shopper_id'],
       currency:       'USD',
@@ -101,7 +130,7 @@ post '/orders' do
   )
 
   payload['orders'].each { |order|
-    @order.order_items << Apruve::OrderItem.new(
+    $order.order_items << Apruve::OrderItem.new(
         title:             order['name'],
         description:       order['name'],
         sku:               order['sku'],
@@ -110,10 +139,11 @@ post '/orders' do
         price_total_cents: (order['subtotal'].to_f * 100).round
     )
   }
-  @order.save!
+  $order.save!
 end
 
 get '/' do
+  
   @user = session[:user]
 
   if params[:code] && oauth2_client_ready? && !session[:access_token]
@@ -137,29 +167,32 @@ get '/' do
     @credit_available = Money.new(@corporate_account.credit_available_cents, @corporate_account.instance_variable_get(:@currency))
   end
 
-  @order = demo_order
-  @order.merchant_id = merchant_id
+  def logger
+    request.logger
+  end
+  $order = demo_order()
+  $order.merchant_id = merchant_id
+
   erb :index
 end
 
 # Easier to just make a route for this
+# Dead Code, Never Triggered
 post '/demo_order' do
-  @order = demo_order
-  access_token = session[:access_token]
-
-  overrides_with_token = config_overrides.merge(access_token: access_token) if access_token
-  Apruve.configure(ENV['APRUVE_API_KEY'], apruve_environment, overrides_with_token)
-
-  @order.payment_term = { corporate_account_id: session[:corporate_account_id] }
-  @order.merchant_id = merchant_id
-  @order.save!
-  @status = @order.status
-  erb :finished
+  #This never worked
+  # access_token = session[:access_token]
+  # overrides_with_token = config_overrides.merge(access_token: access_token) if access_token
+  # Apruve.configure(ENV['APRUVE_API_KEY'], apruve_environment, overrides_with_token)
+  # @order.payment_term = { corporate_account_id: session[:corporate_account_id] }
+  # @order.merchant_id = merchant_id
+  # @order.save!
+  # @status = @order.status
 end
 
 get '/signin' do
   erb :login
 end
+
 
 get '/invoice-badly/:token' do
   token = params['token']
@@ -184,8 +217,16 @@ get '/invoice-badly/:token' do
 end
 
 post '/signin' do
-  session[:user] = params[:email]
-  redirect '/'
+  #validate email
+  VALID_EMAIL_REGEX = /\A([\w+\-]\.?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
+  if(params[:email] =~ VALID_EMAIL_REGEX)
+    session[:user] = params[:email]
+    redirect '/'
+  else
+    @@flash_color ="var(--punch)"
+    flash[:error] = lan_dict(@@language,:"Sign In Failure: Invalid Email Format!")
+    redirect '/signin'
+  end
 end
 
 post '/finish_order' do
@@ -237,3 +278,61 @@ end
 error 400 do
   $stdout.print 'Apruve::BadRequest(400)'
 end
+
+post '/change_settings' do
+  color_selected = params[:color_select]
+  lang_selected = params[:lang_select]
+
+  # handle image selection
+  unless params[:image].nil?
+    image = params[:image]
+    tempfile = image[:tempfile]
+    @@filename = image[:filename]
+
+    # Store image to AWS bucket
+    AWS::S3::S3Object.store(@@filename, open(tempfile), ENV['APRUVE_S3_BUCKET_NAME'])
+
+    # Get S3 client
+    s3 = Aws::S3::Client.new(
+      region:               'us-east-1', #or any other region
+      access_key_id:        ENV['APRUVE_AWS_ACCESS_KEY'],
+      secret_access_key:    ENV['SECRET_AWS_ACCESS_KEY']
+    )
+
+    # Get presigned url of image
+    signer = Aws::S3::Presigner.new(client: s3)
+    @@headpic = signer.presigned_url(
+      :get_object,
+      bucket: ENV['APRUVE_S3_BUCKET_NAME'],
+      key: "#{@@filename}",
+      expires_in: 21600 #6 hours
+    )
+  end
+
+  # handle language selection
+  if lang_selected == "Chinese(Simplified)"
+    @@language = :zh_s
+    # Apruve.setSettings({"language":'zz'})
+  elsif lang_selected == "Chinese(Traditional)"
+    @@language = :zh_t
+  elsif lang_selected == "English"
+    @@language = :eng
+  end
+ 
+
+  unless color_selected.nil?
+  $header_color = color_selected
+  end
+
+  if !color_selected.nil? or !params[:image].nil? or !params[:lang_select].nil?
+    @@flash_color ="var(--lime-green)"
+    flash[:success] = lan_dict(@@language,:"Settings Changed Successfully")
+  else
+    @@flash_color ="var(--cool-slate)"
+    flash[:success] = lan_dict(@@language,:"No changes have been made")
+  
+  end
+
+  redirect '/'
+end
+

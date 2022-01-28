@@ -1,6 +1,6 @@
 module DemoOrderHelper
   # Create a order request and some line items
-  def demo_order
+  def demo_order()
     order = Apruve::Order.new(
         currency:       'USD',
         amount_cents:   6000,
@@ -12,7 +12,7 @@ module DemoOrderHelper
         sku:              'LTR-20R',
         price_ea_cents:   1200,
         quantity:         3,
-        price_total_cents:     3600,
+        price_total_cents: 3600,
         view_product_url: 'https://merchant-demo.herokuapp.com'
     )
     order.order_items << Apruve::OrderItem.new(
