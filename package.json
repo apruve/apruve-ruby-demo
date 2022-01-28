@@ -31,5 +31,8 @@
     "reactstrap": "^8.4.1",
     "webpack": "^5.67.0",
     "whatwg-fetch": "^2.0.3"
+  },
+  "engines": {
+    "node": "12.16.2"
   }
 }
